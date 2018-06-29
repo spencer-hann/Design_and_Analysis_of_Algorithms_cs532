@@ -176,49 +176,47 @@ def clist_display(lst1,lst2):
     print("length: %i" % lst2.__len__())
 
 def list_build(lst1,lst2):
-    print("\nbuilding/resetting lists...")
-    lst1.head = None
-    lst2.head = None
-    lst1.insert(Element(4));
-    lst1.insert(Element(3));
-    lst1.insert(Element(2));
-    lst1.insert(Element(1));
-    lst2.insert(Element(4));
-    lst2.insert(Element(3));
-    lst2.insert(Element(2));
-    lst2.insert(Element(1));
+    list_build(lst1)
+    list_build(lst2)
+
+def list_build(lst):
+    print("\nbuilding/resetting list...")
+    lst.head = None
+    lst.insert(Element(4));
+    lst.insert(Element(3));
+    lst.insert(Element(2));
+    lst.insert(Element(1));
 
 def dll_tests():
     print("\n# Doubly Linked List tests #")
     lst = DoublyLinkedList();
-    lst2 = DoublyLinkedList();
-    list_build(lst,lst2)
-    dlist_display(lst,lst2)
+    list_build(lst)
+    print(lst)
     print()
 
     print("list1 insert: 1")
     lst.insert(Element(1))
-    dlist_display(lst,lst2)
+    print(lst)
 
-    list_build(lst,lst2)
+    list_build(lst)
     print("list1 search and delete: 1")
     lst.delete(lst.search(1))
-    dlist_display(lst,lst2)
+    print(lst)
 
-    list_build(lst,lst2)
+    list_build(lst)
     print("list1 search and delete: 2")
     lst.delete(lst.search(2))
-    dlist_display(lst,lst2)
+    print(lst)
 
-    list_build(lst,lst2)
+    list_build(lst)
     print("list1 search and delete: 3")
     lst.delete(lst.search(3))
-    dlist_display(lst,lst2)
+    print(lst)
 
-    list_build(lst,lst2)
+    list_build(lst)
     print("list1 search and delete: 4")
     lst.delete(lst.search(4))
-    dlist_display(lst,lst2)
+    print(lst)
 
 def lll_tests():
     print("\n\n# Singly Linked List tests #")
