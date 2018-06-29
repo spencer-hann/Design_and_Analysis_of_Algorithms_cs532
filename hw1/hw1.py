@@ -5,10 +5,11 @@ class Element:
         self.prev = None;
 
     def __str__(self):
-        return "%d " % (self.key)
+        return str(self.key)
 
     def full_str(self):
         string = str(self.key)
+        self = self.next
         while self:
             string += " -> " + self.__str__();
             self = self.next
@@ -57,9 +58,9 @@ class DoublyLinkedList:
         current = self.head;
         string = ""
         while current:
-            string = current.__str__() + string
+            string = current.__str__() + " " + string
             current = current.next
-        print(string)
+        print("in reverse: " + string)
 
 class SinglyLinkedList:
     def __init__(self):
@@ -147,32 +148,114 @@ class CircularDoublyLinkedList(DoublyLinkedList):
             count += 1
         return count
 
+def dlist_display(lst1,lst2):
+    print("list1: ",end='')
+    print(lst1)
+    lst1.display_reverse()
+    print("list2: ",end='')
+    print(lst2)
+    lst2.display_reverse()
 
-lst2 = SinglyLinkedList();
-lst2.insert(Element(4));
-lst2.insert(Element(3));
-lst2.insert(Element(2));
-lst2.insert(Element(1));
-lst = SinglyLinkedList();
-lst.insert(Element(4));
-lst.insert(Element(3));
-lst.insert(Element(2));
-lst.insert(Element(1));
-print(lst)
-print(lst2)
+def slist_display(lst1,lst2):
+    print("list1: ",end='')
+    print(lst1)
+    print("length: %i" % lst1.__len__())
+    print("list2: ",end='')
+    print(lst2)
+    print("length: %i" % lst2.__len__())
+    print("list1 == list2: " + str(lst1 == lst2))
 
-if lst == lst2:
-    print("yes")
-else:
-    print("no")
+def clist_display(lst1,lst2):
+    print("list1: ", end='')
+    print(lst1)
+    print(lst1.display_reverse())
+    print("length: %i" % lst1.__len__())
+    print("list2: ",end='')
+    print(lst2)
+    print(lst2.display_reverse())
+    print("length: %i" % lst2.__len__())
 
-print(lst)
-lst.delete(lst.head);
-print(lst)
-lst.delete(lst.head.next);
-print(lst)
-lst.delete(lst.head.next);
-print(lst)
-lst.delete(lst.head);
-print(lst)
+def list_build(lst1,lst2):
+    print("\nbuilding/resetting lists...")
+    lst1.head = None
+    lst2.head = None
+    lst1.insert(Element(4));
+    lst1.insert(Element(3));
+    lst1.insert(Element(2));
+    lst1.insert(Element(1));
+    lst2.insert(Element(4));
+    lst2.insert(Element(3));
+    lst2.insert(Element(2));
+    lst2.insert(Element(1));
 
+def dll_tests():
+    print("\n# Doubly Linked List tests #")
+    lst = DoublyLinkedList();
+    lst2 = DoublyLinkedList();
+    list_build(lst,lst2)
+    dlist_display(lst,lst2)
+    print()
+
+    print("list1 insert: 1")
+    lst.insert(Element(1))
+    dlist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 1")
+    lst.delete(lst.search(1))
+    dlist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 2")
+    lst.delete(lst.search(2))
+    dlist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 3")
+    lst.delete(lst.search(3))
+    dlist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 4")
+    lst.delete(lst.search(4))
+    dlist_display(lst,lst2)
+
+def lll_tests():
+    print("\n\n# Singly Linked List tests #")
+    lst = SinglyLinkedList();
+    lst2 = SinglyLinkedList();
+    list_build(lst,lst2)
+    slist_display(lst,lst2)
+    print()
+
+    print("list1 insert: 1")
+    lst.insert(Element(1))
+    slist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 1")
+    lst.delete(lst.search(1))
+    slist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 2")
+    lst.delete(lst.search(2))
+    slist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 3")
+    lst.delete(lst.search(3))
+    slist_display(lst,lst2)
+
+    list_build(lst,lst2)
+    print("list1 search and delete: 4")
+    lst.delete(lst.search(4))
+    slist_display(lst,lst2)
+
+print()
+dll_tests()
+print()
+#lll_tests()
+print()
+#cll_tests()
+print()
