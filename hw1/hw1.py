@@ -4,9 +4,19 @@ class Element:
         self.next = None;
         self.prev = None;
 
+    def __str__(self):
+        return "%d " % (self.key)
+
+    def full_str(self):
+        string = ""
+        while self:
+            string += self.__str__();
+            self = self.next
+        return string + " "
+
     def search(self, k):
         head = self
-        while head.key != k && head != None:
+        while head and head.key != k:
             head = head.next
         if head == None:
             return false
@@ -17,8 +27,11 @@ class DoublyLinkedList:
     def __init__(self):
         self.head = None;
 
+    def __str__(self):
+        return self.head.full_str();
+
     def insert(self, x):
-        if self.head != None:
+        if self.head:
             x.next = self.head
             self.head.prev = x
         self.head = x
@@ -34,7 +47,7 @@ class DoublyLinkedList:
         x.prev = None
 
     def search(self, k):
-        return self.search(k)
+        return self.head.search(k)
 
 class SinglyLinkedList:
     def __init__(self):
@@ -45,9 +58,11 @@ class SinglyLinkedList:
         self.head = x
 
     def delete(self, x):
+        if x == self.head:
+            self.head = x.next
+            return
         search = self.head
-        prev = None
-        while search != x && search != None:
+        while search != x and search:
             prev = search
             search = search.next
         if search == None:
@@ -55,10 +70,10 @@ class SinglyLinkedList:
         prev.next = search.next
 
     def search(self, k):
-        return self.search(k)
+        return self.head.search(k)
 
     def __str__(self):
-        raise NotImplementedError
+        return self.head.full_str();
 
     def __len__(self):
         raise NotImplementedError
@@ -71,8 +86,26 @@ class CircularDoublyLinkedList:
     def __init__(self):
         raise NotImplementedError
 
-
     def insert(self, x):
         raise NotImplementedError
 
     def search(self, k):
+        raise NotImplementedError
+
+lst = SinglyLinkedList();
+lst.insert(Element(4));
+lst.insert(Element(3));
+lst.insert(Element(2));
+lst.insert(Element(1));
+print lst
+lst.delete(lst.head);
+print lst
+lst.delete(lst.head.next);
+print lst
+lst.delete(lst.head.next);
+print lst
+lst.delete(lst.head);
+print lst
+lst.delete(lst.head);
+print lst
+
