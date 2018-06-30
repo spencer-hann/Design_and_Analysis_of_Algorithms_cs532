@@ -19,8 +19,6 @@ class Element:
         head = self
         while head and head.key != k:
             head = head.next
-        if head == None:
-            return false
         return head
 
 class DoublyLinkedList:
@@ -52,15 +50,6 @@ class DoublyLinkedList:
 
     def search(self, k):
         return self.head.search(k)
-
-    def display_reverse(self):
-        if self.head == None: return
-        current = self.head;
-        string = ""
-        while current:
-            string = current.__str__() + " " + string
-            current = current.next
-        print("in reverse: " + string)
 
 class SinglyLinkedList:
     def __init__(self):
@@ -110,21 +99,32 @@ class SinglyLinkedList:
             head2 = head2.next
         return not (head1 or head2)
 
+    def display_with(self,lst2):
+        print("list1: ",end='')
+        print(self)
+        print("length: %i" % self.__len__())
+        print("list2: ",end='')
+        print(lst2)
+        print("length: %i" % lst2.__len__())
+        print("list1 == list2: " + str(self == lst2))
+
 class CircularDoublyLinkedList(DoublyLinkedList):
 
     def __init__(self):
         self.head = Element(None)
-        self.head.next = self.head.prev = self.head
+        self.head.next = self.head
+        self.head.prev = self.head
 
     def insert(self, x):
         if x is None: return
-        x.next = head.next
-        head.next = x
+        x.prev = self.head
+        x.next = self.head.next
+        x.prev.next = x
         x.next.prev = x
 
     def search(self, k):
         if self.head.next == self.head:
-            return ""
+            return None
         self.head.prev.next = None
         tmp = self.head.next.search()
         self.head.prev.next = self.head
@@ -147,113 +147,124 @@ class CircularDoublyLinkedList(DoublyLinkedList):
             head = head.next
             count += 1
         return count
+    
+    def display(self):
+        print(self)
+        tmp = self.head.prev
+        print("in reverse: (circular)", end='')
+        while tmp.key is not None:
+            print(" <-> " + tmp.__str__(),end='')
+            tmp = tmp.prev
+        print("\nlength: %i" % self.__len__())
 
-def dlist_display(lst1,lst2):
-    print("list1: ",end='')
-    print(lst1)
-    lst1.display_reverse()
-    print("list2: ",end='')
-    print(lst2)
-    lst2.display_reverse()
 
-def slist_display(lst1,lst2):
-    print("list1: ",end='')
-    print(lst1)
-    print("length: %i" % lst1.__len__())
-    print("list2: ",end='')
-    print(lst2)
-    print("length: %i" % lst2.__len__())
-    print("list1 == list2: " + str(lst1 == lst2))
+def display_reverse(lst):
+    if lst == None or lst.head == None: return
+    current = lst.head;
+    while current.next:
+        current = current.next
+    while current:
+        print(current.__str__() + " ",end='')
+        current = current.prev
+    print()
 
-def clist_display(lst1,lst2):
-    print("list1: ", end='')
-    print(lst1)
-    print(lst1.display_reverse())
-    print("length: %i" % lst1.__len__())
-    print("list2: ",end='')
-    print(lst2)
-    print(lst2.display_reverse())
-    print("length: %i" % lst2.__len__())
-
-def list_build(lst1,lst2):
-    list_build(lst1)
-    list_build(lst2)
-
-def list_build(lst):
-    print("\nbuilding/resetting list...")
-    lst.head = None
+def list_build(lst,lst2=None):
+    print("\nbuilding/resetting list1...")
+    if type(lst) is CircularDoublyLinkedList:
+        lst.head.next = lst.head
+        lst.head.prev = lst.head
+    else:
+        lst.head = None
     lst.insert(Element(4));
     lst.insert(Element(3));
     lst.insert(Element(2));
     lst.insert(Element(1));
+    if lst2 is not None:
+        print("building/resetting list2...")
+        lst2.head = None
+        lst2.insert(Element(4));
+        lst2.insert(Element(3));
+        lst2.insert(Element(2));
+        lst2.insert(Element(1));
 
 def dll_tests():
     print("\n# Doubly Linked List tests #")
     lst = DoublyLinkedList();
     list_build(lst)
     print(lst)
-    print()
+    display_reverse(lst)
 
-    print("list1 insert: 1")
+    print("\nlist1 insert: 1")
     lst.insert(Element(1))
     print(lst)
+    display_reverse(lst)
 
     list_build(lst)
     print("list1 search and delete: 1")
     lst.delete(lst.search(1))
     print(lst)
+    display_reverse(lst)
 
     list_build(lst)
     print("list1 search and delete: 2")
     lst.delete(lst.search(2))
     print(lst)
+    display_reverse(lst)
 
     list_build(lst)
     print("list1 search and delete: 3")
     lst.delete(lst.search(3))
     print(lst)
+    display_reverse(lst)
 
     list_build(lst)
     print("list1 search and delete: 4")
     lst.delete(lst.search(4))
     print(lst)
+    display_reverse(lst)
 
 def lll_tests():
-    print("\n\n# Singly Linked List tests #")
+    print("\n# Singly Linked List tests #")
     lst = SinglyLinkedList();
     lst2 = SinglyLinkedList();
     list_build(lst,lst2)
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
     print()
 
     print("list1 insert: 1")
     lst.insert(Element(1))
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
 
     list_build(lst,lst2)
     print("list1 search and delete: 1")
     lst.delete(lst.search(1))
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
 
     list_build(lst,lst2)
     print("list1 search and delete: 2")
     lst.delete(lst.search(2))
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
 
     list_build(lst,lst2)
     print("list1 search and delete: 3")
     lst.delete(lst.search(3))
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
 
     list_build(lst,lst2)
     print("list1 search and delete: 4")
     lst.delete(lst.search(4))
-    slist_display(lst,lst2)
+    lst.display_with(lst2)
+
+def cll_tests():
+    print("\n# Circular linked list tests #")
+    lst = CircularDoublyLinkedList()
+    list_build(lst)
+    lst.display();
 
 print()
 dll_tests()
 print()
 #lll_tests()
 print()
-#cll_tests()
+cll_tests()
 print()
