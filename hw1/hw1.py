@@ -126,7 +126,7 @@ class CircularDoublyLinkedList(DoublyLinkedList):
         if self.head.next == self.head:
             return None
         self.head.prev.next = None
-        tmp = self.head.next.search()
+        tmp = self.head.next.search(k)
         self.head.prev.next = self.head
         return tmp
 
@@ -157,9 +157,10 @@ class CircularDoublyLinkedList(DoublyLinkedList):
             tmp = tmp.prev
         print("\nlength: %i" % self.__len__())
 
-
 def display_reverse(lst):
-    if lst == None or lst.head == None: return
+    print("in reverse: ",end='')
+    if lst == None or lst.head == None: 
+        print("None")
     current = lst.head;
     while current.next:
         current = current.next
@@ -223,6 +224,12 @@ def dll_tests():
     print(lst)
     display_reverse(lst)
 
+    list_build(lst)
+    print("search: 5")
+    print(lst.search(5))
+    print(lst)
+    display_reverse(lst)
+
 def lll_tests():
     print("\n# Singly Linked List tests #")
     lst = SinglyLinkedList();
@@ -255,16 +262,45 @@ def lll_tests():
     lst.delete(lst.search(4))
     lst.display_with(lst2)
 
+    list_build(lst,lst2)
+    print("search: 5")
+    print(lst.search(5))
+    lst.display_with(lst2)
+
 def cll_tests():
     print("\n# Circular linked list tests #")
     lst = CircularDoublyLinkedList()
     list_build(lst)
     lst.display();
 
+    print("list1 search and delete: 1")
+    lst.delete(lst.search(1))
+    lst.display()
+
+    list_build(lst)
+    print("list1 search and delete: 2")
+    lst.delete(lst.search(2))
+    lst.display()
+
+    list_build(lst)
+    print("list1 search and delete: 3")
+    lst.delete(lst.search(3))
+    lst.display()
+
+    list_build(lst)
+    print("list1 search and delete: 4")
+    lst.delete(lst.search(4))
+    lst.display()
+
+    list_build(lst)
+    print("list1 search: 5")
+    print(lst.search(5))
+    lst.display()
+
 print()
 dll_tests()
 print()
-#lll_tests()
+lll_tests()
 print()
 cll_tests()
 print()
