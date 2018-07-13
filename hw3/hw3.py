@@ -38,7 +38,7 @@ class Tree:
             self.Transplant(z,z.right)
         elif z.right is None:
             self.Transplant(z,z.left)
-        else: 
+        else:
             y = z.right.Min()
             if y.parent != z:
                 self.Transplant(y,y.right)
@@ -47,6 +47,17 @@ class Tree:
             self.Transplant(z,y)
             y.left = z.left
             y.left.parent = y
+
+    def Delete(self,z):
+        if z.left is None:
+            self.Transplant(z,z.right)
+        elif z.right is None:
+            self.Transplant(z,z.left)
+        else:
+            y = z.right.Min()
+            y.left = z.left
+            z.left.parent = y
+            self.Transplant(z,z.right)
 
 class Node:
     def __init__(self,k):
@@ -124,10 +135,10 @@ class Node:
 
     def CreateListX(self, l):
         if self.left:
-            l = self.left.CreateListX() + l
+            self.left.CreateListX(l)
         l.append(self.key)
         if self.right:
-            l.extend(self.right.CreateListX())
+            self.right.CreateListX(l)
 
 def BuildTree1023():
     l = [x for x in range(1,1024)]
@@ -136,24 +147,32 @@ def BuildTree1023():
         i = int(random.random()*len(l))
         t.Insert(Node(l[i]))
         del l[i]
-    return t.root.Height()
+    orig_height = t.root.Height()
+    for i in range(1000):
+        x = random.randint(1,1023)
+        t.Delete(t.root.Search(x))
+        t.Insert(Node(x))
+    return orig_height, t.root.Height()
 
 def BuildTrees():
-    sum = 0
+    sum1, sum2 = 0, 0
     for i in range(1000):
-        sum += BuildTree1023()
-        print(sum)
-    print(sum/1000)
+        a, b = BuildTree1023()
+        sum1 += a
+        sum2 += b
+        #print(sum1, sum2)
+    print("original height: " + str(sum1/1000))
+    print("post delete height: " + str(sum2/1000))
 
 def main():
     t = Tree()
-    t.Insert(Node(2))
-    t.Insert(Node(3))
-    t.Insert(Node(5))
-    t.Insert(Node(6))
-    t.Insert(Node(7))
-    t.Insert(Node(9))
     t.Insert(Node(11))
+    t.Insert(Node(9))
+    t.Insert(Node(7))
+    t.Insert(Node(6))
+    t.Insert(Node(5))
+    t.Insert(Node(3))
+    t.Insert(Node(2))
     print(str(t.root))
     print(t.root.Height())
 
