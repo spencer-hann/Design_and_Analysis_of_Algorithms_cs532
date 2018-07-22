@@ -48,7 +48,7 @@ class Tree:
             y.left = z.left
             y.left.parent = y
 
-    def Delete(self,z):
+    def DeleteX(self,z):
         if z.left is None:
             self.Transplant(z,z.right)
         elif z.right is None:
@@ -65,6 +65,24 @@ class Node:
         self.left = None
         self.right = None
         self.parent = None
+
+    def count(self):
+        c = 1
+        if self.left:
+            c += self.left.count()
+        if self.right:
+            c += self.right.count()
+        return c
+
+    def check(self):
+        l = self.CreateList()
+        end = l.__len__()
+        i = 1
+        while i < end:
+            if l[i-1] > l[i]:
+                return False
+            i += 1
+        return True
 
     def InOrderWalk(self):
         s = ""
@@ -164,6 +182,33 @@ def BuildTrees():
     print("original height: " + str(sum1/1000))
     print("post delete height: " + str(sum2/1000))
 
+def BuildTreeX(use_DeleteX=False):
+    l = [x for x in range(1,1024)]
+    t = Tree()
+    while l != []:
+        i = int(random.random()*len(l))
+        t.Insert(Node(l[i]))
+        del l[i]
+    orig_height = t.root.Height()
+
+    if use_DeleteX: # determine which function will be used
+        delete = t.DeleteX
+    else:
+        delete = t.Delete
+
+    for i in range(100000):
+        if i % 1000 == 0:
+            print("Iteration " + str(i),
+                ", Height: " + str(t.root.Height()))
+        k = random.randint(1,1023)
+        delete(t.root.Search(k))
+        t.Insert(Node(k))
+
+    post_height = t.root.Height()
+    print("original height: " + str(orig_height))
+    print("post deletion height: " + str(post_height))
+    return orig_height, post_height
+
 def main():
     t = Tree()
     t.Insert(Node(11))
@@ -176,7 +221,17 @@ def main():
     print(str(t.root))
     print(t.root.Height())
 
-    BuildTrees()
+    import time
+    start = time.time()
+    BuildTreeX(True)
+    end = time.time()
+    x = end - start
+
+    start = time.time()
+    BuildTreeX(False)
+    end = time.time()
+    a = end - start
+    print(x, a)
 
 if __name__ == "__main__":
     # execute only if run as a script 
