@@ -11,11 +11,11 @@ class Alignmt:
     def __gt__(self, op):
         return self.score > op
 
+    def __lt__(self, op):
+        return self.score < op
+
     def __eq__(self, op):
         return self.score == op
-
-    def __int__(self):
-        return self.score
 
     def __str__(self):
         return "%i %s" % (self.score, self.str)
@@ -82,6 +82,20 @@ def _version3(best, str1, str2, x=0, y=0, path="", score=0):
         else:
             _version3(best, str1, str2, x+1, y+1, path+'\\', score+1)
 
+def display(arr):
+    x = -1
+    y = -1
+    while arr.get((x,y)):
+        while arr.get((x,y)):
+            print(arr[(x,y)],end='\t')
+            if len(arr[(x,y)].str) < 6:
+                print(end='\t')
+            x += 1
+        print()
+        x = -1
+        y += 1
+    print()
+
 def version4(input1, input2):
     # init the table's first row and column
     output = {(-1,-1):Alignmt(0)}
@@ -90,31 +104,41 @@ def version4(input1, input2):
     for y in range(len(input2)):
         output[(-1,y)] = Alignmt(y+1,"|"*(y+1))
 
-    _version4(output, input1, input2, len(input1)-1, len(input2)-1)
-    print(output)
+    print("limits: (%i,%i)" % (len(input1),len(input2)))
 
-def _version4(arr, str1, str2, x=0, y=0, path="", score=0):
-    if x > len(str1) or y > len(str2):
+    _version4(output, input1, input2, len(input1)-1, len(input2)-1)
+    display(output)
+    print(output[(len(input1)-1,len(input2)-1)])
+
+def _version4(arr, str1, str2, x=0, y=0):
+    if x >= len(str1) or y >= len(str2):
         return
 
     above = arr.get((x,y-1))
+    if not above:
+        above = _version4(arr, str1, str2, x, y-1)
     left = arr.get((x-1,y))
+    if not left:
+        left = _version4(arr, str1, str2, x-1, y)
     diagon = arr.get((x-1,y-1))
 
-    if not above:
-        _version4(arr, str1, str2, x, y-1, path+'|', score+1)
-    if not left:
-        _version4(arr, str1, str2, x-1, y, path+'-', score+1)
-    if x < len(str1) and y < len(str2):
-        if str1[x] == str2[y]:
-            _version4(arr, str1, str2, x+1, y+1, path+'\\', score)
-        else:
-            _version4(arr, str1, str2, x+1, y+1, path+'\\', score+1)
+    if above < diagon:
+        if above < left:
+            arr[(x,y)] = Alignmt(above.score+1, above.str + "|")
+    elif left < diagon:
+        arr[(x,y)] = Alignmt(left.score+1, left.str + "-")
+    elif str1[x] == str2[y]:
+        arr[(x,y)] = Alignmt(diagon.score, diagon.str + "\\")
+    else:
+        arr[(x,y)] = Alignmt(diagon.score+1, diagon.str + "\\")
+
+    #display(arr)
+    return arr[(x,y)]
 
 str1 = ["A","B","C","C","D"]
 str2 = ["A","E","B","F","C","D"]
 #version1(str1, str2)
 #version2(str1, str2)
-version3(str1, str2)
-#version4(str1, str2)
+#version3(str1, str2)
+version4(str1, str2)
 #exp_test()
