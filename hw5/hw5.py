@@ -104,7 +104,7 @@ class min_heap:
 
     @staticmethod
     def parent(i):
-        return (i-1)/2
+        return (i-1)//2 if i > 0 else 0
 
     @staticmethod
     def left(i):
@@ -119,22 +119,44 @@ class min_heap:
         self[a] = self[b]
         self[b] = tmp
 
-    def valid_index(self, i, i2=0):
-        return i>=0 and i<=self.size and i2>=0 and i2<=self.size
-
-    def heapify(self,i):
+    def heapify_original(self,i):
         A = self # to match textbook
-        if not A.valid_index(i): return
+        if i < 0 or i > A.size: return
         l = left(i)
         r = rght(i)
-        if A.valid_index(l,r) and A[l] < A[r]:
+        if l <= A.size and A[l] < A[i]:
             smallest = l
         else: smallest = i
-        if A.valid_index(r) and A[r] < A[smallest]:
+        if r <= A.size and A[r] < A[smallest]:
             smallest = r
         if smallest != i:
             A.exchange(i,smallest)
             A.heapify(smallest)
+
+    def heapify(self,i):
+        A = self # to match textbook
+        if i < 0 or i > A.size: return
+
+        while(1):
+            l = left(i)
+            r = rght(i)
+            if l <= A.size and A[l] < A[i]:
+                smallest = l
+            else: smallest = i
+            if r <= A.size and A[r] < A[smallest]:
+                smallest = r
+            if smallest != i:
+                A.exchange(i,smallest)
+                i = smallest
+                continue
+            return
+
+    def heap_check(self):
+        i = 0
+        for i in range(self.size):
+            if self[i] < self[prnt(i)]:
+                return False
+        return True
 
     def build(self):
         if self.size < 0:
@@ -145,6 +167,7 @@ class min_heap:
 
         for i in range(self.size, -1, -1):
             self.heapify(i)
+        #if not self.heap_check(): print("ERROR: "+str(self))
 
     def extract(A):
         if A.size < 0: return None
@@ -155,32 +178,18 @@ class min_heap:
         return min_
 
     def insert(self, val):
-        if self.size == self.len:
+        if self.size == self.len-1:
             print("heap is full")
-            return
-        self[self.size] = val
+            return 0
         self.size += 1
+        i = self.size
+        self[i] = val
+
         while i > 0 and self[prnt(i)] > self[i]:
             self.exchange(prnt(i),i)
             i = prnt(i)
-
-
+        return 1
 # min_heap static funcs:
 prnt = min_heap.parent
 left = min_heap.left
 rght = min_heap.right
-
-v = [2,1,3,4]
-w = [2,1,3,4]
-W = 6
-
-#print(knapsack2(W,w,v))
-#print(version1(w,v,W))
-heap = min_heap(10)
-heap.build()
-print()
-print(heap)
-while(heap.size >= 0):
-    print("size:" + str(heap.size))
-    print("min: " + str(heap.extract()))
-    print("heap: " + str(heap))
