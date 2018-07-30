@@ -18,12 +18,55 @@ def version1(w_array,v_array,weight):
                 bI = b[i-1][w-w_array[i]] + v_array[i]
                 if (bI > b[i][w]):
                     b[i][w] = bI
-    return b[N-1][weight]
+    return b[N-1][weight], find_path(b, N-1, weight, v_array, w_array)
+
+def knapsack3(W,w,v):
+    table = [[None for j in range(W+1)] for i in range(len(v))]
+    val = knapsack3_(w,v,table,len(v)-1,W)
+    sol = find_path(table, len(v)-1, W, v, w)
+    return val, sol
+
+def knapsack3_(w,v,table,i,j):
+    if j == 0 or i == 0:
+        table[i][j] = 0 if w[0] > j else v[0]
+        #display(table)
+        return table[i][j]
+    if table[i-1][j] == None:
+        table[i][j] = knapsack3_(w,v,table,i-1,j)
+    else: table[i][j] = table[i-1][j]
+    if w[i] <= j:
+        if table[i-1][j-w[i]] == None:
+            tmp = knapsack3_(w,v,table,i-1,j-w[i])
+        else: tmp = table[i-1][j-w[i]]
+        tmp += v[i]
+        if tmp > table[i][j]:
+            table[i][j] = tmp
+    #display(table)
+    return table[i][j]
+
+
+def find_path(table, i, j, v, w):
+    sol = []
+    #display(table)
+
+    while i > 0 and j > 0:
+        if table[i][j] != table[i-1][j]:
+            j -= w[i]
+            sol += [(w[i],v[i])]
+        i -= 1
+
+    if j>0: sol += [(w[i],v[i])]
+
+    return sol
 
 def display(table):
+    print()
     for i in range(len(table)):
         for j in table[i]:
-            print("%i " % (j),end='')
+            if j != None:
+                print("{0} ".format(j),end='')
+            else:
+                print('x ',end='')
         print()
 
 def knapsack1(W,w,v):
@@ -61,9 +104,9 @@ def knapsack2(W,w,v):
             else:
                 table[i][j] = table[i-1][j]
 
-    return table[len(v)-1][W-1], find_path(table, len(v)-1, W-1, v, w)
+    return table[len(v)-1][W-1], find_path_old(table, len(v)-1, W-1, v, w)
 
-def find_path(table, i, j, v, w):
+def find_path_old(table, i, j, v, w):
     sol = []
     #display(table)
 
@@ -79,16 +122,10 @@ def find_path(table, i, j, v, w):
     return sol
 
 class min_heap:
-    def __init__(self, length=0):
-        if length:
-            self.heap = [0 for i in range(length)]
-        else: # undetermined size if none is given
-            self.heap = []
+    def __init__(self, length=5):
+        self.heap = [0 for i in range(length)]
         self.len = length
         self.size = -1
-
-    def __len__(self):
-        return self.size
 
     def __getitem__(self, i):
         return self.heap[i]
@@ -152,7 +189,6 @@ class min_heap:
             return
 
     def heap_check(self):
-        i = 0
         for i in range(self.size):
             if self[i] < self[prnt(i)]:
                 return False
@@ -163,9 +199,9 @@ class min_heap:
             from random import shuffle
             self.heap = [i for i in range(self.len)]
             shuffle(self.heap)
-        self.size = self.len-1
+            self.size = self.len-1
 
-        for i in range(self.size, -1, -1):
+        for i in range(self.size//2, -1, -1):
             self.heapify(i)
         #if not self.heap_check(): print("ERROR: "+str(self))
 
@@ -189,7 +225,57 @@ class min_heap:
             self.exchange(prnt(i),i)
             i = prnt(i)
         return 1
+
+    @staticmethod
+    def test():
+        t = min_heap(50)
+        print("Performing build tests...")
+        for i in range(10000):
+            t.build()
+            if not t.heap_check():
+                print("Heap check Failed")
+                return 0
+            t.size = -1 # reset so that build will reshuffle
+        print("tests passed.")
+
+        print("Performing extract tests...")
+        l = []
+        comp = [i for i in range(t.len)]
+        for i in range(10000):
+            t.build()
+            while t.size > -1:
+                l.append(t.extract())
+            if l != comp:
+                print("Extract failed")
+                print("list should be sorted: ")
+                print(l)
+                return 0
+            l.clear()
+            t.size = -1
+        print("tests passed.")
+        print("All tests passed.")
+        return 1
+
+
+
 # min_heap static funcs:
 prnt = min_heap.parent
 left = min_heap.left
 rght = min_heap.right
+
+
+import random
+for i in range(100000):
+    v = [random.randint(1,50) for i in range(20)]
+    w = [random.randint(1,50) for i in range(20)]
+    W = random.randint(1,100)
+    a = version1(w,v,W)
+    b = knapsack3(W,w,v)
+    if a != b:
+        print("Error")
+        print("v, w")
+        for j in range(len(v)):
+            print("{0}, {1}".format(v[j],w[j]))
+        break
+    print(a)
+    print(b)
