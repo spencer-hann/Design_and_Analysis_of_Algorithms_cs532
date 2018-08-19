@@ -16,7 +16,6 @@ class Vertex:
         self.pi = None
         self.color = "white"
 
-
 class Queue:
     """FIFO Queue Object
     """
@@ -103,15 +102,12 @@ def breadth_first_search(
     graph: List[List[int]], source: int, destination: int, use_python_deque=False
 ) -> List[int]:
     """Perform BFS on the graph,
-
     Arguments:
         graph {List[List[int]]} -- The adjacensy list representation of the graph
         source {int} -- The system index of the starting system
         destination {int} -- The system index of the destination system
-
     Keyword Arguments:
         use_python_deque {bool} -- option to use the native deque python object or your own implementation (default: {False})
-
     Returns:
         List[int] -- The list of system indexes representing the shortest path from the source to target destination
     """
@@ -129,18 +125,17 @@ def breadth_first_search(
     # Here is where you implement the breadth first search
     queue.enqueue(vertices[source])
     while queue:
-        print(queue._queue)
         u: Vertex = queue.dequeue()
         for v in graph[u.identifier]:
-            if v == destination:
-                print("dest reached: ",end='')
-                print(v, destination)
-                break
             if vertices[v].color == "white":
                 vertices[v].color = "gray"
                 vertices[v].d = u.d + 1
                 vertices[v].pi = u
                 queue.enqueue(vertices[v])
+            if v == destination:
+                print("dest reached: ",end='')
+                print(v, destination)
+                queue = False
             u.color = "black"
 
     return backtrace(vertices[destination])
