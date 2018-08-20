@@ -9,16 +9,21 @@ __version__ = "2"
 
 
 ### Question 2
-class Vertex:
+cdef class Vertex:
+    cdef public int identifier
+    cdef public object d
+    cdef public object pi
+    cdef public object color
     def __init__(self, identifier: Any):
         self.identifier = identifier
         self.d = float("inf")
         self.pi = None
         self.color = "white"
 
-class Queue:
+cdef class Queue:
     """FIFO Queue Object
     """
+    cdef public list _queue
 
     def __init__(self):
         # we use the underscore to indicate that we do not want to access
@@ -28,8 +33,8 @@ class Queue:
 
     def __bool__(self) -> bool: return bool(self._queue)
     def popleft(self) -> Vertex: return self._queue.pop(0)
-    def append(self, element: Vertex) -> None: self._queue.append(element)
-    dequeue = popleft; enqueue = append
+    def append(self, element) -> None: self._queue.append(element)
+    def appendleft(self,element) -> None: self._queue.insert(0,element)
 
 def parse_universe(
     fpath=Path("sde-universe_2018-07-16.csv")
@@ -53,7 +58,7 @@ def parse_universe(
     # adjacency lists representation
     id_to_index: Dict[int, int] = {}
 
-    i: int = 0
+    cdef int i = 0
     with open(fpath) as f:
         reader = csv.reader(f)
         next(reader) # take first line
@@ -66,7 +71,7 @@ def parse_universe(
             system_mapping[int(row[10])] = row[9]
             name_to_id[row[7]] = int(row[10])
             id_to_index[int(row[10])] = i
-            i+=1
+            i += 1
 
     # empty list of the right size to put your adjacency lists into
     graph: List[List[int]] = [None] * len(system_mapping)
@@ -123,42 +128,16 @@ def breadth_first_search(
         queue = Queue()
 
     # Here is where you implement the breadth first search
-    queue.enqueue(vertices[source])
+    queue.append(vertices[source])
+    cdef Vertex u
     while queue:
-        u: Vertex = queue.dequeue()
+        u = queue.popleft()
         for v in graph[u.identifier]:
             if vertices[v].color == "white":
                 vertices[v].color = "gray"
                 vertices[v].d = u.d + 1
                 vertices[v].pi = u
-                queue.enqueue(vertices[v])
-            if v == destination: queue = 0 # break outer
-            u.color = "black"
-
-    return backtrace(vertices[destination])
-
-def depth_first_search(
-    graph: List[List[int]], source: int, destination: int) -> List[int]:
-    # initialization of the nodes
-    vertices = [Vertex(index) for index, _ in enumerate(graph)]
-    vertices[source].color = "gray"
-    vertices[source].d = 0
-
-    if use_python_deque:
-        queue = deque()
-    else:
-        queue = Queue()
-
-    # Here is where you implement the breadth first search
-    queue.enqueue(vertices[source])
-    while queue:
-        u: Vertex = queue.dequeue()
-        for v in graph[u.identifier]:
-            if vertices[v].color == "white":
-                vertices[v].color = "gray"
-                vertices[v].d = u.d + 1
-                vertices[v].pi = u
-                queue.enqueue(vertices[v])
+                queue.append(vertices[v])
             if v == destination: queue = 0 # break outer
             u.color = "black"
 
@@ -185,37 +164,38 @@ def question2(import_pickle=False):
 
 def queue_test():
     graph, mapping = parse_universe()
-    num_runs = 100000
-    i = 0
+    cdef int num_runs = 50000
+    cdef int i = 0
 
+    from time import clock as timer
     start = timer()
     while i < num_runs:
         jita_dodixie_route = breadth_first_search(graph, mapping["Jita"], mapping["Dodixie"], False)
         i += 1
     jd_queue = timer() - start
 
-    start = timer()
+    i = 0; start = timer()
     while i < num_runs:
         jita_dodixie_route = breadth_first_search(graph, mapping["Jita"], mapping["Dodixie"], True)
         i += 1
     jd_pydeque = timer() - start
 
-    start = timer()
+    i = 0; start = timer()
     while i < num_runs:
         jita_dodixie_route = breadth_first_search(graph, mapping["313I-B"], mapping["ZDYA-G"], False)
         i += 1
     z_queue = timer() - start
 
-    start = timer()
+    i = 0; start = timer()
     while i < num_runs:
         jita_dodixie_route = breadth_first_search(graph, mapping["313I-B"], mapping["ZDYA-G"], True)
         i += 1
     z_pydeque = timer() - start
 
-    print("\t\tPython Deque\t\tCustome Queue")
-    print("Jita->Dodixie\t{0}\t{1}".format(jd_pydeque, jd_queue))
-    print("313I-B->ZDYA-G\t{0}\t{1}".format(z_pydeque, z_queue))
-    print() # new line
+    print("\t\tPython Deque\tCustome Queue")
+    print("Jita->Dodixie\t%.6f\t%.6f" % (jd_pydeque, jd_queue))
+    print("313I-B->ZDYA-G\t%.6f\t%.6f" % (z_pydeque, z_queue))
+    print()
 
 ### Question 3
 
@@ -226,10 +206,36 @@ def parse_requirements(fpath=Path("dependencies.txt")) -> Dict[str, List[str]]:
         fpath {[type]} -- Path to the file to be imported (default: {Path("dependencies.txt")})
 
     Returns:
-        Dict[str, List[str]] -- A dictionary representing the graph.  The key will be 
+        Dict[str, List[str]] -- A dictionary representing the graph.  The key will be
     """
-    raise NotImplementedError
+    graph: Dict[str, List[str]] = {}
+    with open(fpath) as f:
+        rdr = csv.reader(f)
+        for row in rdr:
+            row[0] = row[0].strip()
+            if row[0][0] != '-':
+                main = row[0]
+                graph[main] = []
+            else:
+                graph[main].append(row[0][2:])
+    return graph
 
+class Node:
+    def __init__(self, identifier: str, adj: List):
+        self.id = identifier
+        self.d = float("inf")
+        self.pi = None
+        self.color = "white"
+        self.adjacencies = adj
+
+    def __str__(self):
+        s = self.id
+        for i in self.adjacencies:
+            s += "\n\t" + i.id
+        return s
+
+    def __repr__(self):
+        return str(self) + '\n'
 
 def topological_sort(graph: Dict[str, List[str]]) -> List[str]:
     """Performs topological sort on the adjacency list generated earlier
@@ -240,8 +246,41 @@ def topological_sort(graph: Dict[str, List[str]]) -> List[str]:
     Returns:
         List[str] -- Sorted dependencies
     """
-    raise NotImplementedError
+    #vrt: List[Node] = [i for i in str_to_node)]
 
+    # create node objects for every item and map str to node
+    mapping: Dict[str, Node] = {i: Node(i,None) for i in graph}
+    # include nodes for items without dependencies
+    for i in graph.values():
+        for j in i:
+            if j not in mapping:
+                mapping[j] = Node(j,[])
+    # iterate thru hash map, creating adjacency list for each node
+    vrt: List[Node] = [mapping[i] for i in mapping]
+    for n in vrt:
+        if n.adjacencies is None:
+            n.adjacencies = [mapping[i] for i in graph[n.id]]
+
+    path: List[str] = []
+    for u in vrt:
+        if u.color == "white":
+            dfs(u, path)
+    return path
+
+def dfs(u: Node, path: List[str]) -> None:
+    u.color = "done"
+    for v in u.adjacencies:
+        if v.color == "white":
+            v.pi = u
+            dfs(v, path)
+    path.append(u.id)
+
+def dfs_iter(G: List[Node], path: List[str]) -> None:
+    G[0].color = "gray"
+    G[0].d = 0
+    G[0].pi = None
+
+    stack = Queue()
 
 def question3(import_pickle=False) -> List[str]:
     """Function to give the solution to Question 3
@@ -261,9 +300,9 @@ def question3(import_pickle=False) -> List[str]:
 
 
 def main():
-    question2()
-    queue_test()
-    #question3()
+    #question2()
+    #queue_test()
+    question3()
 
 
 if __name__ == "__main__":

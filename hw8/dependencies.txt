@@ -1,0 +1,77 @@
+black
+  - appdirs
+  - attrs
+  - click
+  - toml
+flake8-bugbear
+  - attrs
+  - flake8
+flake8
+  - mccabe
+  - pycodestyle
+  - pyflakes
+mypy
+  - typed-ast
+flake8-mypy
+  - attrs
+  - flake8
+  - mypy
+aspy.yaml
+  - pyyaml
+cfgv
+  - six
+pre-commit
+  - aspy.yaml
+  - cached-property
+  - cfgv
+  - identify
+  - nodeenv
+  - pyyaml
+  - six
+  - toml
+  - virtualenv
+more-itertools
+  - six
+pytest
+  - atomicwrites
+  - attrs
+  - more-itertools
+  - pluggy
+  - py
+  - setuptools
+  - six
+numba
+  - llvmlite
+  - numpy
+pytest-qt
+  - pytest
+pyedflib
+  - numpy
+scipy
+  - numpy
+qtawesome
+  - qtpy
+  - six
+qtpy
+  - pyqt5
+pyqt5
+  - PyQt5-sip
+pyqtgraph
+  - pyqt5
+  - numpy
+TimeView
+  - cython
+  - numba
+  - numpy
+  - pyedflib
+  - pyqt5
+  - pyqtgraph
+  - qtawesome
+  - qtpy
+  - scipy
+  - sqlalchemy
+  - black
+  - pytest-qt
+  - pre-commit
+  - flake8-mypy
+  - flake8-bugbear
