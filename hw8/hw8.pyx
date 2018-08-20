@@ -167,7 +167,7 @@ def queue_test():
     cdef int num_runs = 50000
     cdef int i = 0
 
-    from time import clock as timer
+    #from time import clock as timer
     start = timer()
     while i < num_runs:
         jita_dodixie_route = breadth_first_search(graph, mapping["Jita"], mapping["Dodixie"], False)
@@ -192,7 +192,7 @@ def queue_test():
         i += 1
     z_pydeque = timer() - start
 
-    print("\t\tPython Deque\tCustome Queue")
+    print("\t\tPython Deque\tCustom Queue")
     print("Jita->Dodixie\t%.6f\t%.6f" % (jd_pydeque, jd_queue))
     print("313I-B->ZDYA-G\t%.6f\t%.6f" % (z_pydeque, z_queue))
     print()
@@ -228,15 +228,6 @@ class Node:
         self.color = "white"
         self.adjacencies = adj
 
-    def __str__(self):
-        s = self.id
-        for i in self.adjacencies:
-            s += "\n\t" + i.id
-        return s
-
-    def __repr__(self):
-        return str(self) + '\n'
-
 def topological_sort(graph: Dict[str, List[str]]) -> List[str]:
     """Performs topological sort on the adjacency list generated earlier
 
@@ -248,13 +239,13 @@ def topological_sort(graph: Dict[str, List[str]]) -> List[str]:
     """
     #vrt: List[Node] = [i for i in str_to_node)]
 
-    # create node objects for every item and map str to node
+    # create node object for every item and map str to node
     mapping: Dict[str, Node] = {i: Node(i,None) for i in graph}
     # include nodes for items without dependencies
-    for i in graph.values():
-        for j in i:
-            if j not in mapping:
-                mapping[j] = Node(j,[])
+    for nodes in graph.values():
+        for adj in nodes:
+            if adj not in mapping:
+                mapping[adj] = Node(adj,[])
     # iterate thru hash map, creating adjacency list for each node
     vrt: List[Node] = [mapping[i] for i in mapping]
     for n in vrt:
@@ -265,9 +256,10 @@ def topological_sort(graph: Dict[str, List[str]]) -> List[str]:
     for u in vrt:
         if u.color == "white":
             dfs(u, path)
+            #dfs_recursive(u, path)
     return path
 
-def dfs(u: Node, path: List[str]) -> None:
+def dfs_recursive(u: Node, path: List[str]) -> None:
     u.color = "done"
     for v in u.adjacencies:
         if v.color == "white":
@@ -275,16 +267,23 @@ def dfs(u: Node, path: List[str]) -> None:
             dfs(v, path)
     path.append(u.id)
 
-def dfs_iter(G: List[Node], path: List[str]) -> None:
-    G[0].color = "gray"
-    G[0].d = 0
-    G[0].pi = None
+def dfs(s: Node, path: List[str]) -> None:
+    s.color = "done"
 
-    stack = Queue()
+    stack = [s]
+    stack2 = [s]
+    while stack:
+        u = stack.pop()
+        for v in u.adjacencies:
+            if v.color == "white":
+                v.color = "done"
+                stack.insert(0, v)
+                stack2.append(v)
+
+    while stack2: path.append(stack2.pop().id)
 
 def question3(import_pickle=False) -> List[str]:
     """Function to give the solution to Question 3
-
     Returns:
         List[str] -- returns a list of strings with the order in which one should install TimeView's dependencies
     """
@@ -300,7 +299,7 @@ def question3(import_pickle=False) -> List[str]:
 
 
 def main():
-    #question2()
+    question2()
     #queue_test()
     question3()
 
