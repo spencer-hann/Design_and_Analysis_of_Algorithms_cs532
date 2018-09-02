@@ -815,42 +815,6 @@ static const char *__pyx_f[] = {
   "__init__.pxd",
   "type.pxd",
 };
-/* BufferFormatStructs.proto */
-#define IS_UNSIGNED(type) (((type) -1) > 0)
-struct __Pyx_StructField_;
-#define __PYX_BUF_FLAGS_PACKED_STRUCT (1 << 0)
-typedef struct {
-  const char* name;
-  struct __Pyx_StructField_* fields;
-  size_t size;
-  size_t arraysize[8];
-  int ndim;
-  char typegroup;
-  char is_unsigned;
-  int flags;
-} __Pyx_TypeInfo;
-typedef struct __Pyx_StructField_ {
-  __Pyx_TypeInfo* type;
-  const char* name;
-  size_t offset;
-} __Pyx_StructField;
-typedef struct {
-  __Pyx_StructField* field;
-  size_t parent_offset;
-} __Pyx_BufFmt_StackElem;
-typedef struct {
-  __Pyx_StructField root;
-  __Pyx_BufFmt_StackElem* head;
-  size_t fmt_offset;
-  size_t new_count, enc_count;
-  size_t struct_alignment;
-  int is_complex;
-  char enc_type;
-  char new_packmode;
-  char enc_packmode;
-  char is_valid_array;
-} __Pyx_BufFmt_Context;
-
 
 /* "../../../.local/lib/python3.6/site-packages/Cython/Includes/numpy/__init__.pxd":730
  * # in Cython to enable them only on the right systems.
@@ -1107,8 +1071,8 @@ typedef npy_clongdouble __pyx_t_5numpy_clongdouble_t;
 typedef npy_cdouble __pyx_t_5numpy_complex_t;
 struct __pyx_opt_args_4hw10_load_file;
 
-/* "hw10.pyx":84
- *         return False
+/* "hw10.pyx":102
+ *         for v in self.vertices: v.reset()
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):             # <<<<<<<<<<<<<<
  *     cdef list temp = []
@@ -1142,19 +1106,19 @@ struct __pyx_obj_4hw10_System {
  *             str(self.z) + ")"
  * 
  * cdef class Vertex(System):             # <<<<<<<<<<<<<<
- *     cdef System system
  *     cdef float d
+ *     cdef Vertex pi
  */
 struct __pyx_obj_4hw10_Vertex {
   struct __pyx_obj_4hw10_System __pyx_base;
-  struct __pyx_obj_4hw10_System *system;
+  struct __pyx_vtabstruct_4hw10_Vertex *__pyx_vtab;
   float d;
-  struct __pyx_obj_4hw10_System *pi;
+  struct __pyx_obj_4hw10_Vertex *pi;
 };
 
 
-/* "hw10.pyx":56
- *         self.pi = None
+/* "hw10.pyx":64
+ *         return tuple(self.d, self)
  * 
  * cdef class Vertex_list:             # <<<<<<<<<<<<<<
  *     cdef public dict names
@@ -1162,11 +1126,41 @@ struct __pyx_obj_4hw10_Vertex {
  */
 struct __pyx_obj_4hw10_Vertex_list {
   PyObject_HEAD
+  struct __pyx_vtabstruct_4hw10_Vertex_list *__pyx_vtab;
   PyObject *names;
   PyObject *ids;
   PyArrayObject *vertices;
+  PyArrayObject *w;
 };
 
+
+
+/* "hw10.pyx":40
+ *             str(self.z) + ")"
+ * 
+ * cdef class Vertex(System):             # <<<<<<<<<<<<<<
+ *     cdef float d
+ *     cdef Vertex pi
+ */
+
+struct __pyx_vtabstruct_4hw10_Vertex {
+  void (*reset)(struct __pyx_obj_4hw10_Vertex *, int __pyx_skip_dispatch);
+};
+static struct __pyx_vtabstruct_4hw10_Vertex *__pyx_vtabptr_4hw10_Vertex;
+
+
+/* "hw10.pyx":64
+ *         return tuple(self.d, self)
+ * 
+ * cdef class Vertex_list:             # <<<<<<<<<<<<<<
+ *     cdef public dict names
+ *     cdef public dict ids
+ */
+
+struct __pyx_vtabstruct_4hw10_Vertex_list {
+  void (*reset)(struct __pyx_obj_4hw10_Vertex_list *, int __pyx_skip_dispatch);
+};
+static struct __pyx_vtabstruct_4hw10_Vertex_list *__pyx_vtabptr_4hw10_Vertex_list;
 
 /* --- Runtime support code (head) --- */
 /* Refnanny.proto */
@@ -1359,6 +1353,18 @@ static CYTHON_INLINE PyObject *__Pyx_GetAttr(PyObject *, PyObject *);
 /* GetAttr3.proto */
 static CYTHON_INLINE PyObject *__Pyx_GetAttr3(PyObject *, PyObject *, PyObject *);
 
+/* PyObjectCallNoArg.proto */
+#if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
+#else
+#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
+#endif
+
+/* WriteUnraisableException.proto */
+static void __Pyx_WriteUnraisable(const char *name, int clineno,
+                                  int lineno, const char *filename,
+                                  int full_traceback, int nogil);
+
 /* GetItemInt.proto */
 #define __Pyx_GetItemInt(o, i, type, is_signed, to_py_func, is_list, wraparound, boundscheck)\
     (__Pyx_fits_Py_ssize_t(i, type, is_signed) ?\
@@ -1391,6 +1397,21 @@ static int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v);
 static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObject *v,
                                                int is_list, int wraparound, int boundscheck);
 
+/* RaiseTooManyValuesToUnpack.proto */
+static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected);
+
+/* RaiseNeedMoreValuesToUnpack.proto */
+static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index);
+
+/* IterFinish.proto */
+static CYTHON_INLINE int __Pyx_IterFinish(void);
+
+/* UnpackItemEndCheck.proto */
+static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected);
+
+/* ExtTypeTest.proto */
+static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
+
 /* DictGetItem.proto */
 #if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
 static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
@@ -1402,14 +1423,18 @@ static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key);
 #define __Pyx_PyObject_Dict_GetItem(obj, name)  PyObject_GetItem(obj, name)
 #endif
 
+/* ObjectGetItem.proto */
+#if CYTHON_USE_TYPE_SLOTS
+static CYTHON_INLINE PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key);
+#else
+#define __Pyx_PyObject_GetItem(obj, key)  PyObject_GetItem(obj, key)
+#endif
+
 /* PyDictContains.proto */
 static CYTHON_INLINE int __Pyx_PyDict_ContainsTF(PyObject* item, PyObject* dict, int eq) {
     int result = PyDict_Contains(dict, item);
     return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
 }
-
-/* ExtTypeTest.proto */
-static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type);
 
 /* PyObjectLookupSpecial.proto */
 #if CYTHON_USE_PYTYPE_LOOKUP && CYTHON_USE_TYPE_SLOTS
@@ -1435,13 +1460,6 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_LookupSpecial(PyObject* obj, PyObj
 }
 #else
 #define __Pyx_PyObject_LookupSpecial(o,n) __Pyx_PyObject_GetAttrStr(o,n)
-#endif
-
-/* PyObjectCallNoArg.proto */
-#if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func);
-#else
-#define __Pyx_PyObject_CallNoArg(func) __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL)
 #endif
 
 /* ListAppend.proto */
@@ -1480,39 +1498,11 @@ static int __Pyx__GetException(PyThreadState *tstate, PyObject **type, PyObject 
 static int __Pyx_GetException(PyObject **type, PyObject **value, PyObject **tb);
 #endif
 
-/* IsLittleEndian.proto */
-static CYTHON_INLINE int __Pyx_Is_Little_Endian(void);
-
-/* BufferFormatCheck.proto */
-static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts);
-static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
-                              __Pyx_BufFmt_StackElem* stack,
-                              __Pyx_TypeInfo* type);
-
-/* BufferGetAndValidate.proto */
-#define __Pyx_GetBufferAndValidate(buf, obj, dtype, flags, nd, cast, stack)\
-    ((obj == Py_None || obj == NULL) ?\
-    (__Pyx_ZeroBuffer(buf), 0) :\
-    __Pyx__GetBufferAndValidate(buf, obj, dtype, flags, nd, cast, stack))
-static int  __Pyx__GetBufferAndValidate(Py_buffer* buf, PyObject* obj,
-    __Pyx_TypeInfo* dtype, int flags, int nd, int cast, __Pyx_BufFmt_StackElem* stack);
-static void __Pyx_ZeroBuffer(Py_buffer* buf);
-static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info);
-static Py_ssize_t __Pyx_minusones[] = { -1, -1, -1, -1, -1, -1, -1, -1 };
-static Py_ssize_t __Pyx_zeros[] = { 0, 0, 0, 0, 0, 0, 0, 0 };
-
 /* PySequenceContains.proto */
 static CYTHON_INLINE int __Pyx_PySequence_ContainsTF(PyObject* item, PyObject* seq, int eq) {
     int result = PySequence_Contains(seq, item);
     return unlikely(result < 0) ? result : (result == (eq == Py_EQ));
 }
-
-/* ObjectGetItem.proto */
-#if CYTHON_USE_TYPE_SLOTS
-static CYTHON_INLINE PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key);
-#else
-#define __Pyx_PyObject_GetItem(obj, key)  PyObject_GetItem(obj, key)
-#endif
 
 /* Import.proto */
 static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level);
@@ -1525,12 +1515,6 @@ static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb, PyObject 
 
 /* HasAttr.proto */
 static CYTHON_INLINE int __Pyx_HasAttr(PyObject *, PyObject *);
-
-/* RaiseTooManyValuesToUnpack.proto */
-static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected);
-
-/* RaiseNeedMoreValuesToUnpack.proto */
-static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index);
 
 /* RaiseNoneIterError.proto */
 static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void);
@@ -1551,6 +1535,9 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
 
 /* SetupReduce.proto */
 static int __Pyx_setup_reduce(PyObject* type_obj);
+
+/* SetVTable.proto */
+static int __Pyx_SetVtable(PyObject *dict, void *vtable);
 
 /* CLineInTraceback.proto */
 #ifdef CYTHON_CLINE_IN_TRACEBACK
@@ -1581,28 +1568,8 @@ static void __Pyx_AddTraceback(const char *funcname, int c_line,
 /* CIntToPy.proto */
 static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value);
 
-/* BufferStructDeclare.proto */
-typedef struct {
-  Py_ssize_t shape, strides, suboffsets;
-} __Pyx_Buf_DimInfo;
-typedef struct {
-  size_t refcount;
-  Py_buffer pybuffer;
-} __Pyx_Buffer;
-typedef struct {
-  __Pyx_Buffer *rcbuffer;
-  char *data;
-  __Pyx_Buf_DimInfo diminfo[8];
-} __Pyx_LocalBuf_ND;
-
-#if PY_MAJOR_VERSION < 3
-    static int __Pyx_GetBuffer(PyObject *obj, Py_buffer *view, int flags);
-    static void __Pyx_ReleaseBuffer(Py_buffer *view);
-#else
-    #define __Pyx_GetBuffer PyObject_GetBuffer
-    #define __Pyx_ReleaseBuffer PyBuffer_Release
-#endif
-
+/* CIntToPy.proto */
+static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* Print.proto */
 static int __Pyx_Print(PyObject*, PyObject *, int);
@@ -1610,9 +1577,6 @@ static int __Pyx_Print(PyObject*, PyObject *, int);
 static PyObject* __pyx_print = 0;
 static PyObject* __pyx_print_kwargs = 0;
 #endif
-
-/* CIntToPy.proto */
-static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value);
 
 /* RealImag.proto */
 #if CYTHON_CCOMPLEX
@@ -1758,6 +1722,8 @@ static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class
 /* InitStrings.proto */
 static int __Pyx_InitStrings(__Pyx_StringTabEntry *t);
 
+static void __pyx_f_4hw10_6Vertex_reset(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
+static void __pyx_f_4hw10_11Vertex_list_reset(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, int __pyx_skip_dispatch); /* proto*/
 
 /* Module declarations from 'cpython.buffer' */
 
@@ -1793,26 +1759,25 @@ static PyTypeObject *__pyx_ptype_4hw10_System = 0;
 static PyTypeObject *__pyx_ptype_4hw10_Vertex = 0;
 static PyTypeObject *__pyx_ptype_4hw10_Vertex_list = 0;
 static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_opt_args_4hw10_load_file *__pyx_optional_args); /*proto*/
-static PyObject *__pyx_f_4hw10_Dijkstras(struct __pyx_obj_4hw10_Vertex_list *, PyArrayObject *, struct __pyx_obj_4hw10_Vertex *); /*proto*/
+static void __pyx_f_4hw10_Dijkstras(struct __pyx_obj_4hw10_Vertex_list *, struct __pyx_obj_4hw10_Vertex *); /*proto*/
 static PyObject *__pyx_f_4hw10___pyx_unpickle_System__set_state(struct __pyx_obj_4hw10_System *, PyObject *); /*proto*/
 static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj_4hw10_Vertex *, PyObject *); /*proto*/
 static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __pyx_obj_4hw10_Vertex_list *, PyObject *); /*proto*/
-static __Pyx_TypeInfo __Pyx_TypeInfo_float = { "float", NULL, sizeof(float), { 0 }, 0, 'R', 0, 0 };
 #define __Pyx_MODULE_NAME "hw10"
 extern int __pyx_module_is_main_hw10;
 int __pyx_module_is_main_hw10 = 0;
 
 /* Implementation of 'hw10' */
 static PyObject *__pyx_builtin_super;
+static PyObject *__pyx_builtin_zip;
+static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_open;
 static PyObject *__pyx_builtin_ValueError;
-static PyObject *__pyx_builtin_range;
 static PyObject *__pyx_builtin_RuntimeError;
 static PyObject *__pyx_builtin_ImportError;
 static const char __pyx_k_[] = ", ";
 static const char __pyx_k_0[] = "0";
 static const char __pyx_k_G[] = "G";
-static const char __pyx_k_w[] = "w";
 static const char __pyx_k_x[] = "x";
 static const char __pyx_k_y[] = "y";
 static const char __pyx_k_z[] = "z";
@@ -1828,6 +1793,7 @@ static const char __pyx_k_inf[] = "inf";
 static const char __pyx_k_lst[] = "lst";
 static const char __pyx_k_new[] = "__new__";
 static const char __pyx_k_sec[] = "sec";
+static const char __pyx_k_zip[] = "zip";
 static const char __pyx_k_Path[] = "Path";
 static const char __pyx_k_dict[] = "__dict__";
 static const char __pyx_k_exit[] = "__exit__";
@@ -1839,13 +1805,13 @@ static const char __pyx_k_main[] = "__main__";
 static const char __pyx_k_name[] = "name";
 static const char __pyx_k_null[] = "null";
 static const char __pyx_k_open[] = "open";
-static const char __pyx_k_path[] = "path";
 static const char __pyx_k_test[] = "test";
 static const char __pyx_k_enter[] = "__enter__";
 static const char __pyx_k_numpy[] = "numpy";
 static const char __pyx_k_print[] = "print";
 static const char __pyx_k_queue[] = "queue";
 static const char __pyx_k_range[] = "range";
+static const char __pyx_k_reset[] = "reset";
 static const char __pyx_k_start[] = "start";
 static const char __pyx_k_super[] = "super";
 static const char __pyx_k_tests[] = "tests";
@@ -1871,6 +1837,7 @@ static const char __pyx_k_system_id[] = "system_id";
 static const char __pyx_k_DictReader[] = "DictReader";
 static const char __pyx_k_ValueError[] = "ValueError";
 static const char __pyx_k_pyx_result[] = "__pyx_result";
+static const char __pyx_k_pyx_vtable[] = "__pyx_vtable__";
 static const char __pyx_k_ImportError[] = "ImportError";
 static const char __pyx_k_PickleError[] = "PickleError";
 static const char __pyx_k_destination[] = "destination";
@@ -1895,9 +1862,9 @@ static const char __pyx_k_sde_universe_2018_07_16_csv[] = "sde-universe_2018-07-
 static const char __pyx_k_numpy_core_multiarray_failed_to[] = "numpy.core.multiarray failed to import";
 static const char __pyx_k_unknown_dtype_code_in_numpy_pxd[] = "unknown dtype code in numpy.pxd (%d)";
 static const char __pyx_k_Format_string_allocated_too_shor[] = "Format string allocated too short, see comment in numpy.pxd";
+static const char __pyx_k_Incompatible_checksums_s_vs_0x23[] = "Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))";
 static const char __pyx_k_Incompatible_checksums_s_vs_0x2c[] = "Incompatible checksums (%s vs 0x2c24cdc = (adj, id, name, security, x, y, z))";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x64[] = "Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))";
-static const char __pyx_k_Incompatible_checksums_s_vs_0x80[] = "Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))";
+static const char __pyx_k_Incompatible_checksums_s_vs_0xfc[] = "Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))";
 static const char __pyx_k_Non_native_byte_order_not_suppor[] = "Non-native byte order not supported";
 static const char __pyx_k_ndarray_is_not_Fortran_contiguou[] = "ndarray is not Fortran contiguous";
 static const char __pyx_k_numpy_core_umath_failed_to_impor[] = "numpy.core.umath failed to import";
@@ -1909,9 +1876,9 @@ static PyObject *__pyx_kp_u_Format_string_allocated_too_shor;
 static PyObject *__pyx_kp_u_Format_string_allocated_too_shor_2;
 static PyObject *__pyx_n_s_G;
 static PyObject *__pyx_n_s_ImportError;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x23;
 static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x2c;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x64;
-static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0x80;
+static PyObject *__pyx_kp_s_Incompatible_checksums_s_vs_0xfc;
 static PyObject *__pyx_kp_s_Location;
 static PyObject *__pyx_kp_u_Non_native_byte_order_not_suppor;
 static PyObject *__pyx_n_s_Path;
@@ -1956,7 +1923,6 @@ static PyObject *__pyx_n_s_numpy;
 static PyObject *__pyx_kp_s_numpy_core_multiarray_failed_to;
 static PyObject *__pyx_kp_s_numpy_core_umath_failed_to_impor;
 static PyObject *__pyx_n_s_open;
-static PyObject *__pyx_n_s_path;
 static PyObject *__pyx_n_s_pathlib;
 static PyObject *__pyx_n_s_pickle;
 static PyObject *__pyx_n_s_pqueue;
@@ -1969,12 +1935,14 @@ static PyObject *__pyx_n_s_pyx_type;
 static PyObject *__pyx_n_s_pyx_unpickle_System;
 static PyObject *__pyx_n_s_pyx_unpickle_Vertex;
 static PyObject *__pyx_n_s_pyx_unpickle_Vertex_list;
+static PyObject *__pyx_n_s_pyx_vtable;
 static PyObject *__pyx_n_s_q1_shortest_path;
 static PyObject *__pyx_n_s_queue;
 static PyObject *__pyx_n_s_range;
 static PyObject *__pyx_n_s_reduce;
 static PyObject *__pyx_n_s_reduce_cython;
 static PyObject *__pyx_n_s_reduce_ex;
+static PyObject *__pyx_n_s_reset;
 static PyObject *__pyx_kp_s_sde_universe_2018_07_16_csv;
 static PyObject *__pyx_n_s_sec;
 static PyObject *__pyx_n_s_security_status;
@@ -1991,10 +1959,10 @@ static PyObject *__pyx_n_s_test_2;
 static PyObject *__pyx_n_s_tests;
 static PyObject *__pyx_kp_u_unknown_dtype_code_in_numpy_pxd;
 static PyObject *__pyx_n_s_update;
-static PyObject *__pyx_n_s_w;
 static PyObject *__pyx_n_s_x;
 static PyObject *__pyx_n_s_y;
 static PyObject *__pyx_n_s_z;
+static PyObject *__pyx_n_s_zip;
 static int __pyx_pf_4hw10_6System___init__(struct __pyx_obj_4hw10_System *__pyx_v_self, PyObject *__pyx_v_system_id, PyObject *__pyx_v_adj, PyObject *__pyx_v_x, PyObject *__pyx_v_y, PyObject *__pyx_v_z, PyObject *__pyx_v_name, PyObject *__pyx_v_sec); /* proto */
 static PyObject *__pyx_pf_4hw10_6System_2__str__(struct __pyx_obj_4hw10_System *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4hw10_6System_4name___get__(struct __pyx_obj_4hw10_System *__pyx_v_self); /* proto */
@@ -2016,12 +1984,15 @@ static int __pyx_pf_4hw10_6System_3adj_4__del__(struct __pyx_obj_4hw10_System *_
 static PyObject *__pyx_pf_4hw10_6System_4__reduce_cython__(struct __pyx_obj_4hw10_System *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4hw10_6System_6__setstate_cython__(struct __pyx_obj_4hw10_System *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_4hw10_6Vertex___init__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, PyObject *__pyx_v_system_id, PyObject *__pyx_v_adj, PyObject *__pyx_v_x, PyObject *__pyx_v_y, PyObject *__pyx_v_z, PyObject *__pyx_v_name, PyObject *__pyx_v_sec); /* proto */
-static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4hw10_6Vertex_4__setstate_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_4hw10_6Vertex_2reset(struct __pyx_obj_4hw10_Vertex *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_4hw10_6Vertex_4__iter__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_4hw10_6Vertex_6__reduce_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_4hw10_6Vertex_8__setstate_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_lst); /* proto */
 static Py_ssize_t __pyx_pf_4hw10_11Vertex_list_2__len__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4hw10_11Vertex_list_4__getitem__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list_6__contains__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_key); /* proto */
+static PyObject *__pyx_pf_4hw10_11Vertex_list_8reset(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
 static PyObject *__pyx_pf_4hw10_11Vertex_list_5names___get__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list_5names_2__set__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list_5names_4__del__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
@@ -2031,8 +2002,11 @@ static int __pyx_pf_4hw10_11Vertex_list_3ids_4__del__(struct __pyx_obj_4hw10_Ver
 static PyObject *__pyx_pf_4hw10_11Vertex_list_8vertices___get__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list_8vertices_2__set__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
 static int __pyx_pf_4hw10_11Vertex_list_8vertices_4__del__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
-static PyObject *__pyx_pf_4hw10_11Vertex_list_10__setstate_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
+static PyObject *__pyx_pf_4hw10_11Vertex_list_1w___get__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
+static int __pyx_pf_4hw10_11Vertex_list_1w_2__set__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_value); /* proto */
+static int __pyx_pf_4hw10_11Vertex_list_1w_4__del__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_4hw10_11Vertex_list_10__reduce_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self); /* proto */
+static PyObject *__pyx_pf_4hw10_11Vertex_list_12__setstate_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v___pyx_state); /* proto */
 static PyObject *__pyx_pf_4hw10_q1_shortest_path(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_start, PyObject *__pyx_v_destination); /* proto */
 static PyObject *__pyx_pf_4hw10_2main(CYTHON_UNUSED PyObject *__pyx_self); /* proto */
 static PyObject *__pyx_pf_4hw10_4__pyx_unpickle_System(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v___pyx_type, long __pyx_v___pyx_checksum, PyObject *__pyx_v___pyx_state); /* proto */
@@ -2044,9 +2018,9 @@ static PyObject *__pyx_tp_new_4hw10_System(PyTypeObject *t, PyObject *a, PyObjec
 static PyObject *__pyx_tp_new_4hw10_Vertex(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_tp_new_4hw10_Vertex_list(PyTypeObject *t, PyObject *a, PyObject *k); /*proto*/
 static PyObject *__pyx_int_31000000;
+static PyObject *__pyx_int_37060219;
 static PyObject *__pyx_int_46288092;
-static PyObject *__pyx_int_105801433;
-static PyObject *__pyx_int_134561400;
+static PyObject *__pyx_int_265238156;
 static PyObject *__pyx_k__3;
 static PyObject *__pyx_tuple__5;
 static PyObject *__pyx_tuple__6;
@@ -3447,8 +3421,8 @@ static PyObject *__pyx_pf_4hw10_6System_6__setstate_cython__(struct __pyx_obj_4h
 }
 
 /* "hw10.pyx":44
- *     cdef float d
- *     cdef System pi
+ *     cdef Vertex pi
+ * 
  *     def __init__(             # <<<<<<<<<<<<<<
  *             Vertex self,
  *             str system_id,
@@ -3595,15 +3569,14 @@ static int __pyx_pf_4hw10_6Vertex___init__(struct __pyx_obj_4hw10_Vertex *__pyx_
   PyObject *__pyx_t_3 = NULL;
   int __pyx_t_4;
   PyObject *__pyx_t_5 = NULL;
-  double __pyx_t_6;
   __Pyx_RefNannySetupContext("__init__", 0);
 
   /* "hw10.pyx":52
  *             str sec='0'
  *             ):
  *         super().__init__(system_id,adj,x,y,z,name,sec)             # <<<<<<<<<<<<<<
- *         self.d = float("inf")
- *         self.pi = None
+ *         self.reset()
+ * 
  */
   __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 52, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
@@ -3684,29 +3657,15 @@ static int __pyx_pf_4hw10_6Vertex___init__(struct __pyx_obj_4hw10_Vertex *__pyx_
   /* "hw10.pyx":53
  *             ):
  *         super().__init__(system_id,adj,x,y,z,name,sec)
- *         self.d = float("inf")             # <<<<<<<<<<<<<<
- *         self.pi = None
+ *         self.reset()             # <<<<<<<<<<<<<<
  * 
+ *     cpdef void reset(self):
  */
-  __pyx_t_6 = __Pyx_PyObject_AsDouble(__pyx_n_s_inf); if (unlikely(__pyx_t_6 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 53, __pyx_L1_error)
-  __pyx_v_self->d = __pyx_t_6;
-
-  /* "hw10.pyx":54
- *         super().__init__(system_id,adj,x,y,z,name,sec)
- *         self.d = float("inf")
- *         self.pi = None             # <<<<<<<<<<<<<<
- * 
- * cdef class Vertex_list:
- */
-  __Pyx_INCREF(Py_None);
-  __Pyx_GIVEREF(Py_None);
-  __Pyx_GOTREF(__pyx_v_self->pi);
-  __Pyx_DECREF(((PyObject *)__pyx_v_self->pi));
-  __pyx_v_self->pi = ((struct __pyx_obj_4hw10_System *)Py_None);
+  ((struct __pyx_vtabstruct_4hw10_Vertex *)__pyx_v_self->__pyx_vtab)->reset(__pyx_v_self, 0);
 
   /* "hw10.pyx":44
- *     cdef float d
- *     cdef System pi
+ *     cdef Vertex pi
+ * 
  *     def __init__(             # <<<<<<<<<<<<<<
  *             Vertex self,
  *             str system_id,
@@ -3727,26 +3686,232 @@ static int __pyx_pf_4hw10_6Vertex___init__(struct __pyx_obj_4hw10_Vertex *__pyx_
   return __pyx_r;
 }
 
-/* "(tree fragment)":1
- * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
- *     cdef bint use_setstate
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)
+/* "hw10.pyx":55
+ *         self.reset()
+ * 
+ *     cpdef void reset(self):             # <<<<<<<<<<<<<<
+ *         self.d = float("inf")
+ *         self.pi = None
  */
 
+static PyObject *__pyx_pw_4hw10_6Vertex_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static void __pyx_f_4hw10_6Vertex_reset(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, int __pyx_skip_dispatch) {
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  double __pyx_t_5;
+  __Pyx_RefNannySetupContext("reset", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_reset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_4hw10_6Vertex_3reset)) {
+      __Pyx_INCREF(__pyx_t_1);
+      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_4)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+        }
+      }
+      if (__pyx_t_4) {
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else {
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 55, __pyx_L1_error)
+      }
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      goto __pyx_L0;
+    }
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+
+  /* "hw10.pyx":56
+ * 
+ *     cpdef void reset(self):
+ *         self.d = float("inf")             # <<<<<<<<<<<<<<
+ *         self.pi = None
+ * 
+ */
+  __pyx_t_5 = __Pyx_PyObject_AsDouble(__pyx_n_s_inf); if (unlikely(__pyx_t_5 == ((double)((double)-1)) && PyErr_Occurred())) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_v_self->d = __pyx_t_5;
+
+  /* "hw10.pyx":57
+ *     cpdef void reset(self):
+ *         self.d = float("inf")
+ *         self.pi = None             # <<<<<<<<<<<<<<
+ * 
+ *     # convenient for inserting into queue.PriorityQueue
+ */
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  __Pyx_GOTREF(__pyx_v_self->pi);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->pi));
+  __pyx_v_self->pi = ((struct __pyx_obj_4hw10_Vertex *)Py_None);
+
+  /* "hw10.pyx":55
+ *         self.reset()
+ * 
+ *     cpdef void reset(self):             # <<<<<<<<<<<<<<
+ *         self.d = float("inf")
+ *         self.pi = None
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_WriteUnraisable("hw10.Vertex.reset", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+}
+
 /* Python wrapper */
-static PyObject *__pyx_pw_4hw10_6Vertex_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_4hw10_6Vertex_3__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_4hw10_6Vertex_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_4hw10_6Vertex_3reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_4hw10_6Vertex_2__reduce_cython__(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("reset (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_6Vertex_2reset(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self) {
+static PyObject *__pyx_pf_4hw10_6Vertex_2reset(struct __pyx_obj_4hw10_Vertex *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("reset", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_4hw10_6Vertex_reset(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 55, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("hw10.Vertex.reset", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "hw10.pyx":60
+ * 
+ *     # convenient for inserting into queue.PriorityQueue
+ *     def __iter__(self):             # <<<<<<<<<<<<<<
+ *         """convenient for inserting into queue.PriorityQueue"""
+ *         return tuple(self.d, self)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_4hw10_6Vertex_5__iter__(PyObject *__pyx_v_self); /*proto*/
+static char __pyx_doc_4hw10_6Vertex_4__iter__[] = "convenient for inserting into queue.PriorityQueue";
+#if CYTHON_COMPILING_IN_CPYTHON
+struct wrapperbase __pyx_wrapperbase_4hw10_6Vertex_4__iter__;
+#endif
+static PyObject *__pyx_pw_4hw10_6Vertex_5__iter__(PyObject *__pyx_v_self) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__iter__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_6Vertex_4__iter__(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_4hw10_6Vertex_4__iter__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  __Pyx_RefNannySetupContext("__iter__", 0);
+
+  /* "hw10.pyx":62
+ *     def __iter__(self):
+ *         """convenient for inserting into queue.PriorityQueue"""
+ *         return tuple(self.d, self)             # <<<<<<<<<<<<<<
+ * 
+ * cdef class Vertex_list:
+ */
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_self->d); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyTuple_New(2); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __Pyx_GIVEREF(__pyx_t_1);
+  PyTuple_SET_ITEM(__pyx_t_2, 0, __pyx_t_1);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_self));
+  PyTuple_SET_ITEM(__pyx_t_2, 1, ((PyObject *)__pyx_v_self));
+  __pyx_t_1 = 0;
+  __pyx_t_1 = __Pyx_PyObject_Call(((PyObject *)(&PyTuple_Type)), __pyx_t_2, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* "hw10.pyx":60
+ * 
+ *     # convenient for inserting into queue.PriorityQueue
+ *     def __iter__(self):             # <<<<<<<<<<<<<<
+ *         """convenient for inserting into queue.PriorityQueue"""
+ *         return tuple(self.d, self)
+ */
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_AddTraceback("hw10.Vertex.__iter__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "(tree fragment)":1
+ * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
+ *     cdef bint use_setstate
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_4hw10_6Vertex_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_4hw10_6Vertex_7__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_6Vertex_6__reduce_cython__(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_4hw10_6Vertex_6__reduce_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self) {
   int __pyx_v_use_setstate;
   PyObject *__pyx_v_state = NULL;
   PyObject *__pyx_v__dict = NULL;
@@ -3767,7 +3932,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
  *     cdef bint use_setstate
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)             # <<<<<<<<<<<<<<
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
@@ -3783,7 +3948,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   __Pyx_GOTREF(__pyx_t_5);
   __pyx_t_6 = PyFloat_FromDouble(__pyx_v_self->__pyx_base.z); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_6);
-  __pyx_t_7 = PyTuple_New(10); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_7 = PyTuple_New(9); if (unlikely(!__pyx_t_7)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_7);
   __Pyx_INCREF(__pyx_v_self->__pyx_base.adj);
   __Pyx_GIVEREF(__pyx_v_self->__pyx_base.adj);
@@ -3800,15 +3965,12 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   PyTuple_SET_ITEM(__pyx_t_7, 4, ((PyObject *)__pyx_v_self->pi));
   __Pyx_GIVEREF(__pyx_t_3);
   PyTuple_SET_ITEM(__pyx_t_7, 5, __pyx_t_3);
-  __Pyx_INCREF(((PyObject *)__pyx_v_self->system));
-  __Pyx_GIVEREF(((PyObject *)__pyx_v_self->system));
-  PyTuple_SET_ITEM(__pyx_t_7, 6, ((PyObject *)__pyx_v_self->system));
   __Pyx_GIVEREF(__pyx_t_4);
-  PyTuple_SET_ITEM(__pyx_t_7, 7, __pyx_t_4);
+  PyTuple_SET_ITEM(__pyx_t_7, 6, __pyx_t_4);
   __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_7, 8, __pyx_t_5);
+  PyTuple_SET_ITEM(__pyx_t_7, 7, __pyx_t_5);
   __Pyx_GIVEREF(__pyx_t_6);
-  PyTuple_SET_ITEM(__pyx_t_7, 9, __pyx_t_6);
+  PyTuple_SET_ITEM(__pyx_t_7, 8, __pyx_t_6);
   __pyx_t_1 = 0;
   __pyx_t_2 = 0;
   __pyx_t_3 = 0;
@@ -3820,7 +3982,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
 
   /* "(tree fragment)":4
  *     cdef bint use_setstate
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
@@ -3831,7 +3993,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   __pyx_t_7 = 0;
 
   /* "(tree fragment)":5
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -3864,12 +4026,12 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None or self.system is not None
+ *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None
  */
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":5
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -3881,9 +4043,9 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   /* "(tree fragment)":9
  *         use_setstate = True
  *     else:
- *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None or self.system is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, None), state
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, None), state
  */
   /*else*/ {
     __pyx_t_8 = (__pyx_v_self->__pyx_base.adj != ((PyObject*)Py_None));
@@ -3902,14 +4064,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
     }
     __pyx_t_8 = (((PyObject *)__pyx_v_self->pi) != Py_None);
     __pyx_t_10 = (__pyx_t_8 != 0);
-    if (!__pyx_t_10) {
-    } else {
-      __pyx_t_9 = __pyx_t_10;
-      goto __pyx_L4_bool_binop_done;
-    }
-    __pyx_t_10 = (((PyObject *)__pyx_v_self->system) != Py_None);
-    __pyx_t_8 = (__pyx_t_10 != 0);
-    __pyx_t_9 = __pyx_t_8;
+    __pyx_t_9 = __pyx_t_10;
     __pyx_L4_bool_binop_done:;
     __pyx_v_use_setstate = __pyx_t_9;
   }
@@ -3917,20 +4072,20 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
 
   /* "(tree fragment)":10
  *     else:
- *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None or self.system is not None
+ *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, None), state
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, None), state
  *     else:
  */
   __pyx_t_9 = (__pyx_v_use_setstate != 0);
   if (__pyx_t_9) {
 
     /* "(tree fragment)":11
- *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None or self.system is not None
+ *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, state)
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, state)
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_6 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_Vertex); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 11, __pyx_L1_error)
@@ -3940,9 +4095,9 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_7, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_134561400);
-    __Pyx_GIVEREF(__pyx_int_134561400);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_134561400);
+    __Pyx_INCREF(__pyx_int_37060219);
+    __Pyx_GIVEREF(__pyx_int_37060219);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_37060219);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
     PyTuple_SET_ITEM(__pyx_t_7, 2, Py_None);
@@ -3963,17 +4118,17 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
 
     /* "(tree fragment)":10
  *     else:
- *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None or self.system is not None
+ *         use_setstate = self.adj is not None or self.name is not None or self.pi is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, None), state
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":13
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, None), state
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, None), state
  *     else:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Vertex__set_state(self, __pyx_state)
  */
@@ -3986,9 +4141,9 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_7, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_134561400);
-    __Pyx_GIVEREF(__pyx_int_134561400);
-    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_134561400);
+    __Pyx_INCREF(__pyx_int_37060219);
+    __Pyx_GIVEREF(__pyx_int_37060219);
+    PyTuple_SET_ITEM(__pyx_t_7, 1, __pyx_int_37060219);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
     PyTuple_SET_ITEM(__pyx_t_7, 2, __pyx_v_state);
@@ -4008,7 +4163,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.system, self.x, self.y, self.z)
+ *     state = (self.adj, self.d, self.id, self.name, self.pi, self.security, self.x, self.y, self.z)
  */
 
   /* function exit code */
@@ -4032,32 +4187,32 @@ static PyObject *__pyx_pf_4hw10_6Vertex_2__reduce_cython__(struct __pyx_obj_4hw1
 
 /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, state)
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Vertex__set_state(self, __pyx_state)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_4hw10_6Vertex_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_4hw10_6Vertex_5__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_4hw10_6Vertex_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_4hw10_6Vertex_9__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_4hw10_6Vertex_4__setstate_cython__(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_4hw10_6Vertex_8__setstate_cython__(((struct __pyx_obj_4hw10_Vertex *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4hw10_6Vertex_4__setstate_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_4hw10_6Vertex_8__setstate_cython__(struct __pyx_obj_4hw10_Vertex *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, state)
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Vertex__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -4068,7 +4223,7 @@ static PyObject *__pyx_pf_4hw10_6Vertex_4__setstate_cython__(struct __pyx_obj_4h
 
   /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_Vertex, (type(self), 0x8053e78, state)
+ *         return __pyx_unpickle_Vertex, (type(self), 0x2357e7b, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Vertex__set_state(self, __pyx_state)
  */
@@ -4086,12 +4241,12 @@ static PyObject *__pyx_pf_4hw10_6Vertex_4__setstate_cython__(struct __pyx_obj_4h
   return __pyx_r;
 }
 
-/* "hw10.pyx":61
- *     cdef public np.ndarray vertices
+/* "hw10.pyx":70
+ *     cdef public np.ndarray w
  * 
  *     def __init__(Vertex_list self, list lst):             # <<<<<<<<<<<<<<
- *         self.vertices = np.ndarray(len(lst), Vertex)
  *         cdef int i = 0, size = len(lst)
+ *         self.vertices = np.ndarray(size, Vertex)
  */
 
 /* Python wrapper */
@@ -4120,7 +4275,7 @@ static int __pyx_pw_4hw10_11Vertex_list_1__init__(PyObject *__pyx_v_self, PyObje
         else goto __pyx_L5_argtuple_error;
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 61, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "__init__") < 0)) __PYX_ERR(0, 70, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 1) {
       goto __pyx_L5_argtuple_error;
@@ -4131,13 +4286,13 @@ static int __pyx_pw_4hw10_11Vertex_list_1__init__(PyObject *__pyx_v_self, PyObje
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 61, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("__init__", 1, 1, 1, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 70, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("hw10.Vertex_list.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return -1;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lst), (&PyList_Type), 1, "lst", 1))) __PYX_ERR(0, 61, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_lst), (&PyList_Type), 1, "lst", 1))) __PYX_ERR(0, 70, __pyx_L1_error)
   __pyx_r = __pyx_pf_4hw10_11Vertex_list___init__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self), __pyx_v_lst);
 
   /* function exit code */
@@ -4153,32 +4308,49 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   int __pyx_v_i;
   int __pyx_v_size;
   PyObject *__pyx_7genexpr__pyx_v_s = NULL;
+  int __pyx_7genexpr__pyx_v_i;
   PyObject *__pyx_8genexpr1__pyx_v_s = NULL;
+  int __pyx_8genexpr1__pyx_v_i;
   int __pyx_r;
   __Pyx_RefNannyDeclarations
   Py_ssize_t __pyx_t_1;
   PyObject *__pyx_t_2 = NULL;
   PyObject *__pyx_t_3 = NULL;
   int __pyx_t_4;
-  PyObject *(*__pyx_t_5)(PyObject *);
-  PyObject *__pyx_t_6 = NULL;
+  PyObject *__pyx_t_5 = NULL;
+  PyObject *(*__pyx_t_6)(PyObject *);
+  PyObject *__pyx_t_7 = NULL;
+  PyObject *__pyx_t_8 = NULL;
+  PyObject *__pyx_t_9 = NULL;
+  PyObject *(*__pyx_t_10)(PyObject *);
+  int __pyx_t_11;
   __Pyx_RefNannySetupContext("__init__", 0);
 
-  /* "hw10.pyx":62
+  /* "hw10.pyx":71
  * 
  *     def __init__(Vertex_list self, list lst):
- *         self.vertices = np.ndarray(len(lst), Vertex)             # <<<<<<<<<<<<<<
- *         cdef int i = 0, size = len(lst)
- *         while i < size:
+ *         cdef int i = 0, size = len(lst)             # <<<<<<<<<<<<<<
+ *         self.vertices = np.ndarray(size, Vertex)
+ *         # get all vertices into a single list
  */
+  __pyx_v_i = 0;
   if (unlikely(__pyx_v_lst == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-    __PYX_ERR(0, 62, __pyx_L1_error)
+    __PYX_ERR(0, 71, __pyx_L1_error)
   }
-  __pyx_t_1 = PyList_GET_SIZE(__pyx_v_lst); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 62, __pyx_L1_error)
-  __pyx_t_2 = PyInt_FromSsize_t(__pyx_t_1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_1 = PyList_GET_SIZE(__pyx_v_lst); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 71, __pyx_L1_error)
+  __pyx_v_size = __pyx_t_1;
+
+  /* "hw10.pyx":72
+ *     def __init__(Vertex_list self, list lst):
+ *         cdef int i = 0, size = len(lst)
+ *         self.vertices = np.ndarray(size, Vertex)             # <<<<<<<<<<<<<<
+ *         # get all vertices into a single list
+ *         while i < size:
+ */
+  __pyx_t_2 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_3);
   __Pyx_GIVEREF(__pyx_t_2);
   PyTuple_SET_ITEM(__pyx_t_3, 0, __pyx_t_2);
@@ -4186,7 +4358,7 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   __Pyx_GIVEREF(((PyObject *)__pyx_ptype_4hw10_Vertex));
   PyTuple_SET_ITEM(__pyx_t_3, 1, ((PyObject *)__pyx_ptype_4hw10_Vertex));
   __pyx_t_2 = 0;
-  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_ndarray), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 62, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_5numpy_ndarray), __pyx_t_3, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 72, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
   __Pyx_GIVEREF(__pyx_t_2);
@@ -4195,24 +4367,9 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   __pyx_v_self->vertices = ((PyArrayObject *)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "hw10.pyx":63
- *     def __init__(Vertex_list self, list lst):
- *         self.vertices = np.ndarray(len(lst), Vertex)
- *         cdef int i = 0, size = len(lst)             # <<<<<<<<<<<<<<
- *         while i < size:
- *             self.vertices[i] = lst[i]
- */
-  __pyx_v_i = 0;
-  if (unlikely(__pyx_v_lst == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
-    __PYX_ERR(0, 63, __pyx_L1_error)
-  }
-  __pyx_t_1 = PyList_GET_SIZE(__pyx_v_lst); if (unlikely(__pyx_t_1 == ((Py_ssize_t)-1))) __PYX_ERR(0, 63, __pyx_L1_error)
-  __pyx_v_size = __pyx_t_1;
-
-  /* "hw10.pyx":64
- *         self.vertices = np.ndarray(len(lst), Vertex)
- *         cdef int i = 0, size = len(lst)
+  /* "hw10.pyx":74
+ *         self.vertices = np.ndarray(size, Vertex)
+ *         # get all vertices into a single list
  *         while i < size:             # <<<<<<<<<<<<<<
  *             self.vertices[i] = lst[i]
  *             i += 1
@@ -4221,95 +4378,164 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
     __pyx_t_4 = ((__pyx_v_i < __pyx_v_size) != 0);
     if (!__pyx_t_4) break;
 
-    /* "hw10.pyx":65
- *         cdef int i = 0, size = len(lst)
+    /* "hw10.pyx":75
+ *         # get all vertices into a single list
  *         while i < size:
  *             self.vertices[i] = lst[i]             # <<<<<<<<<<<<<<
  *             i += 1
- *         self.ids = {s.id: s for s in self.vertices}
+ *         # map names and ids to array indices
  */
     if (unlikely(__pyx_v_lst == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 65, __pyx_L1_error)
+      __PYX_ERR(0, 75, __pyx_L1_error)
     }
-    __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_lst, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 65, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_GetItemInt_List(__pyx_v_lst, __pyx_v_i, int, 1, __Pyx_PyInt_From_int, 1, 1, 1); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->vertices), __pyx_v_i, __pyx_t_2, int, 1, __Pyx_PyInt_From_int, 0, 1, 1) < 0)) __PYX_ERR(0, 65, __pyx_L1_error)
+    if (unlikely(__Pyx_SetItemInt(((PyObject *)__pyx_v_self->vertices), __pyx_v_i, __pyx_t_2, int, 1, __Pyx_PyInt_From_int, 0, 1, 1) < 0)) __PYX_ERR(0, 75, __pyx_L1_error)
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-    /* "hw10.pyx":66
+    /* "hw10.pyx":76
  *         while i < size:
  *             self.vertices[i] = lst[i]
  *             i += 1             # <<<<<<<<<<<<<<
- *         self.ids = {s.id: s for s in self.vertices}
- *         self.names = {s.name: s for s in self.vertices}
+ *         # map names and ids to array indices
+ *         self.ids = {s.id: i for s,i in zip(self.vertices,range(size))}
  */
     __pyx_v_i = (__pyx_v_i + 1);
   }
 
-  /* "hw10.pyx":67
- *             self.vertices[i] = lst[i]
+  /* "hw10.pyx":78
  *             i += 1
- *         self.ids = {s.id: s for s in self.vertices}             # <<<<<<<<<<<<<<
- *         self.names = {s.name: s for s in self.vertices}
- * 
+ *         # map names and ids to array indices
+ *         self.ids = {s.id: i for s,i in zip(self.vertices,range(size))}             # <<<<<<<<<<<<<<
+ *         self.names = {s.name: i for s,i in zip(self.vertices,range(size))}
+ *         # path weights matrix
  */
   { /* enter inner scope */
-    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 67, __pyx_L7_error)
+    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 78, __pyx_L7_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (likely(PyList_CheckExact(((PyObject *)__pyx_v_self->vertices))) || PyTuple_CheckExact(((PyObject *)__pyx_v_self->vertices))) {
-      __pyx_t_3 = ((PyObject *)__pyx_v_self->vertices); __Pyx_INCREF(__pyx_t_3); __pyx_t_1 = 0;
-      __pyx_t_5 = NULL;
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L7_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_5 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L7_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L7_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_INCREF(((PyObject *)__pyx_v_self->vertices));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_self->vertices));
+    PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_self->vertices));
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_5);
+    __pyx_t_5 = 0;
+    __pyx_t_5 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_3, NULL); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L7_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (likely(PyList_CheckExact(__pyx_t_5)) || PyTuple_CheckExact(__pyx_t_5)) {
+      __pyx_t_3 = __pyx_t_5; __Pyx_INCREF(__pyx_t_3); __pyx_t_1 = 0;
+      __pyx_t_6 = NULL;
     } else {
-      __pyx_t_1 = -1; __pyx_t_3 = PyObject_GetIter(((PyObject *)__pyx_v_self->vertices)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 67, __pyx_L7_error)
+      __pyx_t_1 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 78, __pyx_L7_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 67, __pyx_L7_error)
+      __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 78, __pyx_L7_error)
     }
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     for (;;) {
-      if (likely(!__pyx_t_5)) {
+      if (likely(!__pyx_t_6)) {
         if (likely(PyList_CheckExact(__pyx_t_3))) {
           if (__pyx_t_1 >= PyList_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_6); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 67, __pyx_L7_error)
+          __pyx_t_5 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_5); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 78, __pyx_L7_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 67, __pyx_L7_error)
-          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_5 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_5);
           #endif
         } else {
           if (__pyx_t_1 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_6); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 67, __pyx_L7_error)
+          __pyx_t_5 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_5); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 78, __pyx_L7_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 67, __pyx_L7_error)
-          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_5 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L7_error)
+          __Pyx_GOTREF(__pyx_t_5);
           #endif
         }
       } else {
-        __pyx_t_6 = __pyx_t_5(__pyx_t_3);
-        if (unlikely(!__pyx_t_6)) {
+        __pyx_t_5 = __pyx_t_6(__pyx_t_3);
+        if (unlikely(!__pyx_t_5)) {
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 67, __pyx_L7_error)
+            else __PYX_ERR(0, 78, __pyx_L7_error)
           }
           break;
         }
-        __Pyx_GOTREF(__pyx_t_6);
+        __Pyx_GOTREF(__pyx_t_5);
       }
-      __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_s, __pyx_t_6);
-      __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_7genexpr__pyx_v_s, __pyx_n_s_id); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 67, __pyx_L7_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_6, (PyObject*)__pyx_7genexpr__pyx_v_s))) __PYX_ERR(0, 67, __pyx_L7_error)
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if ((likely(PyTuple_CheckExact(__pyx_t_5))) || (PyList_CheckExact(__pyx_t_5))) {
+        PyObject* sequence = __pyx_t_5;
+        Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
+        if (unlikely(size != 2)) {
+          if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+          else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+          __PYX_ERR(0, 78, __pyx_L7_error)
+        }
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        if (likely(PyTuple_CheckExact(sequence))) {
+          __pyx_t_7 = PyTuple_GET_ITEM(sequence, 0); 
+          __pyx_t_8 = PyTuple_GET_ITEM(sequence, 1); 
+        } else {
+          __pyx_t_7 = PyList_GET_ITEM(sequence, 0); 
+          __pyx_t_8 = PyList_GET_ITEM(sequence, 1); 
+        }
+        __Pyx_INCREF(__pyx_t_7);
+        __Pyx_INCREF(__pyx_t_8);
+        #else
+        __pyx_t_7 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 78, __pyx_L7_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        __pyx_t_8 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L7_error)
+        __Pyx_GOTREF(__pyx_t_8);
+        #endif
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      } else {
+        Py_ssize_t index = -1;
+        __pyx_t_9 = PyObject_GetIter(__pyx_t_5); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 78, __pyx_L7_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+        __pyx_t_10 = Py_TYPE(__pyx_t_9)->tp_iternext;
+        index = 0; __pyx_t_7 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_7)) goto __pyx_L10_unpacking_failed;
+        __Pyx_GOTREF(__pyx_t_7);
+        index = 1; __pyx_t_8 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_8)) goto __pyx_L10_unpacking_failed;
+        __Pyx_GOTREF(__pyx_t_8);
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 2) < 0) __PYX_ERR(0, 78, __pyx_L7_error)
+        __pyx_t_10 = NULL;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        goto __pyx_L11_unpacking_done;
+        __pyx_L10_unpacking_failed:;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_10 = NULL;
+        if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
+        __PYX_ERR(0, 78, __pyx_L7_error)
+        __pyx_L11_unpacking_done:;
+      }
+      __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_8); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 78, __pyx_L7_error)
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __Pyx_XDECREF_SET(__pyx_7genexpr__pyx_v_s, __pyx_t_7);
+      __pyx_t_7 = 0;
+      __pyx_7genexpr__pyx_v_i = __pyx_t_11;
+      __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_7genexpr__pyx_v_s, __pyx_n_s_id); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 78, __pyx_L7_error)
+      __Pyx_GOTREF(__pyx_t_5);
+      __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_7genexpr__pyx_v_i); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 78, __pyx_L7_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_5, (PyObject*)__pyx_t_8))) __PYX_ERR(0, 78, __pyx_L7_error)
+      __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF(__pyx_7genexpr__pyx_v_s); __pyx_7genexpr__pyx_v_s = 0;
-    goto __pyx_L10_exit_scope;
+    goto __pyx_L12_exit_scope;
     __pyx_L7_error:;
     __Pyx_XDECREF(__pyx_7genexpr__pyx_v_s); __pyx_7genexpr__pyx_v_s = 0;
     goto __pyx_L1_error;
-    __pyx_L10_exit_scope:;
+    __pyx_L12_exit_scope:;
   } /* exit inner scope */
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->ids);
@@ -4317,69 +4543,138 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   __pyx_v_self->ids = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "hw10.pyx":68
- *             i += 1
- *         self.ids = {s.id: s for s in self.vertices}
- *         self.names = {s.name: s for s in self.vertices}             # <<<<<<<<<<<<<<
- * 
- *     def __len__(self): return len(self.vertices)
+  /* "hw10.pyx":79
+ *         # map names and ids to array indices
+ *         self.ids = {s.id: i for s,i in zip(self.vertices,range(size))}
+ *         self.names = {s.name: i for s,i in zip(self.vertices,range(size))}             # <<<<<<<<<<<<<<
+ *         # path weights matrix
+ *         self.w = np.full((size,size), np.inf)
  */
   { /* enter inner scope */
-    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 68, __pyx_L13_error)
+    __pyx_t_2 = PyDict_New(); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 79, __pyx_L15_error)
     __Pyx_GOTREF(__pyx_t_2);
-    if (likely(PyList_CheckExact(((PyObject *)__pyx_v_self->vertices))) || PyTuple_CheckExact(((PyObject *)__pyx_v_self->vertices))) {
-      __pyx_t_3 = ((PyObject *)__pyx_v_self->vertices); __Pyx_INCREF(__pyx_t_3); __pyx_t_1 = 0;
-      __pyx_t_5 = NULL;
+    __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L15_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_8 = __Pyx_PyObject_CallOneArg(__pyx_builtin_range, __pyx_t_3); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L15_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L15_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_INCREF(((PyObject *)__pyx_v_self->vertices));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_self->vertices));
+    PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_self->vertices));
+    __Pyx_GIVEREF(__pyx_t_8);
+    PyTuple_SET_ITEM(__pyx_t_3, 1, __pyx_t_8);
+    __pyx_t_8 = 0;
+    __pyx_t_8 = __Pyx_PyObject_Call(__pyx_builtin_zip, __pyx_t_3, NULL); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L15_error)
+    __Pyx_GOTREF(__pyx_t_8);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    if (likely(PyList_CheckExact(__pyx_t_8)) || PyTuple_CheckExact(__pyx_t_8)) {
+      __pyx_t_3 = __pyx_t_8; __Pyx_INCREF(__pyx_t_3); __pyx_t_1 = 0;
+      __pyx_t_6 = NULL;
     } else {
-      __pyx_t_1 = -1; __pyx_t_3 = PyObject_GetIter(((PyObject *)__pyx_v_self->vertices)); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 68, __pyx_L13_error)
+      __pyx_t_1 = -1; __pyx_t_3 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 79, __pyx_L15_error)
       __Pyx_GOTREF(__pyx_t_3);
-      __pyx_t_5 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 68, __pyx_L13_error)
+      __pyx_t_6 = Py_TYPE(__pyx_t_3)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 79, __pyx_L15_error)
     }
+    __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
     for (;;) {
-      if (likely(!__pyx_t_5)) {
+      if (likely(!__pyx_t_6)) {
         if (likely(PyList_CheckExact(__pyx_t_3))) {
           if (__pyx_t_1 >= PyList_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_6); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 68, __pyx_L13_error)
+          __pyx_t_8 = PyList_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_8); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L15_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 68, __pyx_L13_error)
-          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_8 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L15_error)
+          __Pyx_GOTREF(__pyx_t_8);
           #endif
         } else {
           if (__pyx_t_1 >= PyTuple_GET_SIZE(__pyx_t_3)) break;
           #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-          __pyx_t_6 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_6); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 68, __pyx_L13_error)
+          __pyx_t_8 = PyTuple_GET_ITEM(__pyx_t_3, __pyx_t_1); __Pyx_INCREF(__pyx_t_8); __pyx_t_1++; if (unlikely(0 < 0)) __PYX_ERR(0, 79, __pyx_L15_error)
           #else
-          __pyx_t_6 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 68, __pyx_L13_error)
-          __Pyx_GOTREF(__pyx_t_6);
+          __pyx_t_8 = PySequence_ITEM(__pyx_t_3, __pyx_t_1); __pyx_t_1++; if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L15_error)
+          __Pyx_GOTREF(__pyx_t_8);
           #endif
         }
       } else {
-        __pyx_t_6 = __pyx_t_5(__pyx_t_3);
-        if (unlikely(!__pyx_t_6)) {
+        __pyx_t_8 = __pyx_t_6(__pyx_t_3);
+        if (unlikely(!__pyx_t_8)) {
           PyObject* exc_type = PyErr_Occurred();
           if (exc_type) {
             if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-            else __PYX_ERR(0, 68, __pyx_L13_error)
+            else __PYX_ERR(0, 79, __pyx_L15_error)
           }
           break;
         }
-        __Pyx_GOTREF(__pyx_t_6);
+        __Pyx_GOTREF(__pyx_t_8);
       }
-      __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_s, __pyx_t_6);
-      __pyx_t_6 = 0;
-      __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_8genexpr1__pyx_v_s, __pyx_n_s_name); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 68, __pyx_L13_error)
-      __Pyx_GOTREF(__pyx_t_6);
-      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_6, (PyObject*)__pyx_8genexpr1__pyx_v_s))) __PYX_ERR(0, 68, __pyx_L13_error)
-      __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
+      if ((likely(PyTuple_CheckExact(__pyx_t_8))) || (PyList_CheckExact(__pyx_t_8))) {
+        PyObject* sequence = __pyx_t_8;
+        Py_ssize_t size = __Pyx_PySequence_SIZE(sequence);
+        if (unlikely(size != 2)) {
+          if (size > 2) __Pyx_RaiseTooManyValuesError(2);
+          else if (size >= 0) __Pyx_RaiseNeedMoreValuesError(size);
+          __PYX_ERR(0, 79, __pyx_L15_error)
+        }
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        if (likely(PyTuple_CheckExact(sequence))) {
+          __pyx_t_5 = PyTuple_GET_ITEM(sequence, 0); 
+          __pyx_t_7 = PyTuple_GET_ITEM(sequence, 1); 
+        } else {
+          __pyx_t_5 = PyList_GET_ITEM(sequence, 0); 
+          __pyx_t_7 = PyList_GET_ITEM(sequence, 1); 
+        }
+        __Pyx_INCREF(__pyx_t_5);
+        __Pyx_INCREF(__pyx_t_7);
+        #else
+        __pyx_t_5 = PySequence_ITEM(sequence, 0); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 79, __pyx_L15_error)
+        __Pyx_GOTREF(__pyx_t_5);
+        __pyx_t_7 = PySequence_ITEM(sequence, 1); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L15_error)
+        __Pyx_GOTREF(__pyx_t_7);
+        #endif
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      } else {
+        Py_ssize_t index = -1;
+        __pyx_t_9 = PyObject_GetIter(__pyx_t_8); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 79, __pyx_L15_error)
+        __Pyx_GOTREF(__pyx_t_9);
+        __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+        __pyx_t_10 = Py_TYPE(__pyx_t_9)->tp_iternext;
+        index = 0; __pyx_t_5 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_5)) goto __pyx_L18_unpacking_failed;
+        __Pyx_GOTREF(__pyx_t_5);
+        index = 1; __pyx_t_7 = __pyx_t_10(__pyx_t_9); if (unlikely(!__pyx_t_7)) goto __pyx_L18_unpacking_failed;
+        __Pyx_GOTREF(__pyx_t_7);
+        if (__Pyx_IternextUnpackEndCheck(__pyx_t_10(__pyx_t_9), 2) < 0) __PYX_ERR(0, 79, __pyx_L15_error)
+        __pyx_t_10 = NULL;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        goto __pyx_L19_unpacking_done;
+        __pyx_L18_unpacking_failed:;
+        __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+        __pyx_t_10 = NULL;
+        if (__Pyx_IterFinish() == 0) __Pyx_RaiseNeedMoreValuesError(index);
+        __PYX_ERR(0, 79, __pyx_L15_error)
+        __pyx_L19_unpacking_done:;
+      }
+      __pyx_t_11 = __Pyx_PyInt_As_int(__pyx_t_7); if (unlikely((__pyx_t_11 == (int)-1) && PyErr_Occurred())) __PYX_ERR(0, 79, __pyx_L15_error)
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+      __Pyx_XDECREF_SET(__pyx_8genexpr1__pyx_v_s, __pyx_t_5);
+      __pyx_t_5 = 0;
+      __pyx_8genexpr1__pyx_v_i = __pyx_t_11;
+      __pyx_t_8 = __Pyx_PyObject_GetAttrStr(__pyx_8genexpr1__pyx_v_s, __pyx_n_s_name); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 79, __pyx_L15_error)
+      __Pyx_GOTREF(__pyx_t_8);
+      __pyx_t_7 = __Pyx_PyInt_From_int(__pyx_8genexpr1__pyx_v_i); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 79, __pyx_L15_error)
+      __Pyx_GOTREF(__pyx_t_7);
+      if (unlikely(PyDict_SetItem(__pyx_t_2, (PyObject*)__pyx_t_8, (PyObject*)__pyx_t_7))) __PYX_ERR(0, 79, __pyx_L15_error)
+      __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+      __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
     }
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
     __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_s); __pyx_8genexpr1__pyx_v_s = 0;
-    goto __pyx_L16_exit_scope;
-    __pyx_L13_error:;
+    goto __pyx_L20_exit_scope;
+    __pyx_L15_error:;
     __Pyx_XDECREF(__pyx_8genexpr1__pyx_v_s); __pyx_8genexpr1__pyx_v_s = 0;
     goto __pyx_L1_error;
-    __pyx_L16_exit_scope:;
+    __pyx_L20_exit_scope:;
   } /* exit inner scope */
   __Pyx_GIVEREF(__pyx_t_2);
   __Pyx_GOTREF(__pyx_v_self->names);
@@ -4387,12 +4682,97 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   __pyx_v_self->names = ((PyObject*)__pyx_t_2);
   __pyx_t_2 = 0;
 
-  /* "hw10.pyx":61
- *     cdef public np.ndarray vertices
+  /* "hw10.pyx":81
+ *         self.names = {s.name: i for s,i in zip(self.vertices,range(size))}
+ *         # path weights matrix
+ *         self.w = np.full((size,size), np.inf)             # <<<<<<<<<<<<<<
+ * 
+ *     def __len__(self): return len(self.vertices)
+ */
+  __pyx_t_3 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_7 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_full); if (unlikely(!__pyx_t_7)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_7);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __pyx_t_8 = __Pyx_PyInt_From_int(__pyx_v_size); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_5);
+  __Pyx_GIVEREF(__pyx_t_3);
+  PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
+  __Pyx_GIVEREF(__pyx_t_8);
+  PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_8);
+  __pyx_t_3 = 0;
+  __pyx_t_8 = 0;
+  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_8);
+  __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_inf); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
+  __pyx_t_8 = NULL;
+  __pyx_t_11 = 0;
+  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_7))) {
+    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_7);
+    if (likely(__pyx_t_8)) {
+      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_7);
+      __Pyx_INCREF(__pyx_t_8);
+      __Pyx_INCREF(function);
+      __Pyx_DECREF_SET(__pyx_t_7, function);
+      __pyx_t_11 = 1;
+    }
+  }
+  #if CYTHON_FAST_PYCALL
+  if (PyFunction_Check(__pyx_t_7)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_5, __pyx_t_3};
+    __pyx_t_2 = __Pyx_PyFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else
+  #endif
+  #if CYTHON_FAST_PYCCALL
+  if (__Pyx_PyFastCFunction_Check(__pyx_t_7)) {
+    PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_5, __pyx_t_3};
+    __pyx_t_2 = __Pyx_PyCFunction_FastCall(__pyx_t_7, __pyx_temp+1-__pyx_t_11, 2+__pyx_t_11); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  } else
+  #endif
+  {
+    __pyx_t_9 = PyTuple_New(2+__pyx_t_11); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_9);
+    if (__pyx_t_8) {
+      __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_8); __pyx_t_8 = NULL;
+    }
+    __Pyx_GIVEREF(__pyx_t_5);
+    PyTuple_SET_ITEM(__pyx_t_9, 0+__pyx_t_11, __pyx_t_5);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_9, 1+__pyx_t_11, __pyx_t_3);
+    __pyx_t_5 = 0;
+    __pyx_t_3 = 0;
+    __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_7, __pyx_t_9, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_7); __pyx_t_7 = 0;
+  if (!(likely(((__pyx_t_2) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_2, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 81, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_2);
+  __Pyx_GOTREF(__pyx_v_self->w);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->w));
+  __pyx_v_self->w = ((PyArrayObject *)__pyx_t_2);
+  __pyx_t_2 = 0;
+
+  /* "hw10.pyx":70
+ *     cdef public np.ndarray w
  * 
  *     def __init__(Vertex_list self, list lst):             # <<<<<<<<<<<<<<
- *         self.vertices = np.ndarray(len(lst), Vertex)
  *         cdef int i = 0, size = len(lst)
+ *         self.vertices = np.ndarray(size, Vertex)
  */
 
   /* function exit code */
@@ -4401,7 +4781,10 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_2);
   __Pyx_XDECREF(__pyx_t_3);
-  __Pyx_XDECREF(__pyx_t_6);
+  __Pyx_XDECREF(__pyx_t_5);
+  __Pyx_XDECREF(__pyx_t_7);
+  __Pyx_XDECREF(__pyx_t_8);
+  __Pyx_XDECREF(__pyx_t_9);
   __Pyx_AddTraceback("hw10.Vertex_list.__init__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = -1;
   __pyx_L0:;
@@ -4411,8 +4794,8 @@ static int __pyx_pf_4hw10_11Vertex_list___init__(struct __pyx_obj_4hw10_Vertex_l
   return __pyx_r;
 }
 
-/* "hw10.pyx":70
- *         self.names = {s.name: s for s in self.vertices}
+/* "hw10.pyx":83
+ *         self.w = np.full((size,size), np.inf)
  * 
  *     def __len__(self): return len(self.vertices)             # <<<<<<<<<<<<<<
  * 
@@ -4440,7 +4823,7 @@ static Py_ssize_t __pyx_pf_4hw10_11Vertex_list_2__len__(struct __pyx_obj_4hw10_V
   __Pyx_RefNannySetupContext("__len__", 0);
   __pyx_t_1 = ((PyObject *)__pyx_v_self->vertices);
   __Pyx_INCREF(__pyx_t_1);
-  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 70, __pyx_L1_error)
+  __pyx_t_2 = PyObject_Length(__pyx_t_1); if (unlikely(__pyx_t_2 == ((Py_ssize_t)-1))) __PYX_ERR(0, 83, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_r = __pyx_t_2;
   goto __pyx_L0;
@@ -4455,12 +4838,12 @@ static Py_ssize_t __pyx_pf_4hw10_11Vertex_list_2__len__(struct __pyx_obj_4hw10_V
   return __pyx_r;
 }
 
-/* "hw10.pyx":72
+/* "hw10.pyx":85
  *     def __len__(self): return len(self.vertices)
  * 
  *     def __getitem__(self, key):             # <<<<<<<<<<<<<<
- *         if type(key) is str:
- *             return self.names[key]
+ *         if type(key) is tuple:
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
  */
 
 /* Python wrapper */
@@ -4482,21 +4865,90 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_4__getitem__(struct __pyx_obj_4hw1
   int __pyx_t_1;
   int __pyx_t_2;
   PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  PyObject *__pyx_t_5 = NULL;
   __Pyx_RefNannySetupContext("__getitem__", 0);
 
-  /* "hw10.pyx":73
+  /* "hw10.pyx":86
  * 
  *     def __getitem__(self, key):
+ *         if type(key) is tuple:             # <<<<<<<<<<<<<<
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
+ *         if type(key) is str:
+ */
+  __pyx_t_1 = (((PyObject *)Py_TYPE(__pyx_v_key)) == ((PyObject *)(&PyTuple_Type)));
+  __pyx_t_2 = (__pyx_t_1 != 0);
+  if (__pyx_t_2) {
+
+    /* "hw10.pyx":87
+ *     def __getitem__(self, key):
+ *         if type(key) is tuple:
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]             # <<<<<<<<<<<<<<
+ *         if type(key) is str:
+ *             return self.names[key]
+ */
+    __Pyx_XDECREF(__pyx_r);
+    if (unlikely(__pyx_v_self->ids == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 87, __pyx_L1_error)
+    }
+    __pyx_t_3 = __Pyx_GetItemInt(__pyx_v_key, 0, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = __Pyx_PyObject_GetAttrStr(__pyx_t_3, __pyx_n_s_id); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->ids, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    if (unlikely(__pyx_v_self->ids == Py_None)) {
+      PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+      __PYX_ERR(0, 87, __pyx_L1_error)
+    }
+    __pyx_t_4 = __Pyx_GetItemInt(__pyx_v_key, 1, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_4, __pyx_n_s_id); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->ids, __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_t_5 = PyTuple_New(2); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_5);
+    __Pyx_GIVEREF(__pyx_t_3);
+    PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_3);
+    __Pyx_GIVEREF(__pyx_t_4);
+    PyTuple_SET_ITEM(__pyx_t_5, 1, __pyx_t_4);
+    __pyx_t_3 = 0;
+    __pyx_t_4 = 0;
+    __pyx_t_4 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_self->w), __pyx_t_5); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
+    __pyx_r = __pyx_t_4;
+    __pyx_t_4 = 0;
+    goto __pyx_L0;
+
+    /* "hw10.pyx":86
+ * 
+ *     def __getitem__(self, key):
+ *         if type(key) is tuple:             # <<<<<<<<<<<<<<
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
+ *         if type(key) is str:
+ */
+  }
+
+  /* "hw10.pyx":88
+ *         if type(key) is tuple:
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
  *         if type(key) is str:             # <<<<<<<<<<<<<<
  *             return self.names[key]
  *         # if not str, should be int
  */
-  __pyx_t_1 = (((PyObject *)Py_TYPE(__pyx_v_key)) == ((PyObject *)(&PyString_Type)));
-  __pyx_t_2 = (__pyx_t_1 != 0);
-  if (__pyx_t_2) {
+  __pyx_t_2 = (((PyObject *)Py_TYPE(__pyx_v_key)) == ((PyObject *)(&PyString_Type)));
+  __pyx_t_1 = (__pyx_t_2 != 0);
+  if (__pyx_t_1) {
 
-    /* "hw10.pyx":74
- *     def __getitem__(self, key):
+    /* "hw10.pyx":89
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
  *         if type(key) is str:
  *             return self.names[key]             # <<<<<<<<<<<<<<
  *         # if not str, should be int
@@ -4505,24 +4957,24 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_4__getitem__(struct __pyx_obj_4hw1
     __Pyx_XDECREF(__pyx_r);
     if (unlikely(__pyx_v_self->names == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-      __PYX_ERR(0, 74, __pyx_L1_error)
+      __PYX_ERR(0, 89, __pyx_L1_error)
     }
-    __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->names, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 74, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_3);
-    __pyx_r = __pyx_t_3;
-    __pyx_t_3 = 0;
+    __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->names, __pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 89, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_r = __pyx_t_4;
+    __pyx_t_4 = 0;
     goto __pyx_L0;
 
-    /* "hw10.pyx":73
- * 
- *     def __getitem__(self, key):
+    /* "hw10.pyx":88
+ *         if type(key) is tuple:
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
  *         if type(key) is str:             # <<<<<<<<<<<<<<
  *             return self.names[key]
  *         # if not str, should be int
  */
   }
 
-  /* "hw10.pyx":76
+  /* "hw10.pyx":91
  *             return self.names[key]
  *         # if not str, should be int
  *         return self.ids[key]             # <<<<<<<<<<<<<<
@@ -4532,25 +4984,27 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_4__getitem__(struct __pyx_obj_4hw1
   __Pyx_XDECREF(__pyx_r);
   if (unlikely(__pyx_v_self->ids == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(0, 76, __pyx_L1_error)
+    __PYX_ERR(0, 91, __pyx_L1_error)
   }
-  __pyx_t_3 = __Pyx_PyDict_GetItem(__pyx_v_self->ids, __pyx_v_key); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 76, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_3);
-  __pyx_r = __pyx_t_3;
-  __pyx_t_3 = 0;
+  __pyx_t_4 = __Pyx_PyDict_GetItem(__pyx_v_self->ids, __pyx_v_key); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 91, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __pyx_r = __pyx_t_4;
+  __pyx_t_4 = 0;
   goto __pyx_L0;
 
-  /* "hw10.pyx":72
+  /* "hw10.pyx":85
  *     def __len__(self): return len(self.vertices)
  * 
  *     def __getitem__(self, key):             # <<<<<<<<<<<<<<
- *         if type(key) is str:
- *             return self.names[key]
+ *         if type(key) is tuple:
+ *             return self.w[self.ids[key[0].id], self.ids[key[1].id]]
  */
 
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_XDECREF(__pyx_t_5);
   __Pyx_AddTraceback("hw10.Vertex_list.__getitem__", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
   __pyx_L0:;
@@ -4559,7 +5013,7 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_4__getitem__(struct __pyx_obj_4hw1
   return __pyx_r;
 }
 
-/* "hw10.pyx":79
+/* "hw10.pyx":94
  *         # if type(key) is not int either, allow KeyError
  * 
  *     def __contains__(self, key):             # <<<<<<<<<<<<<<
@@ -4587,7 +5041,7 @@ static int __pyx_pf_4hw10_11Vertex_list_6__contains__(struct __pyx_obj_4hw10_Ver
   int __pyx_t_2;
   __Pyx_RefNannySetupContext("__contains__", 0);
 
-  /* "hw10.pyx":80
+  /* "hw10.pyx":95
  * 
  *     def __contains__(self, key):
  *         if type(key) is str: return key in self.names             # <<<<<<<<<<<<<<
@@ -4599,14 +5053,14 @@ static int __pyx_pf_4hw10_11Vertex_list_6__contains__(struct __pyx_obj_4hw10_Ver
   if (__pyx_t_2) {
     if (unlikely(__pyx_v_self->names == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-      __PYX_ERR(0, 80, __pyx_L1_error)
+      __PYX_ERR(0, 95, __pyx_L1_error)
     }
-    __pyx_t_2 = (__Pyx_PyDict_ContainsTF(__pyx_v_key, __pyx_v_self->names, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 80, __pyx_L1_error)
+    __pyx_t_2 = (__Pyx_PyDict_ContainsTF(__pyx_v_key, __pyx_v_self->names, Py_EQ)); if (unlikely(__pyx_t_2 < 0)) __PYX_ERR(0, 95, __pyx_L1_error)
     __pyx_r = __pyx_t_2;
     goto __pyx_L0;
   }
 
-  /* "hw10.pyx":81
+  /* "hw10.pyx":96
  *     def __contains__(self, key):
  *         if type(key) is str: return key in self.names
  *         if type(key) is int: return key in self.ids             # <<<<<<<<<<<<<<
@@ -4618,24 +5072,24 @@ static int __pyx_pf_4hw10_11Vertex_list_6__contains__(struct __pyx_obj_4hw10_Ver
   if (__pyx_t_1) {
     if (unlikely(__pyx_v_self->ids == Py_None)) {
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
-      __PYX_ERR(0, 81, __pyx_L1_error)
+      __PYX_ERR(0, 96, __pyx_L1_error)
     }
-    __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_v_key, __pyx_v_self->ids, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 81, __pyx_L1_error)
+    __pyx_t_1 = (__Pyx_PyDict_ContainsTF(__pyx_v_key, __pyx_v_self->ids, Py_EQ)); if (unlikely(__pyx_t_1 < 0)) __PYX_ERR(0, 96, __pyx_L1_error)
     __pyx_r = __pyx_t_1;
     goto __pyx_L0;
   }
 
-  /* "hw10.pyx":82
+  /* "hw10.pyx":97
  *         if type(key) is str: return key in self.names
  *         if type(key) is int: return key in self.ids
  *         return False             # <<<<<<<<<<<<<<
  * 
- * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
+ *     cpdef void reset(self):
  */
   __pyx_r = 0;
   goto __pyx_L0;
 
-  /* "hw10.pyx":79
+  /* "hw10.pyx":94
  *         # if type(key) is not int either, allow KeyError
  * 
  *     def __contains__(self, key):             # <<<<<<<<<<<<<<
@@ -4652,7 +5106,188 @@ static int __pyx_pf_4hw10_11Vertex_list_6__contains__(struct __pyx_obj_4hw10_Ver
   return __pyx_r;
 }
 
-/* "hw10.pyx":57
+/* "hw10.pyx":99
+ *         return False
+ * 
+ *     cpdef void reset(self):             # <<<<<<<<<<<<<<
+ *         for v in self.vertices: v.reset()
+ * 
+ */
+
+static PyObject *__pyx_pw_4hw10_11Vertex_list_9reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static void __pyx_f_4hw10_11Vertex_list_reset(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, int __pyx_skip_dispatch) {
+  PyObject *__pyx_v_v = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  Py_ssize_t __pyx_t_5;
+  PyObject *(*__pyx_t_6)(PyObject *);
+  __Pyx_RefNannySetupContext("reset", 0);
+  /* Check if called by wrapper */
+  if (unlikely(__pyx_skip_dispatch)) ;
+  /* Check if overridden in Python */
+  else if (unlikely(Py_TYPE(((PyObject *)__pyx_v_self))->tp_dictoffset != 0)) {
+    __pyx_t_1 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v_self), __pyx_n_s_reset); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    if (!PyCFunction_Check(__pyx_t_1) || (PyCFunction_GET_FUNCTION(__pyx_t_1) != (PyCFunction)__pyx_pw_4hw10_11Vertex_list_9reset)) {
+      __Pyx_INCREF(__pyx_t_1);
+      __pyx_t_3 = __pyx_t_1; __pyx_t_4 = NULL;
+      if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_3))) {
+        __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+        if (likely(__pyx_t_4)) {
+          PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+          __Pyx_INCREF(__pyx_t_4);
+          __Pyx_INCREF(function);
+          __Pyx_DECREF_SET(__pyx_t_3, function);
+        }
+      }
+      if (__pyx_t_4) {
+        __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+        __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+      } else {
+        __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 99, __pyx_L1_error)
+      }
+      __Pyx_GOTREF(__pyx_t_2);
+      __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+      __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+      __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+      goto __pyx_L0;
+    }
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  }
+
+  /* "hw10.pyx":100
+ * 
+ *     cpdef void reset(self):
+ *         for v in self.vertices: v.reset()             # <<<<<<<<<<<<<<
+ * 
+ * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
+ */
+  if (likely(PyList_CheckExact(((PyObject *)__pyx_v_self->vertices))) || PyTuple_CheckExact(((PyObject *)__pyx_v_self->vertices))) {
+    __pyx_t_1 = ((PyObject *)__pyx_v_self->vertices); __Pyx_INCREF(__pyx_t_1); __pyx_t_5 = 0;
+    __pyx_t_6 = NULL;
+  } else {
+    __pyx_t_5 = -1; __pyx_t_1 = PyObject_GetIter(((PyObject *)__pyx_v_self->vertices)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __pyx_t_6 = Py_TYPE(__pyx_t_1)->tp_iternext; if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 100, __pyx_L1_error)
+  }
+  for (;;) {
+    if (likely(!__pyx_t_6)) {
+      if (likely(PyList_CheckExact(__pyx_t_1))) {
+        if (__pyx_t_5 >= PyList_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_2 = PyList_GET_ITEM(__pyx_t_1, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 100, __pyx_L1_error)
+        #else
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        #endif
+      } else {
+        if (__pyx_t_5 >= PyTuple_GET_SIZE(__pyx_t_1)) break;
+        #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
+        __pyx_t_2 = PyTuple_GET_ITEM(__pyx_t_1, __pyx_t_5); __Pyx_INCREF(__pyx_t_2); __pyx_t_5++; if (unlikely(0 < 0)) __PYX_ERR(0, 100, __pyx_L1_error)
+        #else
+        __pyx_t_2 = PySequence_ITEM(__pyx_t_1, __pyx_t_5); __pyx_t_5++; if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+        __Pyx_GOTREF(__pyx_t_2);
+        #endif
+      }
+    } else {
+      __pyx_t_2 = __pyx_t_6(__pyx_t_1);
+      if (unlikely(!__pyx_t_2)) {
+        PyObject* exc_type = PyErr_Occurred();
+        if (exc_type) {
+          if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
+          else __PYX_ERR(0, 100, __pyx_L1_error)
+        }
+        break;
+      }
+      __Pyx_GOTREF(__pyx_t_2);
+    }
+    __Pyx_XDECREF_SET(__pyx_v_v, __pyx_t_2);
+    __pyx_t_2 = 0;
+    __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_v_v, __pyx_n_s_reset); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 100, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __pyx_t_4 = NULL;
+    if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_3))) {
+      __pyx_t_4 = PyMethod_GET_SELF(__pyx_t_3);
+      if (likely(__pyx_t_4)) {
+        PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_3);
+        __Pyx_INCREF(__pyx_t_4);
+        __Pyx_INCREF(function);
+        __Pyx_DECREF_SET(__pyx_t_3, function);
+      }
+    }
+    if (__pyx_t_4) {
+      __pyx_t_2 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_t_4); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+      __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    } else {
+      __pyx_t_2 = __Pyx_PyObject_CallNoArg(__pyx_t_3); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 100, __pyx_L1_error)
+    }
+    __Pyx_GOTREF(__pyx_t_2);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  }
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+
+  /* "hw10.pyx":99
+ *         return False
+ * 
+ *     cpdef void reset(self):             # <<<<<<<<<<<<<<
+ *         for v in self.vertices: v.reset()
+ * 
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_WriteUnraisable("hw10.Vertex_list.reset", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_v);
+  __Pyx_RefNannyFinishContext();
+}
+
+/* Python wrapper */
+static PyObject *__pyx_pw_4hw10_11Vertex_list_9reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_4hw10_11Vertex_list_9reset(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("reset (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_8reset(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_4hw10_11Vertex_list_8reset(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("reset", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __pyx_t_1 = __Pyx_void_to_None(__pyx_f_4hw10_11Vertex_list_reset(__pyx_v_self, 1)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 99, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("hw10.Vertex_list.reset", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = NULL;
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "hw10.pyx":65
  * 
  * cdef class Vertex_list:
  *     cdef public dict names             # <<<<<<<<<<<<<<
@@ -4707,7 +5342,7 @@ static int __pyx_pf_4hw10_11Vertex_list_5names_2__set__(struct __pyx_obj_4hw10_V
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 57, __pyx_L1_error)
+  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 65, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -4757,12 +5392,12 @@ static int __pyx_pf_4hw10_11Vertex_list_5names_4__del__(struct __pyx_obj_4hw10_V
   return __pyx_r;
 }
 
-/* "hw10.pyx":58
+/* "hw10.pyx":66
  * cdef class Vertex_list:
  *     cdef public dict names
  *     cdef public dict ids             # <<<<<<<<<<<<<<
  *     cdef public np.ndarray vertices
- * 
+ *     cdef public np.ndarray w
  */
 
 /* Python wrapper */
@@ -4812,7 +5447,7 @@ static int __pyx_pf_4hw10_11Vertex_list_3ids_2__set__(struct __pyx_obj_4hw10_Ver
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 58, __pyx_L1_error)
+  if (!(likely(PyDict_CheckExact(__pyx_v_value))||((__pyx_v_value) == Py_None)||(PyErr_Format(PyExc_TypeError, "Expected %.16s, got %.200s", "dict", Py_TYPE(__pyx_v_value)->tp_name), 0))) __PYX_ERR(0, 66, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -4862,12 +5497,12 @@ static int __pyx_pf_4hw10_11Vertex_list_3ids_4__del__(struct __pyx_obj_4hw10_Ver
   return __pyx_r;
 }
 
-/* "hw10.pyx":59
+/* "hw10.pyx":67
  *     cdef public dict names
  *     cdef public dict ids
  *     cdef public np.ndarray vertices             # <<<<<<<<<<<<<<
+ *     cdef public np.ndarray w
  * 
- *     def __init__(Vertex_list self, list lst):
  */
 
 /* Python wrapper */
@@ -4917,7 +5552,7 @@ static int __pyx_pf_4hw10_11Vertex_list_8vertices_2__set__(struct __pyx_obj_4hw1
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__set__", 0);
-  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 59, __pyx_L1_error)
+  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 67, __pyx_L1_error)
   __pyx_t_1 = __pyx_v_value;
   __Pyx_INCREF(__pyx_t_1);
   __Pyx_GIVEREF(__pyx_t_1);
@@ -4967,26 +5602,131 @@ static int __pyx_pf_4hw10_11Vertex_list_8vertices_4__del__(struct __pyx_obj_4hw1
   return __pyx_r;
 }
 
-/* "(tree fragment)":1
- * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
- *     cdef bint use_setstate
- *     state = (self.ids, self.names, self.vertices)
+/* "hw10.pyx":68
+ *     cdef public dict ids
+ *     cdef public np.ndarray vertices
+ *     cdef public np.ndarray w             # <<<<<<<<<<<<<<
+ * 
+ *     def __init__(Vertex_list self, list lst):
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_4hw10_11Vertex_list_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
-static PyObject *__pyx_pw_4hw10_11Vertex_list_9__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+static PyObject *__pyx_pw_4hw10_11Vertex_list_1w_1__get__(PyObject *__pyx_v_self); /*proto*/
+static PyObject *__pyx_pw_4hw10_11Vertex_list_1w_1__get__(PyObject *__pyx_v_self) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self));
+  __Pyx_RefNannySetupContext("__get__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_1w___get__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self) {
+static PyObject *__pyx_pf_4hw10_11Vertex_list_1w___get__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self) {
+  PyObject *__pyx_r = NULL;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__get__", 0);
+  __Pyx_XDECREF(__pyx_r);
+  __Pyx_INCREF(((PyObject *)__pyx_v_self->w));
+  __pyx_r = ((PyObject *)__pyx_v_self->w);
+  goto __pyx_L0;
+
+  /* function exit code */
+  __pyx_L0:;
+  __Pyx_XGIVEREF(__pyx_r);
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static int __pyx_pw_4hw10_11Vertex_list_1w_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value); /*proto*/
+static int __pyx_pw_4hw10_11Vertex_list_1w_3__set__(PyObject *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__set__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_1w_2__set__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self), ((PyObject *)__pyx_v_value));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_4hw10_11Vertex_list_1w_2__set__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v_value) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("__set__", 0);
+  if (!(likely(((__pyx_v_value) == Py_None) || likely(__Pyx_TypeTest(__pyx_v_value, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 68, __pyx_L1_error)
+  __pyx_t_1 = __pyx_v_value;
+  __Pyx_INCREF(__pyx_t_1);
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v_self->w);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->w));
+  __pyx_v_self->w = ((PyArrayObject *)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* function exit code */
+  __pyx_r = 0;
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_AddTraceback("hw10.Vertex_list.w.__set__", __pyx_clineno, __pyx_lineno, __pyx_filename);
+  __pyx_r = -1;
+  __pyx_L0:;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* Python wrapper */
+static int __pyx_pw_4hw10_11Vertex_list_1w_5__del__(PyObject *__pyx_v_self); /*proto*/
+static int __pyx_pw_4hw10_11Vertex_list_1w_5__del__(PyObject *__pyx_v_self) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__del__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_1w_4__del__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static int __pyx_pf_4hw10_11Vertex_list_1w_4__del__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self) {
+  int __pyx_r;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__del__", 0);
+  __Pyx_INCREF(Py_None);
+  __Pyx_GIVEREF(Py_None);
+  __Pyx_GOTREF(__pyx_v_self->w);
+  __Pyx_DECREF(((PyObject *)__pyx_v_self->w));
+  __pyx_v_self->w = ((PyArrayObject *)Py_None);
+
+  /* function exit code */
+  __pyx_r = 0;
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+/* "(tree fragment)":1
+ * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
+ *     cdef bint use_setstate
+ *     state = (self.ids, self.names, self.vertices, self.w)
+ */
+
+/* Python wrapper */
+static PyObject *__pyx_pw_4hw10_11Vertex_list_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused); /*proto*/
+static PyObject *__pyx_pw_4hw10_11Vertex_list_11__reduce_cython__(PyObject *__pyx_v_self, CYTHON_UNUSED PyObject *unused) {
+  PyObject *__pyx_r = 0;
+  __Pyx_RefNannyDeclarations
+  __Pyx_RefNannySetupContext("__reduce_cython__ (wrapper)", 0);
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_10__reduce_cython__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self));
+
+  /* function exit code */
+  __Pyx_RefNannyFinishContext();
+  return __pyx_r;
+}
+
+static PyObject *__pyx_pf_4hw10_11Vertex_list_10__reduce_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self) {
   int __pyx_v_use_setstate;
   PyObject *__pyx_v_state = NULL;
   PyObject *__pyx_v__dict = NULL;
@@ -5003,11 +5743,11 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
   /* "(tree fragment)":3
  * def __reduce_cython__(self):
  *     cdef bint use_setstate
- *     state = (self.ids, self.names, self.vertices)             # <<<<<<<<<<<<<<
+ *     state = (self.ids, self.names, self.vertices, self.w)             # <<<<<<<<<<<<<<
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:
  */
-  __pyx_t_1 = PyTuple_New(3); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 3, __pyx_L1_error)
+  __pyx_t_1 = PyTuple_New(4); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 3, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_INCREF(__pyx_v_self->ids);
   __Pyx_GIVEREF(__pyx_v_self->ids);
@@ -5018,12 +5758,15 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
   __Pyx_INCREF(((PyObject *)__pyx_v_self->vertices));
   __Pyx_GIVEREF(((PyObject *)__pyx_v_self->vertices));
   PyTuple_SET_ITEM(__pyx_t_1, 2, ((PyObject *)__pyx_v_self->vertices));
+  __Pyx_INCREF(((PyObject *)__pyx_v_self->w));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_self->w));
+  PyTuple_SET_ITEM(__pyx_t_1, 3, ((PyObject *)__pyx_v_self->w));
   __pyx_v_state = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
   /* "(tree fragment)":4
  *     cdef bint use_setstate
- *     state = (self.ids, self.names, self.vertices)
+ *     state = (self.ids, self.names, self.vertices, self.w)
  *     _dict = getattr(self, '__dict__', None)             # <<<<<<<<<<<<<<
  *     if _dict is not None:
  *         state += (_dict,)
@@ -5034,7 +5777,7 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
   __pyx_t_1 = 0;
 
   /* "(tree fragment)":5
- *     state = (self.ids, self.names, self.vertices)
+ *     state = (self.ids, self.names, self.vertices, self.w)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5067,12 +5810,12 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
  *         state += (_dict,)
  *         use_setstate = True             # <<<<<<<<<<<<<<
  *     else:
- *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None
+ *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None or self.w is not None
  */
     __pyx_v_use_setstate = 1;
 
     /* "(tree fragment)":5
- *     state = (self.ids, self.names, self.vertices)
+ *     state = (self.ids, self.names, self.vertices, self.w)
  *     _dict = getattr(self, '__dict__', None)
  *     if _dict is not None:             # <<<<<<<<<<<<<<
  *         state += (_dict,)
@@ -5084,9 +5827,9 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
   /* "(tree fragment)":9
  *         use_setstate = True
  *     else:
- *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None             # <<<<<<<<<<<<<<
+ *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None or self.w is not None             # <<<<<<<<<<<<<<
  *     if use_setstate:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, None), state
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, None), state
  */
   /*else*/ {
     __pyx_t_2 = (__pyx_v_self->ids != ((PyObject*)Py_None));
@@ -5105,7 +5848,14 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
     }
     __pyx_t_2 = (((PyObject *)__pyx_v_self->vertices) != Py_None);
     __pyx_t_5 = (__pyx_t_2 != 0);
-    __pyx_t_3 = __pyx_t_5;
+    if (!__pyx_t_5) {
+    } else {
+      __pyx_t_3 = __pyx_t_5;
+      goto __pyx_L4_bool_binop_done;
+    }
+    __pyx_t_5 = (((PyObject *)__pyx_v_self->w) != Py_None);
+    __pyx_t_2 = (__pyx_t_5 != 0);
+    __pyx_t_3 = __pyx_t_2;
     __pyx_L4_bool_binop_done:;
     __pyx_v_use_setstate = __pyx_t_3;
   }
@@ -5113,20 +5863,20 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
 
   /* "(tree fragment)":10
  *     else:
- *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None
+ *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None or self.w is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, None), state
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, None), state
  *     else:
  */
   __pyx_t_3 = (__pyx_v_use_setstate != 0);
   if (__pyx_t_3) {
 
     /* "(tree fragment)":11
- *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None
+ *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None or self.w is not None
  *     if use_setstate:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, None), state             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, None), state             # <<<<<<<<<<<<<<
  *     else:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, state)
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, state)
  */
     __Pyx_XDECREF(__pyx_r);
     __pyx_t_4 = __Pyx_GetModuleGlobalName(__pyx_n_s_pyx_unpickle_Vertex_list); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 11, __pyx_L1_error)
@@ -5136,9 +5886,9 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_105801433);
-    __Pyx_GIVEREF(__pyx_int_105801433);
-    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_105801433);
+    __Pyx_INCREF(__pyx_int_265238156);
+    __Pyx_GIVEREF(__pyx_int_265238156);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_265238156);
     __Pyx_INCREF(Py_None);
     __Pyx_GIVEREF(Py_None);
     PyTuple_SET_ITEM(__pyx_t_1, 2, Py_None);
@@ -5159,17 +5909,17 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
 
     /* "(tree fragment)":10
  *     else:
- *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None
+ *         use_setstate = self.ids is not None or self.names is not None or self.vertices is not None or self.w is not None
  *     if use_setstate:             # <<<<<<<<<<<<<<
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, None), state
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, None), state
  *     else:
  */
   }
 
   /* "(tree fragment)":13
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, None), state
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, None), state
  *     else:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, state)             # <<<<<<<<<<<<<<
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, state)             # <<<<<<<<<<<<<<
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Vertex_list__set_state(self, __pyx_state)
  */
@@ -5182,9 +5932,9 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
     __Pyx_INCREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     __Pyx_GIVEREF(((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
     PyTuple_SET_ITEM(__pyx_t_1, 0, ((PyObject *)Py_TYPE(((PyObject *)__pyx_v_self))));
-    __Pyx_INCREF(__pyx_int_105801433);
-    __Pyx_GIVEREF(__pyx_int_105801433);
-    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_105801433);
+    __Pyx_INCREF(__pyx_int_265238156);
+    __Pyx_GIVEREF(__pyx_int_265238156);
+    PyTuple_SET_ITEM(__pyx_t_1, 1, __pyx_int_265238156);
     __Pyx_INCREF(__pyx_v_state);
     __Pyx_GIVEREF(__pyx_v_state);
     PyTuple_SET_ITEM(__pyx_t_1, 2, __pyx_v_state);
@@ -5204,7 +5954,7 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
   /* "(tree fragment)":1
  * def __reduce_cython__(self):             # <<<<<<<<<<<<<<
  *     cdef bint use_setstate
- *     state = (self.ids, self.names, self.vertices)
+ *     state = (self.ids, self.names, self.vertices, self.w)
  */
 
   /* function exit code */
@@ -5224,32 +5974,32 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_8__reduce_cython__(struct __pyx_ob
 
 /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, state)
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Vertex_list__set_state(self, __pyx_state)
  */
 
 /* Python wrapper */
-static PyObject *__pyx_pw_4hw10_11Vertex_list_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
-static PyObject *__pyx_pw_4hw10_11Vertex_list_11__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pw_4hw10_11Vertex_list_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state); /*proto*/
+static PyObject *__pyx_pw_4hw10_11Vertex_list_13__setstate_cython__(PyObject *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = 0;
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__setstate_cython__ (wrapper)", 0);
-  __pyx_r = __pyx_pf_4hw10_11Vertex_list_10__setstate_cython__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
+  __pyx_r = __pyx_pf_4hw10_11Vertex_list_12__setstate_cython__(((struct __pyx_obj_4hw10_Vertex_list *)__pyx_v_self), ((PyObject *)__pyx_v___pyx_state));
 
   /* function exit code */
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-static PyObject *__pyx_pf_4hw10_11Vertex_list_10__setstate_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
+static PyObject *__pyx_pf_4hw10_11Vertex_list_12__setstate_cython__(struct __pyx_obj_4hw10_Vertex_list *__pyx_v_self, PyObject *__pyx_v___pyx_state) {
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   __Pyx_RefNannySetupContext("__setstate_cython__", 0);
 
   /* "(tree fragment)":15
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, state)
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, state)
  * def __setstate_cython__(self, __pyx_state):
  *     __pyx_unpickle_Vertex_list__set_state(self, __pyx_state)             # <<<<<<<<<<<<<<
  */
@@ -5260,7 +6010,7 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_10__setstate_cython__(struct __pyx
 
   /* "(tree fragment)":14
  *     else:
- *         return __pyx_unpickle_Vertex_list, (type(self), 0x64e66d9, state)
+ *         return __pyx_unpickle_Vertex_list, (type(self), 0xfcf368c, state)
  * def __setstate_cython__(self, __pyx_state):             # <<<<<<<<<<<<<<
  *     __pyx_unpickle_Vertex_list__set_state(self, __pyx_state)
  */
@@ -5278,8 +6028,8 @@ static PyObject *__pyx_pf_4hw10_11Vertex_list_10__setstate_cython__(struct __pyx
   return __pyx_r;
 }
 
-/* "hw10.pyx":84
- *         return False
+/* "hw10.pyx":102
+ *         for v in self.vertices: v.reset()
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):             # <<<<<<<<<<<<<<
  *     cdef list temp = []
@@ -5321,19 +6071,19 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
     }
   }
 
-  /* "hw10.pyx":85
+  /* "hw10.pyx":103
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
  *     cdef list temp = []             # <<<<<<<<<<<<<<
  *     with open(fpath) as f:
  *         r = csv.DictReader(f)
  */
-  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 85, __pyx_L1_error)
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 103, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_temp = ((PyObject*)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "hw10.pyx":86
+  /* "hw10.pyx":104
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
  *     cdef list temp = []
  *     with open(fpath) as f:             # <<<<<<<<<<<<<<
@@ -5341,11 +6091,11 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
  *         for row in r:
  */
   /*with:*/ {
-    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_open, __pyx_v_fpath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 86, __pyx_L1_error)
+    __pyx_t_1 = __Pyx_PyObject_CallOneArg(__pyx_builtin_open, __pyx_v_fpath); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_1);
-    __pyx_t_2 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 86, __pyx_L1_error)
+    __pyx_t_2 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_exit); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 104, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 86, __pyx_L3_error)
+    __pyx_t_4 = __Pyx_PyObject_LookupSpecial(__pyx_t_1, __pyx_n_s_enter); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 104, __pyx_L3_error)
     __Pyx_GOTREF(__pyx_t_4);
     __pyx_t_5 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_4))) {
@@ -5358,10 +6108,10 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
       }
     }
     if (__pyx_t_5) {
-      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L3_error)
+      __pyx_t_3 = __Pyx_PyObject_CallOneArg(__pyx_t_4, __pyx_t_5); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L3_error)
       __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
     } else {
-      __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 86, __pyx_L3_error)
+      __pyx_t_3 = __Pyx_PyObject_CallNoArg(__pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 104, __pyx_L3_error)
     }
     __Pyx_GOTREF(__pyx_t_3);
     __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
@@ -5380,16 +6130,16 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
           __pyx_v_f = __pyx_t_4;
           __pyx_t_4 = 0;
 
-          /* "hw10.pyx":87
+          /* "hw10.pyx":105
  *     cdef list temp = []
  *     with open(fpath) as f:
  *         r = csv.DictReader(f)             # <<<<<<<<<<<<<<
  *         for row in r:
  *             if int(row["system_id"]) < 31_000_000:
  */
-          __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_csv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 87, __pyx_L7_error)
+          __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_csv); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_1);
-          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_DictReader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 87, __pyx_L7_error)
+          __pyx_t_3 = __Pyx_PyObject_GetAttrStr(__pyx_t_1, __pyx_n_s_DictReader); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 105, __pyx_L7_error)
           __Pyx_GOTREF(__pyx_t_3);
           __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
           __pyx_t_1 = NULL;
@@ -5403,13 +6153,13 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
             }
           }
           if (!__pyx_t_1) {
-            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_f); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L7_error)
+            __pyx_t_4 = __Pyx_PyObject_CallOneArg(__pyx_t_3, __pyx_v_f); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_4);
           } else {
             #if CYTHON_FAST_PYCALL
             if (PyFunction_Check(__pyx_t_3)) {
               PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_v_f};
-              __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L7_error)
+              __pyx_t_4 = __Pyx_PyFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L7_error)
               __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_GOTREF(__pyx_t_4);
             } else
@@ -5417,19 +6167,19 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
             #if CYTHON_FAST_PYCCALL
             if (__Pyx_PyFastCFunction_Check(__pyx_t_3)) {
               PyObject *__pyx_temp[2] = {__pyx_t_1, __pyx_v_f};
-              __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L7_error)
+              __pyx_t_4 = __Pyx_PyCFunction_FastCall(__pyx_t_3, __pyx_temp+1-1, 1+1); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L7_error)
               __Pyx_XDECREF(__pyx_t_1); __pyx_t_1 = 0;
               __Pyx_GOTREF(__pyx_t_4);
             } else
             #endif
             {
-              __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 87, __pyx_L7_error)
+              __pyx_t_5 = PyTuple_New(1+1); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 105, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_5);
               __Pyx_GIVEREF(__pyx_t_1); PyTuple_SET_ITEM(__pyx_t_5, 0, __pyx_t_1); __pyx_t_1 = NULL;
               __Pyx_INCREF(__pyx_v_f);
               __Pyx_GIVEREF(__pyx_v_f);
               PyTuple_SET_ITEM(__pyx_t_5, 0+1, __pyx_v_f);
-              __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 87, __pyx_L7_error)
+              __pyx_t_4 = __Pyx_PyObject_Call(__pyx_t_3, __pyx_t_5, NULL); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 105, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_4);
               __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
             }
@@ -5438,7 +6188,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
           __pyx_v_r = __pyx_t_4;
           __pyx_t_4 = 0;
 
-          /* "hw10.pyx":88
+          /* "hw10.pyx":106
  *     with open(fpath) as f:
  *         r = csv.DictReader(f)
  *         for row in r:             # <<<<<<<<<<<<<<
@@ -5449,26 +6199,26 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
             __pyx_t_4 = __pyx_v_r; __Pyx_INCREF(__pyx_t_4); __pyx_t_9 = 0;
             __pyx_t_10 = NULL;
           } else {
-            __pyx_t_9 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_r); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 88, __pyx_L7_error)
+            __pyx_t_9 = -1; __pyx_t_4 = PyObject_GetIter(__pyx_v_r); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 106, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_4);
-            __pyx_t_10 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 88, __pyx_L7_error)
+            __pyx_t_10 = Py_TYPE(__pyx_t_4)->tp_iternext; if (unlikely(!__pyx_t_10)) __PYX_ERR(0, 106, __pyx_L7_error)
           }
           for (;;) {
             if (likely(!__pyx_t_10)) {
               if (likely(PyList_CheckExact(__pyx_t_4))) {
                 if (__pyx_t_9 >= PyList_GET_SIZE(__pyx_t_4)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 88, __pyx_L7_error)
+                __pyx_t_3 = PyList_GET_ITEM(__pyx_t_4, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 106, __pyx_L7_error)
                 #else
-                __pyx_t_3 = PySequence_ITEM(__pyx_t_4, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 88, __pyx_L7_error)
+                __pyx_t_3 = PySequence_ITEM(__pyx_t_4, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_3);
                 #endif
               } else {
                 if (__pyx_t_9 >= PyTuple_GET_SIZE(__pyx_t_4)) break;
                 #if CYTHON_ASSUME_SAFE_MACROS && !CYTHON_AVOID_BORROWED_REFS
-                __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 88, __pyx_L7_error)
+                __pyx_t_3 = PyTuple_GET_ITEM(__pyx_t_4, __pyx_t_9); __Pyx_INCREF(__pyx_t_3); __pyx_t_9++; if (unlikely(0 < 0)) __PYX_ERR(0, 106, __pyx_L7_error)
                 #else
-                __pyx_t_3 = PySequence_ITEM(__pyx_t_4, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 88, __pyx_L7_error)
+                __pyx_t_3 = PySequence_ITEM(__pyx_t_4, __pyx_t_9); __pyx_t_9++; if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 106, __pyx_L7_error)
                 __Pyx_GOTREF(__pyx_t_3);
                 #endif
               }
@@ -5478,7 +6228,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
                 PyObject* exc_type = PyErr_Occurred();
                 if (exc_type) {
                   if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) PyErr_Clear();
-                  else __PYX_ERR(0, 88, __pyx_L7_error)
+                  else __PYX_ERR(0, 106, __pyx_L7_error)
                 }
                 break;
               }
@@ -5487,102 +6237,102 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
             __Pyx_XDECREF_SET(__pyx_v_row, __pyx_t_3);
             __pyx_t_3 = 0;
 
-            /* "hw10.pyx":89
+            /* "hw10.pyx":107
  *         r = csv.DictReader(f)
  *         for row in r:
  *             if int(row["system_id"]) < 31_000_000:             # <<<<<<<<<<<<<<
  *                 if not row["stargates"]: row["stargates"] = "[]"
  *                 sys = Vertex(
  */
-            __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_system_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L7_error)
+            __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_system_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 107, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_3);
-            __pyx_t_5 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 89, __pyx_L7_error)
+            __pyx_t_5 = __Pyx_PyNumber_Int(__pyx_t_3); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 107, __pyx_L7_error)
             __Pyx_GOTREF(__pyx_t_5);
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
-            __pyx_t_3 = PyObject_RichCompare(__pyx_t_5, __pyx_int_31000000, Py_LT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 89, __pyx_L7_error)
+            __pyx_t_3 = PyObject_RichCompare(__pyx_t_5, __pyx_int_31000000, Py_LT); __Pyx_XGOTREF(__pyx_t_3); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 107, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-            __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 89, __pyx_L7_error)
+            __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 107, __pyx_L7_error)
             __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
             if (__pyx_t_11) {
 
-              /* "hw10.pyx":90
+              /* "hw10.pyx":108
  *         for row in r:
  *             if int(row["system_id"]) < 31_000_000:
  *                 if not row["stargates"]: row["stargates"] = "[]"             # <<<<<<<<<<<<<<
  *                 sys = Vertex(
  *                         row["system_id"],
  */
-              __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_stargates); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 90, __pyx_L7_error)
+              __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_stargates); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 108, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_3);
-              __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 90, __pyx_L7_error)
+              __pyx_t_11 = __Pyx_PyObject_IsTrue(__pyx_t_3); if (unlikely(__pyx_t_11 < 0)) __PYX_ERR(0, 108, __pyx_L7_error)
               __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
               __pyx_t_12 = ((!__pyx_t_11) != 0);
               if (__pyx_t_12) {
-                if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_stargates, __pyx_kp_s__4) < 0)) __PYX_ERR(0, 90, __pyx_L7_error)
+                if (unlikely(PyObject_SetItem(__pyx_v_row, __pyx_n_s_stargates, __pyx_kp_s__4) < 0)) __PYX_ERR(0, 108, __pyx_L7_error)
               }
 
-              /* "hw10.pyx":92
+              /* "hw10.pyx":110
  *                 if not row["stargates"]: row["stargates"] = "[]"
  *                 sys = Vertex(
  *                         row["system_id"],             # <<<<<<<<<<<<<<
  *                         row["stargates"],
  *                         row['x'], row['y'], row['z'],
  */
-              __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_system_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 92, __pyx_L7_error)
+              __pyx_t_3 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_system_id); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 110, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_3);
 
-              /* "hw10.pyx":93
+              /* "hw10.pyx":111
  *                 sys = Vertex(
  *                         row["system_id"],
  *                         row["stargates"],             # <<<<<<<<<<<<<<
  *                         row['x'], row['y'], row['z'],
  *                         row["solarsystem_name"],
  */
-              __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_stargates); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 93, __pyx_L7_error)
+              __pyx_t_5 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_stargates); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 111, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_5);
 
-              /* "hw10.pyx":94
+              /* "hw10.pyx":112
  *                         row["system_id"],
  *                         row["stargates"],
  *                         row['x'], row['y'], row['z'],             # <<<<<<<<<<<<<<
  *                         row["solarsystem_name"],
  *                         row["security_status"]
  */
-              __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 94, __pyx_L7_error)
+              __pyx_t_1 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_x); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 112, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_1);
-              __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 94, __pyx_L7_error)
+              __pyx_t_13 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_y); if (unlikely(!__pyx_t_13)) __PYX_ERR(0, 112, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_13);
-              __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 94, __pyx_L7_error)
+              __pyx_t_14 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_z); if (unlikely(!__pyx_t_14)) __PYX_ERR(0, 112, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_14);
 
-              /* "hw10.pyx":95
+              /* "hw10.pyx":113
  *                         row["stargates"],
  *                         row['x'], row['y'], row['z'],
  *                         row["solarsystem_name"],             # <<<<<<<<<<<<<<
  *                         row["security_status"]
  *                         )
  */
-              __pyx_t_15 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_solarsystem_name); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 95, __pyx_L7_error)
+              __pyx_t_15 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_solarsystem_name); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 113, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_15);
 
-              /* "hw10.pyx":96
+              /* "hw10.pyx":114
  *                         row['x'], row['y'], row['z'],
  *                         row["solarsystem_name"],
  *                         row["security_status"]             # <<<<<<<<<<<<<<
  *                         )
  *                 temp.append(sys)
  */
-              __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_security_status); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 96, __pyx_L7_error)
+              __pyx_t_16 = __Pyx_PyObject_Dict_GetItem(__pyx_v_row, __pyx_n_s_security_status); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 114, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_16);
 
-              /* "hw10.pyx":91
+              /* "hw10.pyx":109
  *             if int(row["system_id"]) < 31_000_000:
  *                 if not row["stargates"]: row["stargates"] = "[]"
  *                 sys = Vertex(             # <<<<<<<<<<<<<<
  *                         row["system_id"],
  *                         row["stargates"],
  */
-              __pyx_t_17 = PyTuple_New(7); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 91, __pyx_L7_error)
+              __pyx_t_17 = PyTuple_New(7); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 109, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_17);
               __Pyx_GIVEREF(__pyx_t_3);
               PyTuple_SET_ITEM(__pyx_t_17, 0, __pyx_t_3);
@@ -5605,22 +6355,22 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
               __pyx_t_14 = 0;
               __pyx_t_15 = 0;
               __pyx_t_16 = 0;
-              __pyx_t_16 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_4hw10_Vertex), __pyx_t_17, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 91, __pyx_L7_error)
+              __pyx_t_16 = __Pyx_PyObject_Call(((PyObject *)__pyx_ptype_4hw10_Vertex), __pyx_t_17, NULL); if (unlikely(!__pyx_t_16)) __PYX_ERR(0, 109, __pyx_L7_error)
               __Pyx_GOTREF(__pyx_t_16);
               __Pyx_DECREF(__pyx_t_17); __pyx_t_17 = 0;
               __Pyx_XDECREF_SET(__pyx_v_sys, ((struct __pyx_obj_4hw10_Vertex *)__pyx_t_16));
               __pyx_t_16 = 0;
 
-              /* "hw10.pyx":98
+              /* "hw10.pyx":116
  *                         row["security_status"]
  *                         )
  *                 temp.append(sys)             # <<<<<<<<<<<<<<
  * 
  *     return Vertex_list(temp)
  */
-              __pyx_t_18 = __Pyx_PyList_Append(__pyx_v_temp, ((PyObject *)__pyx_v_sys)); if (unlikely(__pyx_t_18 == ((int)-1))) __PYX_ERR(0, 98, __pyx_L7_error)
+              __pyx_t_18 = __Pyx_PyList_Append(__pyx_v_temp, ((PyObject *)__pyx_v_sys)); if (unlikely(__pyx_t_18 == ((int)-1))) __PYX_ERR(0, 116, __pyx_L7_error)
 
-              /* "hw10.pyx":89
+              /* "hw10.pyx":107
  *         r = csv.DictReader(f)
  *         for row in r:
  *             if int(row["system_id"]) < 31_000_000:             # <<<<<<<<<<<<<<
@@ -5629,7 +6379,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
  */
             }
 
-            /* "hw10.pyx":88
+            /* "hw10.pyx":106
  *     with open(fpath) as f:
  *         r = csv.DictReader(f)
  *         for row in r:             # <<<<<<<<<<<<<<
@@ -5639,7 +6389,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
           }
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
 
-          /* "hw10.pyx":86
+          /* "hw10.pyx":104
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
  *     cdef list temp = []
  *     with open(fpath) as f:             # <<<<<<<<<<<<<<
@@ -5663,20 +6413,20 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
         __Pyx_XDECREF(__pyx_t_4); __pyx_t_4 = 0;
         /*except:*/ {
           __Pyx_AddTraceback("hw10.load_file", __pyx_clineno, __pyx_lineno, __pyx_filename);
-          if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_16, &__pyx_t_17) < 0) __PYX_ERR(0, 86, __pyx_L9_except_error)
+          if (__Pyx_GetException(&__pyx_t_4, &__pyx_t_16, &__pyx_t_17) < 0) __PYX_ERR(0, 104, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_4);
           __Pyx_GOTREF(__pyx_t_16);
           __Pyx_GOTREF(__pyx_t_17);
-          __pyx_t_15 = PyTuple_Pack(3, __pyx_t_4, __pyx_t_16, __pyx_t_17); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 86, __pyx_L9_except_error)
+          __pyx_t_15 = PyTuple_Pack(3, __pyx_t_4, __pyx_t_16, __pyx_t_17); if (unlikely(!__pyx_t_15)) __PYX_ERR(0, 104, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_15);
           __pyx_t_19 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_t_15, NULL);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
           __Pyx_DECREF(__pyx_t_15); __pyx_t_15 = 0;
-          if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 86, __pyx_L9_except_error)
+          if (unlikely(!__pyx_t_19)) __PYX_ERR(0, 104, __pyx_L9_except_error)
           __Pyx_GOTREF(__pyx_t_19);
           __pyx_t_12 = __Pyx_PyObject_IsTrue(__pyx_t_19);
           __Pyx_DECREF(__pyx_t_19); __pyx_t_19 = 0;
-          if (__pyx_t_12 < 0) __PYX_ERR(0, 86, __pyx_L9_except_error)
+          if (__pyx_t_12 < 0) __PYX_ERR(0, 104, __pyx_L9_except_error)
           __pyx_t_11 = ((!(__pyx_t_12 != 0)) != 0);
           if (__pyx_t_11) {
             __Pyx_GIVEREF(__pyx_t_4);
@@ -5684,7 +6434,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
             __Pyx_XGIVEREF(__pyx_t_17);
             __Pyx_ErrRestoreWithState(__pyx_t_4, __pyx_t_16, __pyx_t_17);
             __pyx_t_4 = 0; __pyx_t_16 = 0; __pyx_t_17 = 0; 
-            __PYX_ERR(0, 86, __pyx_L9_except_error)
+            __PYX_ERR(0, 104, __pyx_L9_except_error)
           }
           __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
           __Pyx_DECREF(__pyx_t_16); __pyx_t_16 = 0;
@@ -5710,7 +6460,7 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
         if (__pyx_t_2) {
           __pyx_t_8 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__5, NULL);
           __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
-          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 86, __pyx_L1_error)
+          if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 104, __pyx_L1_error)
           __Pyx_GOTREF(__pyx_t_8);
           __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
         }
@@ -5725,22 +6475,22 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
     __pyx_L20:;
   }
 
-  /* "hw10.pyx":100
+  /* "hw10.pyx":118
  *                 temp.append(sys)
  * 
  *     return Vertex_list(temp)             # <<<<<<<<<<<<<<
  * 
- * cdef Dijkstras(Vertex_list G, np.ndarray[float] w, Vertex s):
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):
  */
   __Pyx_XDECREF(((PyObject *)__pyx_r));
-  __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)__pyx_ptype_4hw10_Vertex_list), __pyx_v_temp); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 100, __pyx_L1_error)
+  __pyx_t_17 = __Pyx_PyObject_CallOneArg(((PyObject *)__pyx_ptype_4hw10_Vertex_list), __pyx_v_temp); if (unlikely(!__pyx_t_17)) __PYX_ERR(0, 118, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_17);
   __pyx_r = ((struct __pyx_obj_4hw10_Vertex_list *)__pyx_t_17);
   __pyx_t_17 = 0;
   goto __pyx_L0;
 
-  /* "hw10.pyx":84
- *         return False
+  /* "hw10.pyx":102
+ *         for v in self.vertices: v.reset()
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):             # <<<<<<<<<<<<<<
  *     cdef list temp = []
@@ -5771,44 +6521,182 @@ static struct __pyx_obj_4hw10_Vertex_list *__pyx_f_4hw10_load_file(struct __pyx_
   return __pyx_r;
 }
 
-/* "hw10.pyx":102
+/* "hw10.pyx":120
  *     return Vertex_list(temp)
  * 
- * cdef Dijkstras(Vertex_list G, np.ndarray[float] w, Vertex s):             # <<<<<<<<<<<<<<
- *     pass
- * 
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):             # <<<<<<<<<<<<<<
+ *     if v.d > u.d + w[v,u]:
+ *         v.d = u.d + w[v,u]
  */
 
-static PyObject *__pyx_f_4hw10_Dijkstras(CYTHON_UNUSED struct __pyx_obj_4hw10_Vertex_list *__pyx_v_G, CYTHON_UNUSED PyArrayObject *__pyx_v_w, CYTHON_UNUSED struct __pyx_obj_4hw10_Vertex *__pyx_v_s) {
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_w;
-  __Pyx_Buffer __pyx_pybuffer_w;
-  PyObject *__pyx_r = NULL;
+static void __pyx_f_4hw10_relax(struct __pyx_obj_4hw10_Vertex *__pyx_v_u, struct __pyx_obj_4hw10_Vertex *__pyx_v_v, struct __pyx_obj_4hw10_Vertex_list *__pyx_v_w) {
   __Pyx_RefNannyDeclarations
-  __Pyx_RefNannySetupContext("Dijkstras", 0);
-  __pyx_pybuffer_w.pybuffer.buf = NULL;
-  __pyx_pybuffer_w.refcount = 0;
-  __pyx_pybuffernd_w.data = NULL;
-  __pyx_pybuffernd_w.rcbuffer = &__pyx_pybuffer_w;
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_w.rcbuffer->pybuffer, (PyObject*)__pyx_v_w, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) __PYX_ERR(0, 102, __pyx_L1_error)
+  PyObject *__pyx_t_1 = NULL;
+  PyObject *__pyx_t_2 = NULL;
+  PyObject *__pyx_t_3 = NULL;
+  PyObject *__pyx_t_4 = NULL;
+  int __pyx_t_5;
+  float __pyx_t_6;
+  __Pyx_RefNannySetupContext("relax", 0);
+
+  /* "hw10.pyx":121
+ * 
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):
+ *     if v.d > u.d + w[v,u]:             # <<<<<<<<<<<<<<
+ *         v.d = u.d + w[v,u]
+ *         v.pi = u
+ */
+  __pyx_t_1 = PyFloat_FromDouble(__pyx_v_v->d); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_t_2 = PyFloat_FromDouble(__pyx_v_u->d); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_2);
+  __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_INCREF(((PyObject *)__pyx_v_v));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_v));
+  PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_v));
+  __Pyx_INCREF(((PyObject *)__pyx_v_u));
+  __Pyx_GIVEREF(((PyObject *)__pyx_v_u));
+  PyTuple_SET_ITEM(__pyx_t_3, 1, ((PyObject *)__pyx_v_u));
+  __pyx_t_4 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_w), __pyx_t_3); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_4);
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_3 = PyNumber_Add(__pyx_t_2, __pyx_t_4); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_3);
+  __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  __pyx_t_4 = PyObject_RichCompare(__pyx_t_1, __pyx_t_3, Py_GT); __Pyx_XGOTREF(__pyx_t_4); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+  __pyx_t_5 = __Pyx_PyObject_IsTrue(__pyx_t_4); if (unlikely(__pyx_t_5 < 0)) __PYX_ERR(0, 121, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+  if (__pyx_t_5) {
+
+    /* "hw10.pyx":122
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):
+ *     if v.d > u.d + w[v,u]:
+ *         v.d = u.d + w[v,u]             # <<<<<<<<<<<<<<
+ *         v.pi = u
+ * 
+ */
+    __pyx_t_4 = PyFloat_FromDouble(__pyx_v_u->d); if (unlikely(!__pyx_t_4)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_4);
+    __pyx_t_3 = PyTuple_New(2); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_INCREF(((PyObject *)__pyx_v_v));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_v));
+    PyTuple_SET_ITEM(__pyx_t_3, 0, ((PyObject *)__pyx_v_v));
+    __Pyx_INCREF(((PyObject *)__pyx_v_u));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_u));
+    PyTuple_SET_ITEM(__pyx_t_3, 1, ((PyObject *)__pyx_v_u));
+    __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_w), __pyx_t_3); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_1);
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_t_3 = PyNumber_Add(__pyx_t_4, __pyx_t_1); if (unlikely(!__pyx_t_3)) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_GOTREF(__pyx_t_3);
+    __Pyx_DECREF(__pyx_t_4); __pyx_t_4 = 0;
+    __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+    __pyx_t_6 = __pyx_PyFloat_AsFloat(__pyx_t_3); if (unlikely((__pyx_t_6 == (float)-1) && PyErr_Occurred())) __PYX_ERR(0, 122, __pyx_L1_error)
+    __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
+    __pyx_v_v->d = __pyx_t_6;
+
+    /* "hw10.pyx":123
+ *     if v.d > u.d + w[v,u]:
+ *         v.d = u.d + w[v,u]
+ *         v.pi = u             # <<<<<<<<<<<<<<
+ * 
+ * cdef void Dijkstras(Vertex_list G, Vertex s):
+ */
+    __Pyx_INCREF(((PyObject *)__pyx_v_u));
+    __Pyx_GIVEREF(((PyObject *)__pyx_v_u));
+    __Pyx_GOTREF(__pyx_v_v->pi);
+    __Pyx_DECREF(((PyObject *)__pyx_v_v->pi));
+    __pyx_v_v->pi = __pyx_v_u;
+
+    /* "hw10.pyx":121
+ * 
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):
+ *     if v.d > u.d + w[v,u]:             # <<<<<<<<<<<<<<
+ *         v.d = u.d + w[v,u]
+ *         v.pi = u
+ */
   }
-  __pyx_pybuffernd_w.diminfo[0].strides = __pyx_pybuffernd_w.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_w.diminfo[0].shape = __pyx_pybuffernd_w.rcbuffer->pybuffer.shape[0];
+
+  /* "hw10.pyx":120
+ *     return Vertex_list(temp)
+ * 
+ * cdef void relax(Vertex u, Vertex v, Vertex_list w):             # <<<<<<<<<<<<<<
+ *     if v.d > u.d + w[v,u]:
+ *         v.d = u.d + w[v,u]
+ */
 
   /* function exit code */
-  __pyx_r = Py_None; __Pyx_INCREF(Py_None);
   goto __pyx_L0;
   __pyx_L1_error:;
-  __Pyx_AddTraceback("hw10.Dijkstras", __pyx_clineno, __pyx_lineno, __pyx_filename);
-  __pyx_r = 0;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_XDECREF(__pyx_t_2);
+  __Pyx_XDECREF(__pyx_t_3);
+  __Pyx_XDECREF(__pyx_t_4);
+  __Pyx_WriteUnraisable("hw10.relax", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
   __pyx_L0:;
-  __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
-  return __pyx_r;
 }
 
-/* "hw10.pyx":105
- *     pass
+/* "hw10.pyx":125
+ *         v.pi = u
+ * 
+ * cdef void Dijkstras(Vertex_list G, Vertex s):             # <<<<<<<<<<<<<<
+ *     s.d = 0
+ *     cdef set S = set()
+ */
+
+static void __pyx_f_4hw10_Dijkstras(CYTHON_UNUSED struct __pyx_obj_4hw10_Vertex_list *__pyx_v_G, struct __pyx_obj_4hw10_Vertex *__pyx_v_s) {
+  CYTHON_UNUSED PyObject *__pyx_v_S = 0;
+  __Pyx_RefNannyDeclarations
+  PyObject *__pyx_t_1 = NULL;
+  __Pyx_RefNannySetupContext("Dijkstras", 0);
+
+  /* "hw10.pyx":126
+ * 
+ * cdef void Dijkstras(Vertex_list G, Vertex s):
+ *     s.d = 0             # <<<<<<<<<<<<<<
+ *     cdef set S = set()
+ * 
+ */
+  __pyx_v_s->d = 0.0;
+
+  /* "hw10.pyx":127
+ * cdef void Dijkstras(Vertex_list G, Vertex s):
+ *     s.d = 0
+ *     cdef set S = set()             # <<<<<<<<<<<<<<
+ * 
+ * def q1_shortest_path(str start, str destination):
+ */
+  __pyx_t_1 = PySet_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 127, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_v_S = ((PyObject*)__pyx_t_1);
+  __pyx_t_1 = 0;
+
+  /* "hw10.pyx":125
+ *         v.pi = u
+ * 
+ * cdef void Dijkstras(Vertex_list G, Vertex s):             # <<<<<<<<<<<<<<
+ *     s.d = 0
+ *     cdef set S = set()
+ */
+
+  /* function exit code */
+  goto __pyx_L0;
+  __pyx_L1_error:;
+  __Pyx_XDECREF(__pyx_t_1);
+  __Pyx_WriteUnraisable("hw10.Dijkstras", __pyx_clineno, __pyx_lineno, __pyx_filename, 1, 0);
+  __pyx_L0:;
+  __Pyx_XDECREF(__pyx_v_S);
+  __Pyx_RefNannyFinishContext();
+}
+
+/* "hw10.pyx":129
+ *     cdef set S = set()
  * 
  * def q1_shortest_path(str start, str destination):             # <<<<<<<<<<<<<<
  *     cdef Vertex_list G = load_file()
@@ -5847,11 +6735,11 @@ static PyObject *__pyx_pw_4hw10_1q1_shortest_path(PyObject *__pyx_self, PyObject
         case  1:
         if (likely((values[1] = __Pyx_PyDict_GetItemStr(__pyx_kwds, __pyx_n_s_destination)) != 0)) kw_args--;
         else {
-          __Pyx_RaiseArgtupleInvalid("q1_shortest_path", 1, 2, 2, 1); __PYX_ERR(0, 105, __pyx_L3_error)
+          __Pyx_RaiseArgtupleInvalid("q1_shortest_path", 1, 2, 2, 1); __PYX_ERR(0, 129, __pyx_L3_error)
         }
       }
       if (unlikely(kw_args > 0)) {
-        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "q1_shortest_path") < 0)) __PYX_ERR(0, 105, __pyx_L3_error)
+        if (unlikely(__Pyx_ParseOptionalKeywords(__pyx_kwds, __pyx_pyargnames, 0, values, pos_args, "q1_shortest_path") < 0)) __PYX_ERR(0, 129, __pyx_L3_error)
       }
     } else if (PyTuple_GET_SIZE(__pyx_args) != 2) {
       goto __pyx_L5_argtuple_error;
@@ -5864,14 +6752,14 @@ static PyObject *__pyx_pw_4hw10_1q1_shortest_path(PyObject *__pyx_self, PyObject
   }
   goto __pyx_L4_argument_unpacking_done;
   __pyx_L5_argtuple_error:;
-  __Pyx_RaiseArgtupleInvalid("q1_shortest_path", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 105, __pyx_L3_error)
+  __Pyx_RaiseArgtupleInvalid("q1_shortest_path", 1, 2, 2, PyTuple_GET_SIZE(__pyx_args)); __PYX_ERR(0, 129, __pyx_L3_error)
   __pyx_L3_error:;
   __Pyx_AddTraceback("hw10.q1_shortest_path", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __Pyx_RefNannyFinishContext();
   return NULL;
   __pyx_L4_argument_unpacking_done:;
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start), (&PyString_Type), 1, "start", 1))) __PYX_ERR(0, 105, __pyx_L1_error)
-  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_destination), (&PyString_Type), 1, "destination", 1))) __PYX_ERR(0, 105, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_start), (&PyString_Type), 1, "start", 1))) __PYX_ERR(0, 129, __pyx_L1_error)
+  if (unlikely(!__Pyx_ArgTypeTest(((PyObject *)__pyx_v_destination), (&PyString_Type), 1, "destination", 1))) __PYX_ERR(0, 129, __pyx_L1_error)
   __pyx_r = __pyx_pf_4hw10_q1_shortest_path(__pyx_self, __pyx_v_start, __pyx_v_destination);
 
   /* function exit code */
@@ -5885,57 +6773,41 @@ static PyObject *__pyx_pw_4hw10_1q1_shortest_path(PyObject *__pyx_self, PyObject
 
 static PyObject *__pyx_pf_4hw10_q1_shortest_path(CYTHON_UNUSED PyObject *__pyx_self, PyObject *__pyx_v_start, PyObject *__pyx_v_destination) {
   struct __pyx_obj_4hw10_Vertex_list *__pyx_v_G = 0;
-  PyArrayObject *__pyx_v_w = 0;
-  CYTHON_UNUSED PyObject *__pyx_v_path = NULL;
-  __Pyx_LocalBuf_ND __pyx_pybuffernd_w;
-  __Pyx_Buffer __pyx_pybuffer_w;
   PyObject *__pyx_r = NULL;
   __Pyx_RefNannyDeclarations
   PyObject *__pyx_t_1 = NULL;
   int __pyx_t_2;
   int __pyx_t_3;
   int __pyx_t_4;
-  PyObject *__pyx_t_5 = NULL;
-  PyObject *__pyx_t_6 = NULL;
-  Py_ssize_t __pyx_t_7;
-  PyObject *__pyx_t_8 = NULL;
-  PyObject *__pyx_t_9 = NULL;
-  int __pyx_t_10;
-  PyObject *__pyx_t_11 = NULL;
-  PyArrayObject *__pyx_t_12 = NULL;
   __Pyx_RefNannySetupContext("q1_shortest_path", 0);
-  __pyx_pybuffer_w.pybuffer.buf = NULL;
-  __pyx_pybuffer_w.refcount = 0;
-  __pyx_pybuffernd_w.data = NULL;
-  __pyx_pybuffernd_w.rcbuffer = &__pyx_pybuffer_w;
 
-  /* "hw10.pyx":106
+  /* "hw10.pyx":130
  * 
  * def q1_shortest_path(str start, str destination):
  *     cdef Vertex_list G = load_file()             # <<<<<<<<<<<<<<
  *     if start not in G or destination not in G: return None
- *     cdef np.ndarray[float] w = np.full((len(G),len(G)), np.inf)
+ * 
  */
-  __pyx_t_1 = ((PyObject *)__pyx_f_4hw10_load_file(NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 106, __pyx_L1_error)
+  __pyx_t_1 = ((PyObject *)__pyx_f_4hw10_load_file(NULL)); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 130, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_v_G = ((struct __pyx_obj_4hw10_Vertex_list *)__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "hw10.pyx":107
+  /* "hw10.pyx":131
  * def q1_shortest_path(str start, str destination):
  *     cdef Vertex_list G = load_file()
  *     if start not in G or destination not in G: return None             # <<<<<<<<<<<<<<
- *     cdef np.ndarray[float] w = np.full((len(G),len(G)), np.inf)
  * 
+ *     Dijkstras(G, G[start])
  */
-  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_start, ((PyObject *)__pyx_v_G), Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_3 = (__Pyx_PySequence_ContainsTF(__pyx_v_start, ((PyObject *)__pyx_v_G), Py_NE)); if (unlikely(__pyx_t_3 < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
   __pyx_t_4 = (__pyx_t_3 != 0);
   if (!__pyx_t_4) {
   } else {
     __pyx_t_2 = __pyx_t_4;
     goto __pyx_L4_bool_binop_done;
   }
-  __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_v_destination, ((PyObject *)__pyx_v_G), Py_NE)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 107, __pyx_L1_error)
+  __pyx_t_4 = (__Pyx_PySequence_ContainsTF(__pyx_v_destination, ((PyObject *)__pyx_v_G), Py_NE)); if (unlikely(__pyx_t_4 < 0)) __PYX_ERR(0, 131, __pyx_L1_error)
   __pyx_t_3 = (__pyx_t_4 != 0);
   __pyx_t_2 = __pyx_t_3;
   __pyx_L4_bool_binop_done:;
@@ -5945,132 +6817,35 @@ static PyObject *__pyx_pf_4hw10_q1_shortest_path(CYTHON_UNUSED PyObject *__pyx_s
     goto __pyx_L0;
   }
 
-  /* "hw10.pyx":108
- *     cdef Vertex_list G = load_file()
+  /* "hw10.pyx":133
  *     if start not in G or destination not in G: return None
- *     cdef np.ndarray[float] w = np.full((len(G),len(G)), np.inf)             # <<<<<<<<<<<<<<
  * 
- *     path = Dijkstras(G, w, G[start])
- */
-  __pyx_t_5 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_6 = __Pyx_PyObject_GetAttrStr(__pyx_t_5, __pyx_n_s_full); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_G)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 108, __pyx_L1_error)
-  __pyx_t_5 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __pyx_t_7 = PyObject_Length(((PyObject *)__pyx_v_G)); if (unlikely(__pyx_t_7 == ((Py_ssize_t)-1))) __PYX_ERR(0, 108, __pyx_L1_error)
-  __pyx_t_8 = PyInt_FromSsize_t(__pyx_t_7); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_9 = PyTuple_New(2); if (unlikely(!__pyx_t_9)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_9);
-  __Pyx_GIVEREF(__pyx_t_5);
-  PyTuple_SET_ITEM(__pyx_t_9, 0, __pyx_t_5);
-  __Pyx_GIVEREF(__pyx_t_8);
-  PyTuple_SET_ITEM(__pyx_t_9, 1, __pyx_t_8);
-  __pyx_t_5 = 0;
-  __pyx_t_8 = 0;
-  __pyx_t_8 = __Pyx_GetModuleGlobalName(__pyx_n_s_np); if (unlikely(!__pyx_t_8)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_8);
-  __pyx_t_5 = __Pyx_PyObject_GetAttrStr(__pyx_t_8, __pyx_n_s_inf); if (unlikely(!__pyx_t_5)) __PYX_ERR(0, 108, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_5);
-  __Pyx_DECREF(__pyx_t_8); __pyx_t_8 = 0;
-  __pyx_t_8 = NULL;
-  __pyx_t_10 = 0;
-  if (CYTHON_UNPACK_METHODS && unlikely(PyMethod_Check(__pyx_t_6))) {
-    __pyx_t_8 = PyMethod_GET_SELF(__pyx_t_6);
-    if (likely(__pyx_t_8)) {
-      PyObject* function = PyMethod_GET_FUNCTION(__pyx_t_6);
-      __Pyx_INCREF(__pyx_t_8);
-      __Pyx_INCREF(function);
-      __Pyx_DECREF_SET(__pyx_t_6, function);
-      __pyx_t_10 = 1;
-    }
-  }
-  #if CYTHON_FAST_PYCALL
-  if (PyFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_9, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  #if CYTHON_FAST_PYCCALL
-  if (__Pyx_PyFastCFunction_Check(__pyx_t_6)) {
-    PyObject *__pyx_temp[3] = {__pyx_t_8, __pyx_t_9, __pyx_t_5};
-    __pyx_t_1 = __Pyx_PyCFunction_FastCall(__pyx_t_6, __pyx_temp+1-__pyx_t_10, 2+__pyx_t_10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
-    __Pyx_XDECREF(__pyx_t_8); __pyx_t_8 = 0;
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_9); __pyx_t_9 = 0;
-    __Pyx_DECREF(__pyx_t_5); __pyx_t_5 = 0;
-  } else
-  #endif
-  {
-    __pyx_t_11 = PyTuple_New(2+__pyx_t_10); if (unlikely(!__pyx_t_11)) __PYX_ERR(0, 108, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_11);
-    if (__pyx_t_8) {
-      __Pyx_GIVEREF(__pyx_t_8); PyTuple_SET_ITEM(__pyx_t_11, 0, __pyx_t_8); __pyx_t_8 = NULL;
-    }
-    __Pyx_GIVEREF(__pyx_t_9);
-    PyTuple_SET_ITEM(__pyx_t_11, 0+__pyx_t_10, __pyx_t_9);
-    __Pyx_GIVEREF(__pyx_t_5);
-    PyTuple_SET_ITEM(__pyx_t_11, 1+__pyx_t_10, __pyx_t_5);
-    __pyx_t_9 = 0;
-    __pyx_t_5 = 0;
-    __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_6, __pyx_t_11, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 108, __pyx_L1_error)
-    __Pyx_GOTREF(__pyx_t_1);
-    __Pyx_DECREF(__pyx_t_11); __pyx_t_11 = 0;
-  }
-  __Pyx_DECREF(__pyx_t_6); __pyx_t_6 = 0;
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(0, 108, __pyx_L1_error)
-  __pyx_t_12 = ((PyArrayObject *)__pyx_t_1);
-  {
-    __Pyx_BufFmt_StackElem __pyx_stack[1];
-    if (unlikely(__Pyx_GetBufferAndValidate(&__pyx_pybuffernd_w.rcbuffer->pybuffer, (PyObject*)__pyx_t_12, &__Pyx_TypeInfo_float, PyBUF_FORMAT| PyBUF_STRIDES, 1, 0, __pyx_stack) == -1)) {
-      __pyx_v_w = ((PyArrayObject *)Py_None); __Pyx_INCREF(Py_None); __pyx_pybuffernd_w.rcbuffer->pybuffer.buf = NULL;
-      __PYX_ERR(0, 108, __pyx_L1_error)
-    } else {__pyx_pybuffernd_w.diminfo[0].strides = __pyx_pybuffernd_w.rcbuffer->pybuffer.strides[0]; __pyx_pybuffernd_w.diminfo[0].shape = __pyx_pybuffernd_w.rcbuffer->pybuffer.shape[0];
-    }
-  }
-  __pyx_t_12 = 0;
-  __pyx_v_w = ((PyArrayObject *)__pyx_t_1);
-  __pyx_t_1 = 0;
-
-  /* "hw10.pyx":110
- *     cdef np.ndarray[float] w = np.full((len(G),len(G)), np.inf)
- * 
- *     path = Dijkstras(G, w, G[start])             # <<<<<<<<<<<<<<
+ *     Dijkstras(G, G[start])             # <<<<<<<<<<<<<<
  *     return []
  * 
  */
-  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_G), __pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 110, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_GetItem(((PyObject *)__pyx_v_G), __pyx_v_start); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 133, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4hw10_Vertex))))) __PYX_ERR(0, 110, __pyx_L1_error)
-  __pyx_t_6 = __pyx_f_4hw10_Dijkstras(__pyx_v_G, ((PyArrayObject *)__pyx_v_w), ((struct __pyx_obj_4hw10_Vertex *)__pyx_t_1)); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 110, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4hw10_Vertex))))) __PYX_ERR(0, 133, __pyx_L1_error)
+  __pyx_f_4hw10_Dijkstras(__pyx_v_G, ((struct __pyx_obj_4hw10_Vertex *)__pyx_t_1));
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v_path = __pyx_t_6;
-  __pyx_t_6 = 0;
 
-  /* "hw10.pyx":111
+  /* "hw10.pyx":134
  * 
- *     path = Dijkstras(G, w, G[start])
+ *     Dijkstras(G, G[start])
  *     return []             # <<<<<<<<<<<<<<
  * 
  * def main():
  */
   __Pyx_XDECREF(__pyx_r);
-  __pyx_t_6 = PyList_New(0); if (unlikely(!__pyx_t_6)) __PYX_ERR(0, 111, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_6);
-  __pyx_r = __pyx_t_6;
-  __pyx_t_6 = 0;
+  __pyx_t_1 = PyList_New(0); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 134, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  __pyx_r = __pyx_t_1;
+  __pyx_t_1 = 0;
   goto __pyx_L0;
 
-  /* "hw10.pyx":105
- *     pass
+  /* "hw10.pyx":129
+ *     cdef set S = set()
  * 
  * def q1_shortest_path(str start, str destination):             # <<<<<<<<<<<<<<
  *     cdef Vertex_list G = load_file()
@@ -6080,32 +6855,16 @@ static PyObject *__pyx_pf_4hw10_q1_shortest_path(CYTHON_UNUSED PyObject *__pyx_s
   /* function exit code */
   __pyx_L1_error:;
   __Pyx_XDECREF(__pyx_t_1);
-  __Pyx_XDECREF(__pyx_t_5);
-  __Pyx_XDECREF(__pyx_t_6);
-  __Pyx_XDECREF(__pyx_t_8);
-  __Pyx_XDECREF(__pyx_t_9);
-  __Pyx_XDECREF(__pyx_t_11);
-  { PyObject *__pyx_type, *__pyx_value, *__pyx_tb;
-    __Pyx_PyThreadState_declare
-    __Pyx_PyThreadState_assign
-    __Pyx_ErrFetch(&__pyx_type, &__pyx_value, &__pyx_tb);
-    __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_w.rcbuffer->pybuffer);
-  __Pyx_ErrRestore(__pyx_type, __pyx_value, __pyx_tb);}
   __Pyx_AddTraceback("hw10.q1_shortest_path", __pyx_clineno, __pyx_lineno, __pyx_filename);
   __pyx_r = NULL;
-  goto __pyx_L2;
   __pyx_L0:;
-  __Pyx_SafeReleaseBuffer(&__pyx_pybuffernd_w.rcbuffer->pybuffer);
-  __pyx_L2:;
   __Pyx_XDECREF((PyObject *)__pyx_v_G);
-  __Pyx_XDECREF((PyObject *)__pyx_v_w);
-  __Pyx_XDECREF(__pyx_v_path);
   __Pyx_XGIVEREF(__pyx_r);
   __Pyx_RefNannyFinishContext();
   return __pyx_r;
 }
 
-/* "hw10.pyx":113
+/* "hw10.pyx":136
  *     return []
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -6134,38 +6893,38 @@ static PyObject *__pyx_pf_4hw10_2main(CYTHON_UNUSED PyObject *__pyx_self) {
   PyObject *__pyx_t_2 = NULL;
   __Pyx_RefNannySetupContext("main", 0);
 
-  /* "hw10.pyx":114
+  /* "hw10.pyx":137
  * 
  * def main():
  *     print("hw10.pyx:main()")             # <<<<<<<<<<<<<<
  *     print("tests")
  *     q1_shortest_path("test","test")
  */
-  if (__Pyx_PrintOne(0, __pyx_kp_s_hw10_pyx_main) < 0) __PYX_ERR(0, 114, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_kp_s_hw10_pyx_main) < 0) __PYX_ERR(0, 137, __pyx_L1_error)
 
-  /* "hw10.pyx":115
+  /* "hw10.pyx":138
  * def main():
  *     print("hw10.pyx:main()")
  *     print("tests")             # <<<<<<<<<<<<<<
  *     q1_shortest_path("test","test")
  * 
  */
-  if (__Pyx_PrintOne(0, __pyx_n_s_tests) < 0) __PYX_ERR(0, 115, __pyx_L1_error)
+  if (__Pyx_PrintOne(0, __pyx_n_s_tests) < 0) __PYX_ERR(0, 138, __pyx_L1_error)
 
-  /* "hw10.pyx":116
+  /* "hw10.pyx":139
  *     print("hw10.pyx:main()")
  *     print("tests")
  *     q1_shortest_path("test","test")             # <<<<<<<<<<<<<<
  * 
  */
-  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_q1_shortest_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_GetModuleGlobalName(__pyx_n_s_q1_shortest_path); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_PyObject_Call(__pyx_t_1, __pyx_tuple__6, NULL); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "hw10.pyx":113
+  /* "hw10.pyx":136
  *     return []
  * 
  * def main():             # <<<<<<<<<<<<<<
@@ -6727,7 +7486,7 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_System__set_state(struct __pyx_obj
 
 /* "(tree fragment)":1
  * def __pyx_unpickle_Vertex(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x8053e78:
+ *     if __pyx_checksum != 0x2357e7b:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -6820,18 +7579,18 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
 
   /* "(tree fragment)":2
  * def __pyx_unpickle_Vertex(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x8053e78:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x2357e7b:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x8053e78) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x2357e7b) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":3
  * def __pyx_unpickle_Vertex(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x8053e78:
+ *     if __pyx_checksum != 0x2357e7b:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  *     __pyx_result = Vertex.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 3, __pyx_L1_error)
@@ -6850,15 +7609,15 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":4
- *     if __pyx_checksum != 0x8053e78:
+ *     if __pyx_checksum != 0x2357e7b:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Vertex.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x80, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x23, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -6914,15 +7673,15 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
 
     /* "(tree fragment)":2
  * def __pyx_unpickle_Vertex(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x8053e78:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0x2357e7b:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":5
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  *     __pyx_result = Vertex.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
@@ -6976,7 +7735,7 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  *     __pyx_result = Vertex.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
@@ -6999,7 +7758,7 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x8053e78 = (adj, d, id, name, pi, security, system, x, y, z))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x2357e7b = (adj, d, id, name, pi, security, x, y, z))" % __pyx_checksum)
  *     __pyx_result = Vertex.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
@@ -7012,7 +7771,7 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -7021,7 +7780,7 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Vertex(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x8053e78:
+ *     if __pyx_checksum != 0x2357e7b:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -7046,8 +7805,8 @@ static PyObject *__pyx_pf_4hw10_6__pyx_unpickle_Vertex(CYTHON_UNUSED PyObject *_
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj_4hw10_Vertex *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -7069,9 +7828,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   /* "(tree fragment)":10
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[10])
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[9])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -7121,11 +7880,11 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4hw10_System))))) __PYX_ERR(1, 10, __pyx_L1_error)
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4hw10_Vertex))))) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GIVEREF(__pyx_t_1);
   __Pyx_GOTREF(__pyx_v___pyx_result->pi);
   __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->pi));
-  __pyx_v___pyx_result->pi = ((struct __pyx_obj_4hw10_System *)__pyx_t_1);
+  __pyx_v___pyx_result->pi = ((struct __pyx_obj_4hw10_Vertex *)__pyx_t_1);
   __pyx_t_1 = 0;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -7142,12 +7901,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   }
   __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 6, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_4hw10_System))))) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_GIVEREF(__pyx_t_1);
-  __Pyx_GOTREF(__pyx_v___pyx_result->system);
-  __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->system));
-  __pyx_v___pyx_result->system = ((struct __pyx_obj_4hw10_System *)__pyx_t_1);
-  __pyx_t_1 = 0;
+  __pyx_t_2 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_2 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
+  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
+  __pyx_v___pyx_result->__pyx_base.x = __pyx_t_2;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
@@ -7156,7 +7912,7 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_2 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->__pyx_base.x = __pyx_t_2;
+  __pyx_v___pyx_result->__pyx_base.y = __pyx_t_2;
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
     __PYX_ERR(1, 10, __pyx_L1_error)
@@ -7165,29 +7921,20 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   __Pyx_GOTREF(__pyx_t_1);
   __pyx_t_2 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_2 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
-  __pyx_v___pyx_result->__pyx_base.y = __pyx_t_2;
-  if (unlikely(__pyx_v___pyx_state == Py_None)) {
-    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
-    __PYX_ERR(1, 10, __pyx_L1_error)
-  }
-  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_GOTREF(__pyx_t_1);
-  __pyx_t_2 = __pyx_PyFloat_AsFloat(__pyx_t_1); if (unlikely((__pyx_t_2 == (float)-1) && PyErr_Occurred())) __PYX_ERR(1, 10, __pyx_L1_error)
-  __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __pyx_v___pyx_result->__pyx_base.z = __pyx_t_2;
 
   /* "(tree fragment)":11
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[10])
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[9])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_t_5 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_5 == ((Py_ssize_t)-1))) __PYX_ERR(1, 11, __pyx_L1_error)
-  __pyx_t_6 = ((__pyx_t_5 > 10) != 0);
+  __pyx_t_6 = ((__pyx_t_5 > 9) != 0);
   if (__pyx_t_6) {
   } else {
     __pyx_t_4 = __pyx_t_6;
@@ -7200,9 +7947,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
   if (__pyx_t_4) {
 
     /* "(tree fragment)":12
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[10])             # <<<<<<<<<<<<<<
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[9])             # <<<<<<<<<<<<<<
  */
     __pyx_t_8 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
@@ -7213,7 +7960,7 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 12, __pyx_L1_error)
     }
-    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 10, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 12, __pyx_L1_error)
+    __pyx_t_8 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 9, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_8)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_8);
     __pyx_t_10 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_9))) {
@@ -7265,9 +8012,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
 
     /* "(tree fragment)":11
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[10])
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[9])
  */
   }
 
@@ -7275,8 +8022,8 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
  *         __pyx_unpickle_Vertex__set_state(<Vertex> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex__set_state(Vertex __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.system = __pyx_state[6]; __pyx_result.x = __pyx_state[7]; __pyx_result.y = __pyx_state[8]; __pyx_result.z = __pyx_state[9]
- *     if len(__pyx_state) > 10 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.adj = __pyx_state[0]; __pyx_result.d = __pyx_state[1]; __pyx_result.id = __pyx_state[2]; __pyx_result.name = __pyx_state[3]; __pyx_result.pi = __pyx_state[4]; __pyx_result.security = __pyx_state[5]; __pyx_result.x = __pyx_state[6]; __pyx_result.y = __pyx_state[7]; __pyx_result.z = __pyx_state[8]
+ *     if len(__pyx_state) > 9 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -7298,7 +8045,7 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex__set_state(struct __pyx_obj
 
 /* "(tree fragment)":1
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x64e66d9:
+ *     if __pyx_checksum != 0xfcf368c:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -7391,18 +8138,18 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
 
   /* "(tree fragment)":2
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x64e66d9:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xfcf368c:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  */
-  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0x64e66d9) != 0);
+  __pyx_t_1 = ((__pyx_v___pyx_checksum != 0xfcf368c) != 0);
   if (__pyx_t_1) {
 
     /* "(tree fragment)":3
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x64e66d9:
+ *     if __pyx_checksum != 0xfcf368c:
  *         from pickle import PickleError as __pyx_PickleError             # <<<<<<<<<<<<<<
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  *     __pyx_result = Vertex_list.__new__(__pyx_type)
  */
     __pyx_t_2 = PyList_New(1); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 3, __pyx_L1_error)
@@ -7421,15 +8168,15 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":4
- *     if __pyx_checksum != 0x64e66d9:
+ *     if __pyx_checksum != 0xfcf368c:
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)             # <<<<<<<<<<<<<<
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)             # <<<<<<<<<<<<<<
  *     __pyx_result = Vertex_list.__new__(__pyx_type)
  *     if __pyx_state is not None:
  */
     __pyx_t_2 = __Pyx_PyInt_From_long(__pyx_v___pyx_checksum); if (unlikely(!__pyx_t_2)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_2);
-    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0x64, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
+    __pyx_t_4 = __Pyx_PyString_Format(__pyx_kp_s_Incompatible_checksums_s_vs_0xfc, __pyx_t_2); if (unlikely(!__pyx_t_4)) __PYX_ERR(1, 4, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_4);
     __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
     __Pyx_INCREF(__pyx_v___pyx_PickleError);
@@ -7485,15 +8232,15 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
 
     /* "(tree fragment)":2
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):
- *     if __pyx_checksum != 0x64e66d9:             # <<<<<<<<<<<<<<
+ *     if __pyx_checksum != 0xfcf368c:             # <<<<<<<<<<<<<<
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  */
   }
 
   /* "(tree fragment)":5
  *         from pickle import PickleError as __pyx_PickleError
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  *     __pyx_result = Vertex_list.__new__(__pyx_type)             # <<<<<<<<<<<<<<
  *     if __pyx_state is not None:
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
@@ -7547,7 +8294,7 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
   __pyx_t_3 = 0;
 
   /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  *     __pyx_result = Vertex_list.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
@@ -7570,7 +8317,7 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
     __Pyx_DECREF(__pyx_t_3); __pyx_t_3 = 0;
 
     /* "(tree fragment)":6
- *         raise __pyx_PickleError("Incompatible checksums (%s vs 0x64e66d9 = (ids, names, vertices))" % __pyx_checksum)
+ *         raise __pyx_PickleError("Incompatible checksums (%s vs 0xfcf368c = (ids, names, vertices, w))" % __pyx_checksum)
  *     __pyx_result = Vertex_list.__new__(__pyx_type)
  *     if __pyx_state is not None:             # <<<<<<<<<<<<<<
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
@@ -7583,7 +8330,7 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
  *     return __pyx_result             # <<<<<<<<<<<<<<
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
  */
   __Pyx_XDECREF(__pyx_r);
   __Pyx_INCREF(__pyx_v___pyx_result);
@@ -7592,7 +8339,7 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x64e66d9:
+ *     if __pyx_checksum != 0xfcf368c:
  *         from pickle import PickleError as __pyx_PickleError
  */
 
@@ -7617,8 +8364,8 @@ static PyObject *__pyx_pf_4hw10_8__pyx_unpickle_Vertex_list(CYTHON_UNUSED PyObje
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):
  */
 
 static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __pyx_obj_4hw10_Vertex_list *__pyx_v___pyx_result, PyObject *__pyx_v___pyx_state) {
@@ -7638,9 +8385,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
   /* "(tree fragment)":10
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]             # <<<<<<<<<<<<<<
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[3])
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]             # <<<<<<<<<<<<<<
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[4])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
@@ -7678,19 +8425,31 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
   __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->vertices));
   __pyx_v___pyx_result->vertices = ((PyArrayObject *)__pyx_t_1);
   __pyx_t_1 = 0;
+  if (unlikely(__pyx_v___pyx_state == Py_None)) {
+    PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
+    __PYX_ERR(1, 10, __pyx_L1_error)
+  }
+  __pyx_t_1 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 10, __pyx_L1_error)
+  __Pyx_GOTREF(__pyx_t_1);
+  if (!(likely(((__pyx_t_1) == Py_None) || likely(__Pyx_TypeTest(__pyx_t_1, __pyx_ptype_5numpy_ndarray))))) __PYX_ERR(1, 10, __pyx_L1_error)
+  __Pyx_GIVEREF(__pyx_t_1);
+  __Pyx_GOTREF(__pyx_v___pyx_result->w);
+  __Pyx_DECREF(((PyObject *)__pyx_v___pyx_result->w));
+  __pyx_v___pyx_result->w = ((PyArrayObject *)__pyx_t_1);
+  __pyx_t_1 = 0;
 
   /* "(tree fragment)":11
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[3])
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[4])
  */
   if (unlikely(__pyx_v___pyx_state == Py_None)) {
     PyErr_SetString(PyExc_TypeError, "object of type 'NoneType' has no len()");
     __PYX_ERR(1, 11, __pyx_L1_error)
   }
   __pyx_t_3 = PyTuple_GET_SIZE(__pyx_v___pyx_state); if (unlikely(__pyx_t_3 == ((Py_ssize_t)-1))) __PYX_ERR(1, 11, __pyx_L1_error)
-  __pyx_t_4 = ((__pyx_t_3 > 3) != 0);
+  __pyx_t_4 = ((__pyx_t_3 > 4) != 0);
   if (__pyx_t_4) {
   } else {
     __pyx_t_2 = __pyx_t_4;
@@ -7703,9 +8462,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
   if (__pyx_t_2) {
 
     /* "(tree fragment)":12
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):
- *         __pyx_result.__dict__.update(__pyx_state[3])             # <<<<<<<<<<<<<<
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):
+ *         __pyx_result.__dict__.update(__pyx_state[4])             # <<<<<<<<<<<<<<
  */
     __pyx_t_6 = __Pyx_PyObject_GetAttrStr(((PyObject *)__pyx_v___pyx_result), __pyx_n_s_dict); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
@@ -7716,7 +8475,7 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
       PyErr_SetString(PyExc_TypeError, "'NoneType' object is not subscriptable");
       __PYX_ERR(1, 12, __pyx_L1_error)
     }
-    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 3, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 12, __pyx_L1_error)
+    __pyx_t_6 = __Pyx_GetItemInt_Tuple(__pyx_v___pyx_state, 4, long, 1, __Pyx_PyInt_From_long, 0, 0, 1); if (unlikely(!__pyx_t_6)) __PYX_ERR(1, 12, __pyx_L1_error)
     __Pyx_GOTREF(__pyx_t_6);
     __pyx_t_8 = NULL;
     if (CYTHON_UNPACK_METHODS && likely(PyMethod_Check(__pyx_t_7))) {
@@ -7768,9 +8527,9 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
 
     /* "(tree fragment)":11
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
- *         __pyx_result.__dict__.update(__pyx_state[3])
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):             # <<<<<<<<<<<<<<
+ *         __pyx_result.__dict__.update(__pyx_state[4])
  */
   }
 
@@ -7778,8 +8537,8 @@ static PyObject *__pyx_f_4hw10___pyx_unpickle_Vertex_list__set_state(struct __py
  *         __pyx_unpickle_Vertex_list__set_state(<Vertex_list> __pyx_result, __pyx_state)
  *     return __pyx_result
  * cdef __pyx_unpickle_Vertex_list__set_state(Vertex_list __pyx_result, tuple __pyx_state):             # <<<<<<<<<<<<<<
- *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]
- *     if len(__pyx_state) > 3 and hasattr(__pyx_result, '__dict__'):
+ *     __pyx_result.ids = __pyx_state[0]; __pyx_result.names = __pyx_state[1]; __pyx_result.vertices = __pyx_state[2]; __pyx_result.w = __pyx_state[3]
+ *     if len(__pyx_state) > 4 and hasattr(__pyx_result, '__dict__'):
  */
 
   /* function exit code */
@@ -10477,14 +11236,15 @@ static PyTypeObject __pyx_type_4hw10_System = {
   0, /*tp_finalize*/
   #endif
 };
+static struct __pyx_vtabstruct_4hw10_Vertex __pyx_vtable_4hw10_Vertex;
 
 static PyObject *__pyx_tp_new_4hw10_Vertex(PyTypeObject *t, PyObject *a, PyObject *k) {
   struct __pyx_obj_4hw10_Vertex *p;
   PyObject *o = __pyx_tp_new_4hw10_System(t, a, k);
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_4hw10_Vertex *)o);
-  p->system = ((struct __pyx_obj_4hw10_System *)Py_None); Py_INCREF(Py_None);
-  p->pi = ((struct __pyx_obj_4hw10_System *)Py_None); Py_INCREF(Py_None);
+  p->__pyx_vtab = __pyx_vtabptr_4hw10_Vertex;
+  p->pi = ((struct __pyx_obj_4hw10_Vertex *)Py_None); Py_INCREF(Py_None);
   return o;
 }
 
@@ -10496,7 +11256,6 @@ static void __pyx_tp_dealloc_4hw10_Vertex(PyObject *o) {
   }
   #endif
   PyObject_GC_UnTrack(o);
-  Py_CLEAR(p->system);
   Py_CLEAR(p->pi);
   PyObject_GC_Track(o);
   __pyx_tp_dealloc_4hw10_System(o);
@@ -10506,9 +11265,6 @@ static int __pyx_tp_traverse_4hw10_Vertex(PyObject *o, visitproc v, void *a) {
   int e;
   struct __pyx_obj_4hw10_Vertex *p = (struct __pyx_obj_4hw10_Vertex *)o;
   e = __pyx_tp_traverse_4hw10_System(o, v, a); if (e) return e;
-  if (p->system) {
-    e = (*v)(((PyObject *)p->system), a); if (e) return e;
-  }
   if (p->pi) {
     e = (*v)(((PyObject *)p->pi), a); if (e) return e;
   }
@@ -10519,18 +11275,16 @@ static int __pyx_tp_clear_4hw10_Vertex(PyObject *o) {
   PyObject* tmp;
   struct __pyx_obj_4hw10_Vertex *p = (struct __pyx_obj_4hw10_Vertex *)o;
   __pyx_tp_clear_4hw10_System(o);
-  tmp = ((PyObject*)p->system);
-  p->system = ((struct __pyx_obj_4hw10_System *)Py_None); Py_INCREF(Py_None);
-  Py_XDECREF(tmp);
   tmp = ((PyObject*)p->pi);
-  p->pi = ((struct __pyx_obj_4hw10_System *)Py_None); Py_INCREF(Py_None);
+  p->pi = ((struct __pyx_obj_4hw10_Vertex *)Py_None); Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
 }
 
 static PyMethodDef __pyx_methods_4hw10_Vertex[] = {
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_4hw10_6Vertex_3__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_4hw10_6Vertex_5__setstate_cython__, METH_O, 0},
+  {"reset", (PyCFunction)__pyx_pw_4hw10_6Vertex_3reset, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_4hw10_6Vertex_7__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_4hw10_6Vertex_9__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -10569,7 +11323,7 @@ static PyTypeObject __pyx_type_4hw10_Vertex = {
   __pyx_tp_clear_4hw10_Vertex, /*tp_clear*/
   0, /*tp_richcompare*/
   0, /*tp_weaklistoffset*/
-  0, /*tp_iter*/
+  __pyx_pw_4hw10_6Vertex_5__iter__, /*tp_iter*/
   0, /*tp_iternext*/
   __pyx_methods_4hw10_Vertex, /*tp_methods*/
   0, /*tp_members*/
@@ -10595,6 +11349,7 @@ static PyTypeObject __pyx_type_4hw10_Vertex = {
   0, /*tp_finalize*/
   #endif
 };
+static struct __pyx_vtabstruct_4hw10_Vertex_list __pyx_vtable_4hw10_Vertex_list;
 
 static PyObject *__pyx_tp_new_4hw10_Vertex_list(PyTypeObject *t, CYTHON_UNUSED PyObject *a, CYTHON_UNUSED PyObject *k) {
   struct __pyx_obj_4hw10_Vertex_list *p;
@@ -10606,9 +11361,11 @@ static PyObject *__pyx_tp_new_4hw10_Vertex_list(PyTypeObject *t, CYTHON_UNUSED P
   }
   if (unlikely(!o)) return 0;
   p = ((struct __pyx_obj_4hw10_Vertex_list *)o);
+  p->__pyx_vtab = __pyx_vtabptr_4hw10_Vertex_list;
   p->names = ((PyObject*)Py_None); Py_INCREF(Py_None);
   p->ids = ((PyObject*)Py_None); Py_INCREF(Py_None);
   p->vertices = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
+  p->w = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
   return o;
 }
 
@@ -10623,6 +11380,7 @@ static void __pyx_tp_dealloc_4hw10_Vertex_list(PyObject *o) {
   Py_CLEAR(p->names);
   Py_CLEAR(p->ids);
   Py_CLEAR(p->vertices);
+  Py_CLEAR(p->w);
   (*Py_TYPE(o)->tp_free)(o);
 }
 
@@ -10638,6 +11396,9 @@ static int __pyx_tp_traverse_4hw10_Vertex_list(PyObject *o, visitproc v, void *a
   if (p->vertices) {
     e = (*v)(((PyObject *)p->vertices), a); if (e) return e;
   }
+  if (p->w) {
+    e = (*v)(((PyObject *)p->w), a); if (e) return e;
+  }
   return 0;
 }
 
@@ -10652,6 +11413,9 @@ static int __pyx_tp_clear_4hw10_Vertex_list(PyObject *o) {
   Py_XDECREF(tmp);
   tmp = ((PyObject*)p->vertices);
   p->vertices = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
+  Py_XDECREF(tmp);
+  tmp = ((PyObject*)p->w);
+  p->w = ((PyArrayObject *)Py_None); Py_INCREF(Py_None);
   Py_XDECREF(tmp);
   return 0;
 }
@@ -10702,9 +11466,23 @@ static int __pyx_setprop_4hw10_11Vertex_list_vertices(PyObject *o, PyObject *v, 
   }
 }
 
+static PyObject *__pyx_getprop_4hw10_11Vertex_list_w(PyObject *o, CYTHON_UNUSED void *x) {
+  return __pyx_pw_4hw10_11Vertex_list_1w_1__get__(o);
+}
+
+static int __pyx_setprop_4hw10_11Vertex_list_w(PyObject *o, PyObject *v, CYTHON_UNUSED void *x) {
+  if (v) {
+    return __pyx_pw_4hw10_11Vertex_list_1w_3__set__(o, v);
+  }
+  else {
+    return __pyx_pw_4hw10_11Vertex_list_1w_5__del__(o);
+  }
+}
+
 static PyMethodDef __pyx_methods_4hw10_Vertex_list[] = {
-  {"__reduce_cython__", (PyCFunction)__pyx_pw_4hw10_11Vertex_list_9__reduce_cython__, METH_NOARGS, 0},
-  {"__setstate_cython__", (PyCFunction)__pyx_pw_4hw10_11Vertex_list_11__setstate_cython__, METH_O, 0},
+  {"reset", (PyCFunction)__pyx_pw_4hw10_11Vertex_list_9reset, METH_NOARGS, 0},
+  {"__reduce_cython__", (PyCFunction)__pyx_pw_4hw10_11Vertex_list_11__reduce_cython__, METH_NOARGS, 0},
+  {"__setstate_cython__", (PyCFunction)__pyx_pw_4hw10_11Vertex_list_13__setstate_cython__, METH_O, 0},
   {0, 0, 0, 0}
 };
 
@@ -10712,6 +11490,7 @@ static struct PyGetSetDef __pyx_getsets_4hw10_Vertex_list[] = {
   {(char *)"names", __pyx_getprop_4hw10_11Vertex_list_names, __pyx_setprop_4hw10_11Vertex_list_names, (char *)0, 0},
   {(char *)"ids", __pyx_getprop_4hw10_11Vertex_list_ids, __pyx_setprop_4hw10_11Vertex_list_ids, (char *)0, 0},
   {(char *)"vertices", __pyx_getprop_4hw10_11Vertex_list_vertices, __pyx_setprop_4hw10_11Vertex_list_vertices, (char *)0, 0},
+  {(char *)"w", __pyx_getprop_4hw10_11Vertex_list_w, __pyx_setprop_4hw10_11Vertex_list_w, (char *)0, 0},
   {0, 0, 0, 0, 0}
 };
 
@@ -10836,9 +11615,9 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_u_Format_string_allocated_too_shor_2, __pyx_k_Format_string_allocated_too_shor_2, sizeof(__pyx_k_Format_string_allocated_too_shor_2), 0, 1, 0, 0},
   {&__pyx_n_s_G, __pyx_k_G, sizeof(__pyx_k_G), 0, 0, 1, 1},
   {&__pyx_n_s_ImportError, __pyx_k_ImportError, sizeof(__pyx_k_ImportError), 0, 0, 1, 1},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x23, __pyx_k_Incompatible_checksums_s_vs_0x23, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x23), 0, 0, 1, 0},
   {&__pyx_kp_s_Incompatible_checksums_s_vs_0x2c, __pyx_k_Incompatible_checksums_s_vs_0x2c, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x2c), 0, 0, 1, 0},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x64, __pyx_k_Incompatible_checksums_s_vs_0x64, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x64), 0, 0, 1, 0},
-  {&__pyx_kp_s_Incompatible_checksums_s_vs_0x80, __pyx_k_Incompatible_checksums_s_vs_0x80, sizeof(__pyx_k_Incompatible_checksums_s_vs_0x80), 0, 0, 1, 0},
+  {&__pyx_kp_s_Incompatible_checksums_s_vs_0xfc, __pyx_k_Incompatible_checksums_s_vs_0xfc, sizeof(__pyx_k_Incompatible_checksums_s_vs_0xfc), 0, 0, 1, 0},
   {&__pyx_kp_s_Location, __pyx_k_Location, sizeof(__pyx_k_Location), 0, 0, 1, 0},
   {&__pyx_kp_u_Non_native_byte_order_not_suppor, __pyx_k_Non_native_byte_order_not_suppor, sizeof(__pyx_k_Non_native_byte_order_not_suppor), 0, 1, 0, 0},
   {&__pyx_n_s_Path, __pyx_k_Path, sizeof(__pyx_k_Path), 0, 0, 1, 1},
@@ -10883,7 +11662,6 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_kp_s_numpy_core_multiarray_failed_to, __pyx_k_numpy_core_multiarray_failed_to, sizeof(__pyx_k_numpy_core_multiarray_failed_to), 0, 0, 1, 0},
   {&__pyx_kp_s_numpy_core_umath_failed_to_impor, __pyx_k_numpy_core_umath_failed_to_impor, sizeof(__pyx_k_numpy_core_umath_failed_to_impor), 0, 0, 1, 0},
   {&__pyx_n_s_open, __pyx_k_open, sizeof(__pyx_k_open), 0, 0, 1, 1},
-  {&__pyx_n_s_path, __pyx_k_path, sizeof(__pyx_k_path), 0, 0, 1, 1},
   {&__pyx_n_s_pathlib, __pyx_k_pathlib, sizeof(__pyx_k_pathlib), 0, 0, 1, 1},
   {&__pyx_n_s_pickle, __pyx_k_pickle, sizeof(__pyx_k_pickle), 0, 0, 1, 1},
   {&__pyx_n_s_pqueue, __pyx_k_pqueue, sizeof(__pyx_k_pqueue), 0, 0, 1, 1},
@@ -10896,12 +11674,14 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_pyx_unpickle_System, __pyx_k_pyx_unpickle_System, sizeof(__pyx_k_pyx_unpickle_System), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_unpickle_Vertex, __pyx_k_pyx_unpickle_Vertex, sizeof(__pyx_k_pyx_unpickle_Vertex), 0, 0, 1, 1},
   {&__pyx_n_s_pyx_unpickle_Vertex_list, __pyx_k_pyx_unpickle_Vertex_list, sizeof(__pyx_k_pyx_unpickle_Vertex_list), 0, 0, 1, 1},
+  {&__pyx_n_s_pyx_vtable, __pyx_k_pyx_vtable, sizeof(__pyx_k_pyx_vtable), 0, 0, 1, 1},
   {&__pyx_n_s_q1_shortest_path, __pyx_k_q1_shortest_path, sizeof(__pyx_k_q1_shortest_path), 0, 0, 1, 1},
   {&__pyx_n_s_queue, __pyx_k_queue, sizeof(__pyx_k_queue), 0, 0, 1, 1},
   {&__pyx_n_s_range, __pyx_k_range, sizeof(__pyx_k_range), 0, 0, 1, 1},
   {&__pyx_n_s_reduce, __pyx_k_reduce, sizeof(__pyx_k_reduce), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_cython, __pyx_k_reduce_cython, sizeof(__pyx_k_reduce_cython), 0, 0, 1, 1},
   {&__pyx_n_s_reduce_ex, __pyx_k_reduce_ex, sizeof(__pyx_k_reduce_ex), 0, 0, 1, 1},
+  {&__pyx_n_s_reset, __pyx_k_reset, sizeof(__pyx_k_reset), 0, 0, 1, 1},
   {&__pyx_kp_s_sde_universe_2018_07_16_csv, __pyx_k_sde_universe_2018_07_16_csv, sizeof(__pyx_k_sde_universe_2018_07_16_csv), 0, 0, 1, 0},
   {&__pyx_n_s_sec, __pyx_k_sec, sizeof(__pyx_k_sec), 0, 0, 1, 1},
   {&__pyx_n_s_security_status, __pyx_k_security_status, sizeof(__pyx_k_security_status), 0, 0, 1, 1},
@@ -10918,17 +11698,18 @@ static __Pyx_StringTabEntry __pyx_string_tab[] = {
   {&__pyx_n_s_tests, __pyx_k_tests, sizeof(__pyx_k_tests), 0, 0, 1, 1},
   {&__pyx_kp_u_unknown_dtype_code_in_numpy_pxd, __pyx_k_unknown_dtype_code_in_numpy_pxd, sizeof(__pyx_k_unknown_dtype_code_in_numpy_pxd), 0, 1, 0, 0},
   {&__pyx_n_s_update, __pyx_k_update, sizeof(__pyx_k_update), 0, 0, 1, 1},
-  {&__pyx_n_s_w, __pyx_k_w, sizeof(__pyx_k_w), 0, 0, 1, 1},
   {&__pyx_n_s_x, __pyx_k_x, sizeof(__pyx_k_x), 0, 0, 1, 1},
   {&__pyx_n_s_y, __pyx_k_y, sizeof(__pyx_k_y), 0, 0, 1, 1},
   {&__pyx_n_s_z, __pyx_k_z, sizeof(__pyx_k_z), 0, 0, 1, 1},
+  {&__pyx_n_s_zip, __pyx_k_zip, sizeof(__pyx_k_zip), 0, 0, 1, 1},
   {0, 0, 0, 0, 0, 0, 0}
 };
 static int __Pyx_InitCachedBuiltins(void) {
   __pyx_builtin_super = __Pyx_GetBuiltinName(__pyx_n_s_super); if (!__pyx_builtin_super) __PYX_ERR(0, 52, __pyx_L1_error)
-  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_builtin_zip = __Pyx_GetBuiltinName(__pyx_n_s_zip); if (!__pyx_builtin_zip) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(0, 78, __pyx_L1_error)
+  __pyx_builtin_open = __Pyx_GetBuiltinName(__pyx_n_s_open); if (!__pyx_builtin_open) __PYX_ERR(0, 104, __pyx_L1_error)
   __pyx_builtin_ValueError = __Pyx_GetBuiltinName(__pyx_n_s_ValueError); if (!__pyx_builtin_ValueError) __PYX_ERR(2, 229, __pyx_L1_error)
-  __pyx_builtin_range = __Pyx_GetBuiltinName(__pyx_n_s_range); if (!__pyx_builtin_range) __PYX_ERR(2, 242, __pyx_L1_error)
   __pyx_builtin_RuntimeError = __Pyx_GetBuiltinName(__pyx_n_s_RuntimeError); if (!__pyx_builtin_RuntimeError) __PYX_ERR(2, 810, __pyx_L1_error)
   __pyx_builtin_ImportError = __Pyx_GetBuiltinName(__pyx_n_s_ImportError); if (!__pyx_builtin_ImportError) __PYX_ERR(2, 1000, __pyx_L1_error)
   return 0;
@@ -10940,24 +11721,24 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_RefNannyDeclarations
   __Pyx_RefNannySetupContext("__Pyx_InitCachedConstants", 0);
 
-  /* "hw10.pyx":86
+  /* "hw10.pyx":104
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
  *     cdef list temp = []
  *     with open(fpath) as f:             # <<<<<<<<<<<<<<
  *         r = csv.DictReader(f)
  *         for row in r:
  */
-  __pyx_tuple__5 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 86, __pyx_L1_error)
+  __pyx_tuple__5 = PyTuple_Pack(3, Py_None, Py_None, Py_None); if (unlikely(!__pyx_tuple__5)) __PYX_ERR(0, 104, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__5);
   __Pyx_GIVEREF(__pyx_tuple__5);
 
-  /* "hw10.pyx":116
+  /* "hw10.pyx":139
  *     print("hw10.pyx:main()")
  *     print("tests")
  *     q1_shortest_path("test","test")             # <<<<<<<<<<<<<<
  * 
  */
-  __pyx_tuple__6 = PyTuple_Pack(2, __pyx_n_s_test, __pyx_n_s_test); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 116, __pyx_L1_error)
+  __pyx_tuple__6 = PyTuple_Pack(2, __pyx_n_s_test, __pyx_n_s_test); if (unlikely(!__pyx_tuple__6)) __PYX_ERR(0, 139, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__6);
   __Pyx_GIVEREF(__pyx_tuple__6);
 
@@ -11058,37 +11839,37 @@ static int __Pyx_InitCachedConstants(void) {
   __Pyx_GOTREF(__pyx_tuple__15);
   __Pyx_GIVEREF(__pyx_tuple__15);
 
-  /* "hw10.pyx":84
- *         return False
+  /* "hw10.pyx":102
+ *         for v in self.vertices: v.reset()
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):             # <<<<<<<<<<<<<<
  *     cdef list temp = []
  *     with open(fpath) as f:
  */
-  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_sde_universe_2018_07_16_csv); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_tuple__16 = PyTuple_Pack(1, __pyx_kp_s_sde_universe_2018_07_16_csv); if (unlikely(!__pyx_tuple__16)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__16);
   __Pyx_GIVEREF(__pyx_tuple__16);
 
-  /* "hw10.pyx":105
- *     pass
+  /* "hw10.pyx":129
+ *     cdef set S = set()
  * 
  * def q1_shortest_path(str start, str destination):             # <<<<<<<<<<<<<<
  *     cdef Vertex_list G = load_file()
  *     if start not in G or destination not in G: return None
  */
-  __pyx_tuple__17 = PyTuple_Pack(5, __pyx_n_s_start, __pyx_n_s_destination, __pyx_n_s_G, __pyx_n_s_w, __pyx_n_s_path); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_tuple__17 = PyTuple_Pack(3, __pyx_n_s_start, __pyx_n_s_destination, __pyx_n_s_G); if (unlikely(!__pyx_tuple__17)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_tuple__17);
   __Pyx_GIVEREF(__pyx_tuple__17);
-  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 5, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_hw10_pyx, __pyx_n_s_q1_shortest_path, 105, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_codeobj__18 = (PyObject*)__Pyx_PyCode_New(2, 0, 3, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_tuple__17, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_hw10_pyx, __pyx_n_s_q1_shortest_path, 129, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__18)) __PYX_ERR(0, 129, __pyx_L1_error)
 
-  /* "hw10.pyx":113
+  /* "hw10.pyx":136
  *     return []
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     print("hw10.pyx:main()")
  *     print("tests")
  */
-  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_hw10_pyx, __pyx_n_s_main_2, 113, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_codeobj__19 = (PyObject*)__Pyx_PyCode_New(0, 0, 0, 0, CO_OPTIMIZED|CO_NEWLOCALS, __pyx_empty_bytes, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_empty_tuple, __pyx_kp_s_hw10_pyx, __pyx_n_s_main_2, 136, __pyx_empty_bytes); if (unlikely(!__pyx_codeobj__19)) __PYX_ERR(0, 136, __pyx_L1_error)
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_System(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
@@ -11117,9 +11898,9 @@ static int __Pyx_InitCachedConstants(void) {
 static int __Pyx_InitGlobals(void) {
   if (__Pyx_InitStrings(__pyx_string_tab) < 0) __PYX_ERR(0, 1, __pyx_L1_error);
   __pyx_int_31000000 = PyInt_FromLong(31000000L); if (unlikely(!__pyx_int_31000000)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_37060219 = PyInt_FromLong(37060219L); if (unlikely(!__pyx_int_37060219)) __PYX_ERR(0, 1, __pyx_L1_error)
   __pyx_int_46288092 = PyInt_FromLong(46288092L); if (unlikely(!__pyx_int_46288092)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_105801433 = PyInt_FromLong(105801433L); if (unlikely(!__pyx_int_105801433)) __PYX_ERR(0, 1, __pyx_L1_error)
-  __pyx_int_134561400 = PyInt_FromLong(134561400L); if (unlikely(!__pyx_int_134561400)) __PYX_ERR(0, 1, __pyx_L1_error)
+  __pyx_int_265238156 = PyInt_FromLong(265238156L); if (unlikely(!__pyx_int_265238156)) __PYX_ERR(0, 1, __pyx_L1_error)
   return 0;
   __pyx_L1_error:;
   return -1;
@@ -11169,22 +11950,38 @@ static int __Pyx_modinit_type_init_code(void) {
   if (PyObject_SetAttrString(__pyx_m, "System", (PyObject *)&__pyx_type_4hw10_System) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
   if (__Pyx_setup_reduce((PyObject*)&__pyx_type_4hw10_System) < 0) __PYX_ERR(0, 9, __pyx_L1_error)
   __pyx_ptype_4hw10_System = &__pyx_type_4hw10_System;
+  __pyx_vtabptr_4hw10_Vertex = &__pyx_vtable_4hw10_Vertex;
+  __pyx_vtable_4hw10_Vertex.reset = (void (*)(struct __pyx_obj_4hw10_Vertex *, int __pyx_skip_dispatch))__pyx_f_4hw10_6Vertex_reset;
   __pyx_type_4hw10_Vertex.tp_base = __pyx_ptype_4hw10_System;
   if (PyType_Ready(&__pyx_type_4hw10_Vertex) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __pyx_type_4hw10_Vertex.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_4hw10_Vertex.tp_dictoffset && __pyx_type_4hw10_Vertex.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_4hw10_Vertex.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
+  #if CYTHON_COMPILING_IN_CPYTHON
+  {
+    PyObject *wrapper = PyObject_GetAttrString((PyObject *)&__pyx_type_4hw10_Vertex, "__iter__"); if (unlikely(!wrapper)) __PYX_ERR(0, 40, __pyx_L1_error)
+    if (Py_TYPE(wrapper) == &PyWrapperDescr_Type) {
+      __pyx_wrapperbase_4hw10_6Vertex_4__iter__ = *((PyWrapperDescrObject *)wrapper)->d_base;
+      __pyx_wrapperbase_4hw10_6Vertex_4__iter__.doc = __pyx_doc_4hw10_6Vertex_4__iter__;
+      ((PyWrapperDescrObject *)wrapper)->d_base = &__pyx_wrapperbase_4hw10_6Vertex_4__iter__;
+    }
+  }
+  #endif
+  if (__Pyx_SetVtable(__pyx_type_4hw10_Vertex.tp_dict, __pyx_vtabptr_4hw10_Vertex) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   if (PyObject_SetAttrString(__pyx_m, "Vertex", (PyObject *)&__pyx_type_4hw10_Vertex) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   if (__Pyx_setup_reduce((PyObject*)&__pyx_type_4hw10_Vertex) < 0) __PYX_ERR(0, 40, __pyx_L1_error)
   __pyx_ptype_4hw10_Vertex = &__pyx_type_4hw10_Vertex;
-  if (PyType_Ready(&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
+  __pyx_vtabptr_4hw10_Vertex_list = &__pyx_vtable_4hw10_Vertex_list;
+  __pyx_vtable_4hw10_Vertex_list.reset = (void (*)(struct __pyx_obj_4hw10_Vertex_list *, int __pyx_skip_dispatch))__pyx_f_4hw10_11Vertex_list_reset;
+  if (PyType_Ready(&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
   __pyx_type_4hw10_Vertex_list.tp_print = 0;
   if ((CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP) && likely(!__pyx_type_4hw10_Vertex_list.tp_dictoffset && __pyx_type_4hw10_Vertex_list.tp_getattro == PyObject_GenericGetAttr)) {
     __pyx_type_4hw10_Vertex_list.tp_getattro = __Pyx_PyObject_GenericGetAttr;
   }
-  if (PyObject_SetAttrString(__pyx_m, "Vertex_list", (PyObject *)&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
-  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 56, __pyx_L1_error)
+  if (__Pyx_SetVtable(__pyx_type_4hw10_Vertex_list.tp_dict, __pyx_vtabptr_4hw10_Vertex_list) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (PyObject_SetAttrString(__pyx_m, "Vertex_list", (PyObject *)&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
+  if (__Pyx_setup_reduce((PyObject*)&__pyx_type_4hw10_Vertex_list) < 0) __PYX_ERR(0, 64, __pyx_L1_error)
   __pyx_ptype_4hw10_Vertex_list = &__pyx_type_4hw10_Vertex_list;
   __Pyx_RefNannyFinishContext();
   return 0;
@@ -11491,44 +12288,44 @@ if (!__Pyx_RefNanny) {
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
 
-  /* "hw10.pyx":84
- *         return False
+  /* "hw10.pyx":102
+ *         for v in self.vertices: v.reset()
  * 
  * cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):             # <<<<<<<<<<<<<<
  *     cdef list temp = []
  *     with open(fpath) as f:
  */
-  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_Path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_2 = __Pyx_GetModuleGlobalName(__pyx_n_s_Path); if (unlikely(!__pyx_t_2)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_2);
-  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 84, __pyx_L1_error)
+  __pyx_t_1 = __Pyx_PyObject_Call(__pyx_t_2, __pyx_tuple__16, NULL); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 102, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
   __Pyx_DECREF(__pyx_t_2); __pyx_t_2 = 0;
   __pyx_k__3 = __pyx_t_1;
   __Pyx_GIVEREF(__pyx_t_1);
   __pyx_t_1 = 0;
 
-  /* "hw10.pyx":105
- *     pass
+  /* "hw10.pyx":129
+ *     cdef set S = set()
  * 
  * def q1_shortest_path(str start, str destination):             # <<<<<<<<<<<<<<
  *     cdef Vertex_list G = load_file()
  *     if start not in G or destination not in G: return None
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4hw10_1q1_shortest_path, NULL, __pyx_n_s_hw10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 105, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4hw10_1q1_shortest_path, NULL, __pyx_n_s_hw10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_q1_shortest_path, __pyx_t_1) < 0) __PYX_ERR(0, 105, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_q1_shortest_path, __pyx_t_1) < 0) __PYX_ERR(0, 129, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
-  /* "hw10.pyx":113
+  /* "hw10.pyx":136
  *     return []
  * 
  * def main():             # <<<<<<<<<<<<<<
  *     print("hw10.pyx:main()")
  *     print("tests")
  */
-  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4hw10_3main, NULL, __pyx_n_s_hw10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 113, __pyx_L1_error)
+  __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4hw10_3main, NULL, __pyx_n_s_hw10); if (unlikely(!__pyx_t_1)) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_GOTREF(__pyx_t_1);
-  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_1) < 0) __PYX_ERR(0, 113, __pyx_L1_error)
+  if (PyDict_SetItem(__pyx_d, __pyx_n_s_main_2, __pyx_t_1) < 0) __PYX_ERR(0, 136, __pyx_L1_error)
   __Pyx_DECREF(__pyx_t_1); __pyx_t_1 = 0;
 
   /* "(tree fragment)":1
@@ -11555,7 +12352,7 @@ if (!__Pyx_RefNanny) {
 
   /* "(tree fragment)":1
  * def __pyx_unpickle_Vertex_list(__pyx_type, long __pyx_checksum, __pyx_state):             # <<<<<<<<<<<<<<
- *     if __pyx_checksum != 0x64e66d9:
+ *     if __pyx_checksum != 0xfcf368c:
  *         from pickle import PickleError as __pyx_PickleError
  */
   __pyx_t_1 = PyCFunction_NewEx(&__pyx_mdef_4hw10_9__pyx_unpickle_Vertex_list, NULL, __pyx_n_s_hw10); if (unlikely(!__pyx_t_1)) __PYX_ERR(1, 1, __pyx_L1_error)
@@ -12182,8 +12979,71 @@ static CYTHON_INLINE PyObject *__Pyx_GetAttr3(PyObject *o, PyObject *n, PyObject
     return (likely(r)) ? r : __Pyx_GetAttr3Default(d);
 }
 
+/* PyObjectCallNoArg */
+    #if CYTHON_COMPILING_IN_CPYTHON
+static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
+#if CYTHON_FAST_PYCALL
+    if (PyFunction_Check(func)) {
+        return __Pyx_PyFunction_FastCall(func, NULL, 0);
+    }
+#endif
+#ifdef __Pyx_CyFunction_USED
+    if (likely(PyCFunction_Check(func) || __Pyx_TypeCheck(func, __pyx_CyFunctionType))) {
+#else
+    if (likely(PyCFunction_Check(func))) {
+#endif
+        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
+            return __Pyx_PyObject_CallMethO(func, NULL);
+        }
+    }
+    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
+}
+#endif
+
+/* WriteUnraisableException */
+      static void __Pyx_WriteUnraisable(const char *name, CYTHON_UNUSED int clineno,
+                                  CYTHON_UNUSED int lineno, CYTHON_UNUSED const char *filename,
+                                  int full_traceback, CYTHON_UNUSED int nogil) {
+    PyObject *old_exc, *old_val, *old_tb;
+    PyObject *ctx;
+    __Pyx_PyThreadState_declare
+#ifdef WITH_THREAD
+    PyGILState_STATE state;
+    if (nogil)
+        state = PyGILState_Ensure();
+#ifdef _MSC_VER
+    else state = (PyGILState_STATE)-1;
+#endif
+#endif
+    __Pyx_PyThreadState_assign
+    __Pyx_ErrFetch(&old_exc, &old_val, &old_tb);
+    if (full_traceback) {
+        Py_XINCREF(old_exc);
+        Py_XINCREF(old_val);
+        Py_XINCREF(old_tb);
+        __Pyx_ErrRestore(old_exc, old_val, old_tb);
+        PyErr_PrintEx(1);
+    }
+    #if PY_MAJOR_VERSION < 3
+    ctx = PyString_FromString(name);
+    #else
+    ctx = PyUnicode_FromString(name);
+    #endif
+    __Pyx_ErrRestore(old_exc, old_val, old_tb);
+    if (!ctx) {
+        PyErr_WriteUnraisable(Py_None);
+    } else {
+        PyErr_WriteUnraisable(ctx);
+        Py_DECREF(ctx);
+    }
+#ifdef WITH_THREAD
+    if (nogil)
+        PyGILState_Release(state);
+#endif
+}
+
 /* GetItemInt */
-    static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
+      static PyObject *__Pyx_GetItemInt_Generic(PyObject *o, PyObject* j) {
     PyObject *r;
     if (!j) return NULL;
     r = PyObject_GetItem(o, j);
@@ -12270,7 +13130,7 @@ static CYTHON_INLINE PyObject *__Pyx_GetItemInt_Fast(PyObject *o, Py_ssize_t i, 
 }
 
 /* SetItemInt */
-    static int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
+      static int __Pyx_SetItemInt_Generic(PyObject *o, PyObject *j, PyObject *v) {
     int r;
     if (!j) return -1;
     r = PyObject_SetItem(o, j, v);
@@ -12317,8 +13177,81 @@ static CYTHON_INLINE int __Pyx_SetItemInt_Fast(PyObject *o, Py_ssize_t i, PyObje
     return __Pyx_SetItemInt_Generic(o, PyInt_FromSsize_t(i), v);
 }
 
+/* RaiseTooManyValuesToUnpack */
+        static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
+    PyErr_Format(PyExc_ValueError,
+                 "too many values to unpack (expected %" CYTHON_FORMAT_SSIZE_T "d)", expected);
+}
+
+/* RaiseNeedMoreValuesToUnpack */
+        static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
+    PyErr_Format(PyExc_ValueError,
+                 "need more than %" CYTHON_FORMAT_SSIZE_T "d value%.1s to unpack",
+                 index, (index == 1) ? "" : "s");
+}
+
+/* IterFinish */
+        static CYTHON_INLINE int __Pyx_IterFinish(void) {
+#if CYTHON_FAST_THREAD_STATE
+    PyThreadState *tstate = __Pyx_PyThreadState_Current;
+    PyObject* exc_type = tstate->curexc_type;
+    if (unlikely(exc_type)) {
+        if (likely(__Pyx_PyErr_GivenExceptionMatches(exc_type, PyExc_StopIteration))) {
+            PyObject *exc_value, *exc_tb;
+            exc_value = tstate->curexc_value;
+            exc_tb = tstate->curexc_traceback;
+            tstate->curexc_type = 0;
+            tstate->curexc_value = 0;
+            tstate->curexc_traceback = 0;
+            Py_DECREF(exc_type);
+            Py_XDECREF(exc_value);
+            Py_XDECREF(exc_tb);
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    return 0;
+#else
+    if (unlikely(PyErr_Occurred())) {
+        if (likely(PyErr_ExceptionMatches(PyExc_StopIteration))) {
+            PyErr_Clear();
+            return 0;
+        } else {
+            return -1;
+        }
+    }
+    return 0;
+#endif
+}
+
+/* UnpackItemEndCheck */
+        static int __Pyx_IternextUnpackEndCheck(PyObject *retval, Py_ssize_t expected) {
+    if (unlikely(retval)) {
+        Py_DECREF(retval);
+        __Pyx_RaiseTooManyValuesError(expected);
+        return -1;
+    } else {
+        return __Pyx_IterFinish();
+    }
+    return 0;
+}
+
+/* ExtTypeTest */
+        static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
+    if (unlikely(!type)) {
+        PyErr_SetString(PyExc_SystemError, "Missing type object");
+        return 0;
+    }
+    if (likely(__Pyx_TypeCheck(obj, type)))
+        return 1;
+    PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
+                 Py_TYPE(obj)->tp_name, type->tp_name);
+    return 0;
+}
+
 /* DictGetItem */
-      #if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
+        #if PY_MAJOR_VERSION >= 3 && !CYTHON_COMPILING_IN_PYPY
 static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
     PyObject *value;
     value = PyDict_GetItemWithError(d, key);
@@ -12336,37 +13269,32 @@ static PyObject *__Pyx_PyDict_GetItem(PyObject *d, PyObject* key) {
 }
 #endif
 
-/* ExtTypeTest */
-      static CYTHON_INLINE int __Pyx_TypeTest(PyObject *obj, PyTypeObject *type) {
-    if (unlikely(!type)) {
-        PyErr_SetString(PyExc_SystemError, "Missing type object");
-        return 0;
+/* ObjectGetItem */
+        #if CYTHON_USE_TYPE_SLOTS
+static PyObject *__Pyx_PyObject_GetIndex(PyObject *obj, PyObject* index) {
+    PyObject *runerr;
+    Py_ssize_t key_value;
+    PySequenceMethods *m = Py_TYPE(obj)->tp_as_sequence;
+    if (unlikely(!(m && m->sq_item))) {
+        PyErr_Format(PyExc_TypeError, "'%.200s' object is not subscriptable", Py_TYPE(obj)->tp_name);
+        return NULL;
     }
-    if (likely(__Pyx_TypeCheck(obj, type)))
-        return 1;
-    PyErr_Format(PyExc_TypeError, "Cannot convert %.200s to %.200s",
-                 Py_TYPE(obj)->tp_name, type->tp_name);
-    return 0;
+    key_value = __Pyx_PyIndex_AsSsize_t(index);
+    if (likely(key_value != -1 || !(runerr = PyErr_Occurred()))) {
+        return __Pyx_GetItemInt_Fast(obj, key_value, 0, 1, 1);
+    }
+    if (PyErr_GivenExceptionMatches(runerr, PyExc_OverflowError)) {
+        PyErr_Clear();
+        PyErr_Format(PyExc_IndexError, "cannot fit '%.200s' into an index-sized integer", Py_TYPE(index)->tp_name);
+    }
+    return NULL;
 }
-
-/* PyObjectCallNoArg */
-      #if CYTHON_COMPILING_IN_CPYTHON
-static CYTHON_INLINE PyObject* __Pyx_PyObject_CallNoArg(PyObject *func) {
-#if CYTHON_FAST_PYCALL
-    if (PyFunction_Check(func)) {
-        return __Pyx_PyFunction_FastCall(func, NULL, 0);
+static PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key) {
+    PyMappingMethods *m = Py_TYPE(obj)->tp_as_mapping;
+    if (likely(m && m->mp_subscript)) {
+        return m->mp_subscript(obj, key);
     }
-#endif
-#ifdef __Pyx_CyFunction_USED
-    if (likely(PyCFunction_Check(func) || __Pyx_TypeCheck(func, __pyx_CyFunctionType))) {
-#else
-    if (likely(PyCFunction_Check(func))) {
-#endif
-        if (likely(PyCFunction_GET_FLAGS(func) & METH_NOARGS)) {
-            return __Pyx_PyObject_CallMethO(func, NULL);
-        }
-    }
-    return __Pyx_PyObject_Call(func, __pyx_empty_tuple, NULL);
+    return __Pyx_PyObject_GetIndex(obj, key);
 }
 #endif
 
@@ -12479,597 +13407,8 @@ bad:
     return -1;
 }
 
-/* IsLittleEndian */
-          static CYTHON_INLINE int __Pyx_Is_Little_Endian(void)
-{
-  union {
-    uint32_t u32;
-    uint8_t u8[4];
-  } S;
-  S.u32 = 0x01020304;
-  return S.u8[0] == 4;
-}
-
-/* BufferFormatCheck */
-          static void __Pyx_BufFmt_Init(__Pyx_BufFmt_Context* ctx,
-                              __Pyx_BufFmt_StackElem* stack,
-                              __Pyx_TypeInfo* type) {
-  stack[0].field = &ctx->root;
-  stack[0].parent_offset = 0;
-  ctx->root.type = type;
-  ctx->root.name = "buffer dtype";
-  ctx->root.offset = 0;
-  ctx->head = stack;
-  ctx->head->field = &ctx->root;
-  ctx->fmt_offset = 0;
-  ctx->head->parent_offset = 0;
-  ctx->new_packmode = '@';
-  ctx->enc_packmode = '@';
-  ctx->new_count = 1;
-  ctx->enc_count = 0;
-  ctx->enc_type = 0;
-  ctx->is_complex = 0;
-  ctx->is_valid_array = 0;
-  ctx->struct_alignment = 0;
-  while (type->typegroup == 'S') {
-    ++ctx->head;
-    ctx->head->field = type->fields;
-    ctx->head->parent_offset = 0;
-    type = type->fields->type;
-  }
-}
-static int __Pyx_BufFmt_ParseNumber(const char** ts) {
-    int count;
-    const char* t = *ts;
-    if (*t < '0' || *t > '9') {
-      return -1;
-    } else {
-        count = *t++ - '0';
-        while (*t >= '0' && *t < '9') {
-            count *= 10;
-            count += *t++ - '0';
-        }
-    }
-    *ts = t;
-    return count;
-}
-static int __Pyx_BufFmt_ExpectNumber(const char **ts) {
-    int number = __Pyx_BufFmt_ParseNumber(ts);
-    if (number == -1)
-        PyErr_Format(PyExc_ValueError,\
-                     "Does not understand character buffer dtype format string ('%c')", **ts);
-    return number;
-}
-static void __Pyx_BufFmt_RaiseUnexpectedChar(char ch) {
-  PyErr_Format(PyExc_ValueError,
-               "Unexpected format string character: '%c'", ch);
-}
-static const char* __Pyx_BufFmt_DescribeTypeChar(char ch, int is_complex) {
-  switch (ch) {
-    case 'c': return "'char'";
-    case 'b': return "'signed char'";
-    case 'B': return "'unsigned char'";
-    case 'h': return "'short'";
-    case 'H': return "'unsigned short'";
-    case 'i': return "'int'";
-    case 'I': return "'unsigned int'";
-    case 'l': return "'long'";
-    case 'L': return "'unsigned long'";
-    case 'q': return "'long long'";
-    case 'Q': return "'unsigned long long'";
-    case 'f': return (is_complex ? "'complex float'" : "'float'");
-    case 'd': return (is_complex ? "'complex double'" : "'double'");
-    case 'g': return (is_complex ? "'complex long double'" : "'long double'");
-    case 'T': return "a struct";
-    case 'O': return "Python object";
-    case 'P': return "a pointer";
-    case 's': case 'p': return "a string";
-    case 0: return "end";
-    default: return "unparseable format string";
-  }
-}
-static size_t __Pyx_BufFmt_TypeCharToStandardSize(char ch, int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return 2;
-    case 'i': case 'I': case 'l': case 'L': return 4;
-    case 'q': case 'Q': return 8;
-    case 'f': return (is_complex ? 8 : 4);
-    case 'd': return (is_complex ? 16 : 8);
-    case 'g': {
-      PyErr_SetString(PyExc_ValueError, "Python does not define a standard format string size for long double ('g')..");
-      return 0;
-    }
-    case 'O': case 'P': return sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-static size_t __Pyx_BufFmt_TypeCharToNativeSize(char ch, int is_complex) {
-  switch (ch) {
-    case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(short);
-    case 'i': case 'I': return sizeof(int);
-    case 'l': case 'L': return sizeof(long);
-    #ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(PY_LONG_LONG);
-    #endif
-    case 'f': return sizeof(float) * (is_complex ? 2 : 1);
-    case 'd': return sizeof(double) * (is_complex ? 2 : 1);
-    case 'g': return sizeof(long double) * (is_complex ? 2 : 1);
-    case 'O': case 'P': return sizeof(void*);
-    default: {
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-  }
-}
-typedef struct { char c; short x; } __Pyx_st_short;
-typedef struct { char c; int x; } __Pyx_st_int;
-typedef struct { char c; long x; } __Pyx_st_long;
-typedef struct { char c; float x; } __Pyx_st_float;
-typedef struct { char c; double x; } __Pyx_st_double;
-typedef struct { char c; long double x; } __Pyx_st_longdouble;
-typedef struct { char c; void *x; } __Pyx_st_void_p;
-#ifdef HAVE_LONG_LONG
-typedef struct { char c; PY_LONG_LONG x; } __Pyx_st_longlong;
-#endif
-static size_t __Pyx_BufFmt_TypeCharToAlignment(char ch, CYTHON_UNUSED int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(__Pyx_st_short) - sizeof(short);
-    case 'i': case 'I': return sizeof(__Pyx_st_int) - sizeof(int);
-    case 'l': case 'L': return sizeof(__Pyx_st_long) - sizeof(long);
-#ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(__Pyx_st_longlong) - sizeof(PY_LONG_LONG);
-#endif
-    case 'f': return sizeof(__Pyx_st_float) - sizeof(float);
-    case 'd': return sizeof(__Pyx_st_double) - sizeof(double);
-    case 'g': return sizeof(__Pyx_st_longdouble) - sizeof(long double);
-    case 'P': case 'O': return sizeof(__Pyx_st_void_p) - sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-/* These are for computing the padding at the end of the struct to align
-   on the first member of the struct. This will probably the same as above,
-   but we don't have any guarantees.
- */
-typedef struct { short x; char c; } __Pyx_pad_short;
-typedef struct { int x; char c; } __Pyx_pad_int;
-typedef struct { long x; char c; } __Pyx_pad_long;
-typedef struct { float x; char c; } __Pyx_pad_float;
-typedef struct { double x; char c; } __Pyx_pad_double;
-typedef struct { long double x; char c; } __Pyx_pad_longdouble;
-typedef struct { void *x; char c; } __Pyx_pad_void_p;
-#ifdef HAVE_LONG_LONG
-typedef struct { PY_LONG_LONG x; char c; } __Pyx_pad_longlong;
-#endif
-static size_t __Pyx_BufFmt_TypeCharToPadding(char ch, CYTHON_UNUSED int is_complex) {
-  switch (ch) {
-    case '?': case 'c': case 'b': case 'B': case 's': case 'p': return 1;
-    case 'h': case 'H': return sizeof(__Pyx_pad_short) - sizeof(short);
-    case 'i': case 'I': return sizeof(__Pyx_pad_int) - sizeof(int);
-    case 'l': case 'L': return sizeof(__Pyx_pad_long) - sizeof(long);
-#ifdef HAVE_LONG_LONG
-    case 'q': case 'Q': return sizeof(__Pyx_pad_longlong) - sizeof(PY_LONG_LONG);
-#endif
-    case 'f': return sizeof(__Pyx_pad_float) - sizeof(float);
-    case 'd': return sizeof(__Pyx_pad_double) - sizeof(double);
-    case 'g': return sizeof(__Pyx_pad_longdouble) - sizeof(long double);
-    case 'P': case 'O': return sizeof(__Pyx_pad_void_p) - sizeof(void*);
-    default:
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-}
-static char __Pyx_BufFmt_TypeCharToGroup(char ch, int is_complex) {
-  switch (ch) {
-    case 'c':
-        return 'H';
-    case 'b': case 'h': case 'i':
-    case 'l': case 'q': case 's': case 'p':
-        return 'I';
-    case 'B': case 'H': case 'I': case 'L': case 'Q':
-        return 'U';
-    case 'f': case 'd': case 'g':
-        return (is_complex ? 'C' : 'R');
-    case 'O':
-        return 'O';
-    case 'P':
-        return 'P';
-    default: {
-      __Pyx_BufFmt_RaiseUnexpectedChar(ch);
-      return 0;
-    }
-  }
-}
-static void __Pyx_BufFmt_RaiseExpected(__Pyx_BufFmt_Context* ctx) {
-  if (ctx->head == NULL || ctx->head->field == &ctx->root) {
-    const char* expected;
-    const char* quote;
-    if (ctx->head == NULL) {
-      expected = "end";
-      quote = "";
-    } else {
-      expected = ctx->head->field->type->name;
-      quote = "'";
-    }
-    PyErr_Format(PyExc_ValueError,
-                 "Buffer dtype mismatch, expected %s%s%s but got %s",
-                 quote, expected, quote,
-                 __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex));
-  } else {
-    __Pyx_StructField* field = ctx->head->field;
-    __Pyx_StructField* parent = (ctx->head - 1)->field;
-    PyErr_Format(PyExc_ValueError,
-                 "Buffer dtype mismatch, expected '%s' but got %s in '%s.%s'",
-                 field->type->name, __Pyx_BufFmt_DescribeTypeChar(ctx->enc_type, ctx->is_complex),
-                 parent->type->name, field->name);
-  }
-}
-static int __Pyx_BufFmt_ProcessTypeChunk(__Pyx_BufFmt_Context* ctx) {
-  char group;
-  size_t size, offset, arraysize = 1;
-  if (ctx->enc_type == 0) return 0;
-  if (ctx->head->field->type->arraysize[0]) {
-    int i, ndim = 0;
-    if (ctx->enc_type == 's' || ctx->enc_type == 'p') {
-        ctx->is_valid_array = ctx->head->field->type->ndim == 1;
-        ndim = 1;
-        if (ctx->enc_count != ctx->head->field->type->arraysize[0]) {
-            PyErr_Format(PyExc_ValueError,
-                         "Expected a dimension of size %zu, got %zu",
-                         ctx->head->field->type->arraysize[0], ctx->enc_count);
-            return -1;
-        }
-    }
-    if (!ctx->is_valid_array) {
-      PyErr_Format(PyExc_ValueError, "Expected %d dimensions, got %d",
-                   ctx->head->field->type->ndim, ndim);
-      return -1;
-    }
-    for (i = 0; i < ctx->head->field->type->ndim; i++) {
-      arraysize *= ctx->head->field->type->arraysize[i];
-    }
-    ctx->is_valid_array = 0;
-    ctx->enc_count = 1;
-  }
-  group = __Pyx_BufFmt_TypeCharToGroup(ctx->enc_type, ctx->is_complex);
-  do {
-    __Pyx_StructField* field = ctx->head->field;
-    __Pyx_TypeInfo* type = field->type;
-    if (ctx->enc_packmode == '@' || ctx->enc_packmode == '^') {
-      size = __Pyx_BufFmt_TypeCharToNativeSize(ctx->enc_type, ctx->is_complex);
-    } else {
-      size = __Pyx_BufFmt_TypeCharToStandardSize(ctx->enc_type, ctx->is_complex);
-    }
-    if (ctx->enc_packmode == '@') {
-      size_t align_at = __Pyx_BufFmt_TypeCharToAlignment(ctx->enc_type, ctx->is_complex);
-      size_t align_mod_offset;
-      if (align_at == 0) return -1;
-      align_mod_offset = ctx->fmt_offset % align_at;
-      if (align_mod_offset > 0) ctx->fmt_offset += align_at - align_mod_offset;
-      if (ctx->struct_alignment == 0)
-          ctx->struct_alignment = __Pyx_BufFmt_TypeCharToPadding(ctx->enc_type,
-                                                                 ctx->is_complex);
-    }
-    if (type->size != size || type->typegroup != group) {
-      if (type->typegroup == 'C' && type->fields != NULL) {
-        size_t parent_offset = ctx->head->parent_offset + field->offset;
-        ++ctx->head;
-        ctx->head->field = type->fields;
-        ctx->head->parent_offset = parent_offset;
-        continue;
-      }
-      if ((type->typegroup == 'H' || group == 'H') && type->size == size) {
-      } else {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return -1;
-      }
-    }
-    offset = ctx->head->parent_offset + field->offset;
-    if (ctx->fmt_offset != offset) {
-      PyErr_Format(PyExc_ValueError,
-                   "Buffer dtype mismatch; next field is at offset %" CYTHON_FORMAT_SSIZE_T "d but %" CYTHON_FORMAT_SSIZE_T "d expected",
-                   (Py_ssize_t)ctx->fmt_offset, (Py_ssize_t)offset);
-      return -1;
-    }
-    ctx->fmt_offset += size;
-    if (arraysize)
-      ctx->fmt_offset += (arraysize - 1) * size;
-    --ctx->enc_count;
-    while (1) {
-      if (field == &ctx->root) {
-        ctx->head = NULL;
-        if (ctx->enc_count != 0) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return -1;
-        }
-        break;
-      }
-      ctx->head->field = ++field;
-      if (field->type == NULL) {
-        --ctx->head;
-        field = ctx->head->field;
-        continue;
-      } else if (field->type->typegroup == 'S') {
-        size_t parent_offset = ctx->head->parent_offset + field->offset;
-        if (field->type->fields->type == NULL) continue;
-        field = field->type->fields;
-        ++ctx->head;
-        ctx->head->field = field;
-        ctx->head->parent_offset = parent_offset;
-        break;
-      } else {
-        break;
-      }
-    }
-  } while (ctx->enc_count);
-  ctx->enc_type = 0;
-  ctx->is_complex = 0;
-  return 0;
-}
-static PyObject *
-__pyx_buffmt_parse_array(__Pyx_BufFmt_Context* ctx, const char** tsp)
-{
-    const char *ts = *tsp;
-    int i = 0, number;
-    int ndim = ctx->head->field->type->ndim;
-;
-    ++ts;
-    if (ctx->new_count != 1) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Cannot handle repeated arrays in format string");
-        return NULL;
-    }
-    if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-    while (*ts && *ts != ')') {
-        switch (*ts) {
-            case ' ': case '\f': case '\r': case '\n': case '\t': case '\v':  continue;
-            default:  break;
-        }
-        number = __Pyx_BufFmt_ExpectNumber(&ts);
-        if (number == -1) return NULL;
-        if (i < ndim && (size_t) number != ctx->head->field->type->arraysize[i])
-            return PyErr_Format(PyExc_ValueError,
-                        "Expected a dimension of size %zu, got %d",
-                        ctx->head->field->type->arraysize[i], number);
-        if (*ts != ',' && *ts != ')')
-            return PyErr_Format(PyExc_ValueError,
-                                "Expected a comma in format string, got '%c'", *ts);
-        if (*ts == ',') ts++;
-        i++;
-    }
-    if (i != ndim)
-        return PyErr_Format(PyExc_ValueError, "Expected %d dimension(s), got %d",
-                            ctx->head->field->type->ndim, i);
-    if (!*ts) {
-        PyErr_SetString(PyExc_ValueError,
-                        "Unexpected end of format string, expected ')'");
-        return NULL;
-    }
-    ctx->is_valid_array = 1;
-    ctx->new_count = 1;
-    *tsp = ++ts;
-    return Py_None;
-}
-static const char* __Pyx_BufFmt_CheckString(__Pyx_BufFmt_Context* ctx, const char* ts) {
-  int got_Z = 0;
-  while (1) {
-    switch(*ts) {
-      case 0:
-        if (ctx->enc_type != 0 && ctx->head == NULL) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return NULL;
-        }
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        if (ctx->head != NULL) {
-          __Pyx_BufFmt_RaiseExpected(ctx);
-          return NULL;
-        }
-        return ts;
-      case ' ':
-      case '\r':
-      case '\n':
-        ++ts;
-        break;
-      case '<':
-        if (!__Pyx_Is_Little_Endian()) {
-          PyErr_SetString(PyExc_ValueError, "Little-endian buffer not supported on big-endian compiler");
-          return NULL;
-        }
-        ctx->new_packmode = '=';
-        ++ts;
-        break;
-      case '>':
-      case '!':
-        if (__Pyx_Is_Little_Endian()) {
-          PyErr_SetString(PyExc_ValueError, "Big-endian buffer not supported on little-endian compiler");
-          return NULL;
-        }
-        ctx->new_packmode = '=';
-        ++ts;
-        break;
-      case '=':
-      case '@':
-      case '^':
-        ctx->new_packmode = *ts++;
-        break;
-      case 'T':
-        {
-          const char* ts_after_sub;
-          size_t i, struct_count = ctx->new_count;
-          size_t struct_alignment = ctx->struct_alignment;
-          ctx->new_count = 1;
-          ++ts;
-          if (*ts != '{') {
-            PyErr_SetString(PyExc_ValueError, "Buffer acquisition: Expected '{' after 'T'");
-            return NULL;
-          }
-          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-          ctx->enc_type = 0;
-          ctx->enc_count = 0;
-          ctx->struct_alignment = 0;
-          ++ts;
-          ts_after_sub = ts;
-          for (i = 0; i != struct_count; ++i) {
-            ts_after_sub = __Pyx_BufFmt_CheckString(ctx, ts);
-            if (!ts_after_sub) return NULL;
-          }
-          ts = ts_after_sub;
-          if (struct_alignment) ctx->struct_alignment = struct_alignment;
-        }
-        break;
-      case '}':
-        {
-          size_t alignment = ctx->struct_alignment;
-          ++ts;
-          if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-          ctx->enc_type = 0;
-          if (alignment && ctx->fmt_offset % alignment) {
-            ctx->fmt_offset += alignment - (ctx->fmt_offset % alignment);
-          }
-        }
-        return ts;
-      case 'x':
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        ctx->fmt_offset += ctx->new_count;
-        ctx->new_count = 1;
-        ctx->enc_count = 0;
-        ctx->enc_type = 0;
-        ctx->enc_packmode = ctx->new_packmode;
-        ++ts;
-        break;
-      case 'Z':
-        got_Z = 1;
-        ++ts;
-        if (*ts != 'f' && *ts != 'd' && *ts != 'g') {
-          __Pyx_BufFmt_RaiseUnexpectedChar('Z');
-          return NULL;
-        }
-        CYTHON_FALLTHROUGH;
-      case 'c': case 'b': case 'B': case 'h': case 'H': case 'i': case 'I':
-      case 'l': case 'L': case 'q': case 'Q':
-      case 'f': case 'd': case 'g':
-      case 'O': case 'p':
-        if (ctx->enc_type == *ts && got_Z == ctx->is_complex &&
-            ctx->enc_packmode == ctx->new_packmode) {
-          ctx->enc_count += ctx->new_count;
-          ctx->new_count = 1;
-          got_Z = 0;
-          ++ts;
-          break;
-        }
-        CYTHON_FALLTHROUGH;
-      case 's':
-        if (__Pyx_BufFmt_ProcessTypeChunk(ctx) == -1) return NULL;
-        ctx->enc_count = ctx->new_count;
-        ctx->enc_packmode = ctx->new_packmode;
-        ctx->enc_type = *ts;
-        ctx->is_complex = got_Z;
-        ++ts;
-        ctx->new_count = 1;
-        got_Z = 0;
-        break;
-      case ':':
-        ++ts;
-        while(*ts != ':') ++ts;
-        ++ts;
-        break;
-      case '(':
-        if (!__pyx_buffmt_parse_array(ctx, &ts)) return NULL;
-        break;
-      default:
-        {
-          int number = __Pyx_BufFmt_ExpectNumber(&ts);
-          if (number == -1) return NULL;
-          ctx->new_count = (size_t)number;
-        }
-    }
-  }
-}
-
-/* BufferGetAndValidate */
-            static CYTHON_INLINE void __Pyx_SafeReleaseBuffer(Py_buffer* info) {
-  if (unlikely(info->buf == NULL)) return;
-  if (info->suboffsets == __Pyx_minusones) info->suboffsets = NULL;
-  __Pyx_ReleaseBuffer(info);
-}
-static void __Pyx_ZeroBuffer(Py_buffer* buf) {
-  buf->buf = NULL;
-  buf->obj = NULL;
-  buf->strides = __Pyx_zeros;
-  buf->shape = __Pyx_zeros;
-  buf->suboffsets = __Pyx_minusones;
-}
-static int __Pyx__GetBufferAndValidate(
-        Py_buffer* buf, PyObject* obj,  __Pyx_TypeInfo* dtype, int flags,
-        int nd, int cast, __Pyx_BufFmt_StackElem* stack)
-{
-  buf->buf = NULL;
-  if (unlikely(__Pyx_GetBuffer(obj, buf, flags) == -1)) {
-    __Pyx_ZeroBuffer(buf);
-    return -1;
-  }
-  if (unlikely(buf->ndim != nd)) {
-    PyErr_Format(PyExc_ValueError,
-                 "Buffer has wrong number of dimensions (expected %d, got %d)",
-                 nd, buf->ndim);
-    goto fail;
-  }
-  if (!cast) {
-    __Pyx_BufFmt_Context ctx;
-    __Pyx_BufFmt_Init(&ctx, stack, dtype);
-    if (!__Pyx_BufFmt_CheckString(&ctx, buf->format)) goto fail;
-  }
-  if (unlikely((unsigned)buf->itemsize != dtype->size)) {
-    PyErr_Format(PyExc_ValueError,
-      "Item size of buffer (%" CYTHON_FORMAT_SSIZE_T "d byte%s) does not match size of '%s' (%" CYTHON_FORMAT_SSIZE_T "d byte%s)",
-      buf->itemsize, (buf->itemsize > 1) ? "s" : "",
-      dtype->name, (Py_ssize_t)dtype->size, (dtype->size > 1) ? "s" : "");
-    goto fail;
-  }
-  if (buf->suboffsets == NULL) buf->suboffsets = __Pyx_minusones;
-  return 0;
-fail:;
-  __Pyx_SafeReleaseBuffer(buf);
-  return -1;
-}
-
-/* ObjectGetItem */
-            #if CYTHON_USE_TYPE_SLOTS
-static PyObject *__Pyx_PyObject_GetIndex(PyObject *obj, PyObject* index) {
-    PyObject *runerr;
-    Py_ssize_t key_value;
-    PySequenceMethods *m = Py_TYPE(obj)->tp_as_sequence;
-    if (unlikely(!(m && m->sq_item))) {
-        PyErr_Format(PyExc_TypeError, "'%.200s' object is not subscriptable", Py_TYPE(obj)->tp_name);
-        return NULL;
-    }
-    key_value = __Pyx_PyIndex_AsSsize_t(index);
-    if (likely(key_value != -1 || !(runerr = PyErr_Occurred()))) {
-        return __Pyx_GetItemInt_Fast(obj, key_value, 0, 1, 1);
-    }
-    if (PyErr_GivenExceptionMatches(runerr, PyExc_OverflowError)) {
-        PyErr_Clear();
-        PyErr_Format(PyExc_IndexError, "cannot fit '%.200s' into an index-sized integer", Py_TYPE(index)->tp_name);
-    }
-    return NULL;
-}
-static PyObject *__Pyx_PyObject_GetItem(PyObject *obj, PyObject* key) {
-    PyMappingMethods *m = Py_TYPE(obj)->tp_as_mapping;
-    if (likely(m && m->mp_subscript)) {
-        return m->mp_subscript(obj, key);
-    }
-    return __Pyx_PyObject_GetIndex(obj, key);
-}
-#endif
-
 /* Import */
-            static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
+          static PyObject *__Pyx_Import(PyObject *name, PyObject *from_list, int level) {
     PyObject *empty_list = 0;
     PyObject *module = 0;
     PyObject *global_dict = 0;
@@ -13134,7 +13473,7 @@ bad:
 }
 
 /* ImportFrom */
-            static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
+          static PyObject* __Pyx_ImportFrom(PyObject* module, PyObject* name) {
     PyObject* value = __Pyx_PyObject_GetAttrStr(module, name);
     if (unlikely(!value) && PyErr_ExceptionMatches(PyExc_AttributeError)) {
         PyErr_Format(PyExc_ImportError,
@@ -13148,7 +13487,7 @@ bad:
 }
 
 /* RaiseException */
-            #if PY_MAJOR_VERSION < 3
+          #if PY_MAJOR_VERSION < 3
 static void __Pyx_Raise(PyObject *type, PyObject *value, PyObject *tb,
                         CYTHON_UNUSED PyObject *cause) {
     __Pyx_PyThreadState_declare
@@ -13307,7 +13646,7 @@ bad:
 #endif
 
 /* HasAttr */
-            static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
+          static CYTHON_INLINE int __Pyx_HasAttr(PyObject *o, PyObject *n) {
     PyObject *r;
     if (unlikely(!__Pyx_PyBaseString_Check(n))) {
         PyErr_SetString(PyExc_TypeError,
@@ -13324,26 +13663,13 @@ bad:
     }
 }
 
-/* RaiseTooManyValuesToUnpack */
-            static CYTHON_INLINE void __Pyx_RaiseTooManyValuesError(Py_ssize_t expected) {
-    PyErr_Format(PyExc_ValueError,
-                 "too many values to unpack (expected %" CYTHON_FORMAT_SSIZE_T "d)", expected);
-}
-
-/* RaiseNeedMoreValuesToUnpack */
-            static CYTHON_INLINE void __Pyx_RaiseNeedMoreValuesError(Py_ssize_t index) {
-    PyErr_Format(PyExc_ValueError,
-                 "need more than %" CYTHON_FORMAT_SSIZE_T "d value%.1s to unpack",
-                 index, (index == 1) ? "" : "s");
-}
-
 /* RaiseNoneIterError */
-            static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
+          static CYTHON_INLINE void __Pyx_RaiseNoneNotIterableError(void) {
     PyErr_SetString(PyExc_TypeError, "'NoneType' object is not iterable");
 }
 
 /* PyObject_GenericGetAttrNoDict */
-            #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
+          #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
 static PyObject *__Pyx_RaiseGenericGetAttributeError(PyTypeObject *tp, PyObject *attr_name) {
     PyErr_Format(PyExc_AttributeError,
 #if PY_MAJOR_VERSION >= 3
@@ -13383,7 +13709,7 @@ static CYTHON_INLINE PyObject* __Pyx_PyObject_GenericGetAttrNoDict(PyObject* obj
 #endif
 
 /* PyObject_GenericGetAttr */
-            #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
+          #if CYTHON_USE_TYPE_SLOTS && CYTHON_USE_PYTYPE_LOOKUP && PY_VERSION_HEX < 0x03070000
 static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_name) {
     if (unlikely(Py_TYPE(obj)->tp_dictoffset)) {
         return PyObject_GenericGetAttr(obj, attr_name);
@@ -13393,7 +13719,7 @@ static PyObject* __Pyx_PyObject_GenericGetAttr(PyObject* obj, PyObject* attr_nam
 #endif
 
 /* SetupReduce */
-            static int __Pyx_setup_reduce_is_named(PyObject* meth, PyObject* name) {
+          static int __Pyx_setup_reduce_is_named(PyObject* meth, PyObject* name) {
   int ret;
   PyObject *name_attr;
   name_attr = __Pyx_PyObject_GetAttrStr(meth, __pyx_n_s_name_2);
@@ -13468,8 +13794,26 @@ GOOD:
     return ret;
 }
 
+/* SetVTable */
+          static int __Pyx_SetVtable(PyObject *dict, void *vtable) {
+#if PY_VERSION_HEX >= 0x02070000
+    PyObject *ob = PyCapsule_New(vtable, 0, 0);
+#else
+    PyObject *ob = PyCObject_FromVoidPtr(vtable, 0);
+#endif
+    if (!ob)
+        goto bad;
+    if (PyDict_SetItem(dict, __pyx_n_s_pyx_vtable, ob) < 0)
+        goto bad;
+    Py_DECREF(ob);
+    return 0;
+bad:
+    Py_XDECREF(ob);
+    return -1;
+}
+
 /* CLineInTraceback */
-            #ifndef CYTHON_CLINE_IN_TRACEBACK
+          #ifndef CYTHON_CLINE_IN_TRACEBACK
 static int __Pyx_CLineForTraceback(CYTHON_UNUSED PyThreadState *tstate, int c_line) {
     PyObject *use_cline;
     PyObject *ptype, *pvalue, *ptraceback;
@@ -13509,7 +13853,7 @@ static int __Pyx_CLineForTraceback(CYTHON_UNUSED PyThreadState *tstate, int c_li
 #endif
 
 /* CodeObjectCache */
-            static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
+          static int __pyx_bisect_code_objects(__Pyx_CodeObjectCacheEntry* entries, int count, int code_line) {
     int start = 0, mid = 0, end = count - 1;
     if (end >= 0 && code_line > entries[end].code_line) {
         return count;
@@ -13589,7 +13933,7 @@ static void __pyx_insert_code_object(int code_line, PyCodeObject* code_object) {
 }
 
 /* AddTraceback */
-            #include "compile.h"
+          #include "compile.h"
 #include "frameobject.h"
 #include "traceback.h"
 static PyCodeObject* __Pyx_CreateCodeObjectForTraceback(
@@ -13674,7 +14018,7 @@ bad:
 }
 
 /* CIntToPy */
-            static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
+          static CYTHON_INLINE PyObject* __Pyx_PyInt_From_int(int value) {
     const int neg_one = (int) -1, const_zero = (int) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
@@ -13705,7 +14049,7 @@ bad:
 }
 
 /* CIntFromPyVerify */
-            #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
+          #define __PYX_VERIFY_RETURN_INT(target_type, func_type, func_value)\
     __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 0)
 #define __PYX_VERIFY_RETURN_INT_EXC(target_type, func_type, func_value)\
     __PYX__VERIFY_RETURN_INT(target_type, func_type, func_value, 1)
@@ -13726,30 +14070,39 @@ bad:
         return (target_type) value;\
     }
 
-#if PY_MAJOR_VERSION < 3
-static int __Pyx_GetBuffer(PyObject *obj, Py_buffer *view, int flags) {
-    if (PyObject_CheckBuffer(obj)) return PyObject_GetBuffer(obj, view, flags);
-        if (__Pyx_TypeCheck(obj, __pyx_ptype_5numpy_ndarray)) return __pyx_pw_5numpy_7ndarray_1__getbuffer__(obj, view, flags);
-    PyErr_Format(PyExc_TypeError, "'%.200s' does not have the buffer interface", Py_TYPE(obj)->tp_name);
-    return -1;
-}
-static void __Pyx_ReleaseBuffer(Py_buffer *view) {
-    PyObject *obj = view->obj;
-    if (!obj) return;
-    if (PyObject_CheckBuffer(obj)) {
-        PyBuffer_Release(view);
-        return;
-    }
-    if ((0)) {}
-        else if (__Pyx_TypeCheck(obj, __pyx_ptype_5numpy_ndarray)) __pyx_pw_5numpy_7ndarray_3__releasebuffer__(obj, view);
-    view->obj = NULL;
-    Py_DECREF(obj);
-}
+/* CIntToPy */
+          static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
+    const long neg_one = (long) -1, const_zero = (long) 0;
+    const int is_unsigned = neg_one > const_zero;
+    if (is_unsigned) {
+        if (sizeof(long) < sizeof(long)) {
+            return PyInt_FromLong((long) value);
+        } else if (sizeof(long) <= sizeof(unsigned long)) {
+            return PyLong_FromUnsignedLong((unsigned long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
+            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
 #endif
+        }
+    } else {
+        if (sizeof(long) <= sizeof(long)) {
+            return PyInt_FromLong((long) value);
+#ifdef HAVE_LONG_LONG
+        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
+            return PyLong_FromLongLong((PY_LONG_LONG) value);
+#endif
+        }
+    }
+    {
+        int one = 1; int little = (int)*(unsigned char *)&one;
+        unsigned char *bytes = (unsigned char *)&value;
+        return _PyLong_FromByteArray(bytes, sizeof(long),
+                                     little, !is_unsigned);
+    }
+}
 
-
-            /* Print */
-            #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+/* Print */
+          #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
 static PyObject *__Pyx_GetStdout(void) {
     PyObject *f = PySys_GetObject((char *)"stdout");
     if (!f) {
@@ -13854,39 +14207,8 @@ bad:
 }
 #endif
 
-/* CIntToPy */
-            static CYTHON_INLINE PyObject* __Pyx_PyInt_From_long(long value) {
-    const long neg_one = (long) -1, const_zero = (long) 0;
-    const int is_unsigned = neg_one > const_zero;
-    if (is_unsigned) {
-        if (sizeof(long) < sizeof(long)) {
-            return PyInt_FromLong((long) value);
-        } else if (sizeof(long) <= sizeof(unsigned long)) {
-            return PyLong_FromUnsignedLong((unsigned long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(unsigned PY_LONG_LONG)) {
-            return PyLong_FromUnsignedLongLong((unsigned PY_LONG_LONG) value);
-#endif
-        }
-    } else {
-        if (sizeof(long) <= sizeof(long)) {
-            return PyInt_FromLong((long) value);
-#ifdef HAVE_LONG_LONG
-        } else if (sizeof(long) <= sizeof(PY_LONG_LONG)) {
-            return PyLong_FromLongLong((PY_LONG_LONG) value);
-#endif
-        }
-    }
-    {
-        int one = 1; int little = (int)*(unsigned char *)&one;
-        unsigned char *bytes = (unsigned char *)&value;
-        return _PyLong_FromByteArray(bytes, sizeof(long),
-                                     little, !is_unsigned);
-    }
-}
-
 /* Declarations */
-            #if CYTHON_CCOMPLEX
+          #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     static CYTHON_INLINE __pyx_t_float_complex __pyx_t_float_complex_from_parts(float x, float y) {
       return ::std::complex< float >(x, y);
@@ -13906,7 +14228,7 @@ bad:
 #endif
 
 /* Arithmetic */
-            #if CYTHON_CCOMPLEX
+          #if CYTHON_CCOMPLEX
 #else
     static CYTHON_INLINE int __Pyx_c_eq_float(__pyx_t_float_complex a, __pyx_t_float_complex b) {
        return (a.real == b.real) && (a.imag == b.imag);
@@ -14041,7 +14363,7 @@ bad:
 #endif
 
 /* Declarations */
-            #if CYTHON_CCOMPLEX
+          #if CYTHON_CCOMPLEX
   #ifdef __cplusplus
     static CYTHON_INLINE __pyx_t_double_complex __pyx_t_double_complex_from_parts(double x, double y) {
       return ::std::complex< double >(x, y);
@@ -14061,7 +14383,7 @@ bad:
 #endif
 
 /* Arithmetic */
-            #if CYTHON_CCOMPLEX
+          #if CYTHON_CCOMPLEX
 #else
     static CYTHON_INLINE int __Pyx_c_eq_double(__pyx_t_double_complex a, __pyx_t_double_complex b) {
        return (a.real == b.real) && (a.imag == b.imag);
@@ -14196,7 +14518,7 @@ bad:
 #endif
 
 /* CIntToPy */
-            static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value) {
+          static CYTHON_INLINE PyObject* __Pyx_PyInt_From_enum__NPY_TYPES(enum NPY_TYPES value) {
     const enum NPY_TYPES neg_one = (enum NPY_TYPES) -1, const_zero = (enum NPY_TYPES) 0;
     const int is_unsigned = neg_one > const_zero;
     if (is_unsigned) {
@@ -14227,7 +14549,7 @@ bad:
 }
 
 /* CIntFromPy */
-            static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
+          static CYTHON_INLINE int __Pyx_PyInt_As_int(PyObject *x) {
     const int neg_one = (int) -1, const_zero = (int) 0;
     const int is_unsigned = neg_one > const_zero;
 #if PY_MAJOR_VERSION < 3
@@ -14416,7 +14738,7 @@ raise_neg_overflow:
 }
 
 /* CIntFromPy */
-            static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
+          static CYTHON_INLINE long __Pyx_PyInt_As_long(PyObject *x) {
     const long neg_one = (long) -1, const_zero = (long) 0;
     const int is_unsigned = neg_one > const_zero;
 #if PY_MAJOR_VERSION < 3
@@ -14605,7 +14927,7 @@ raise_neg_overflow:
 }
 
 /* PrintOne */
-            #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
+          #if !CYTHON_COMPILING_IN_PYPY && PY_MAJOR_VERSION < 3
 static int __Pyx_PrintOne(PyObject* f, PyObject *o) {
     if (!f) {
         if (!(f = __Pyx_GetStdout()))
@@ -14642,7 +14964,7 @@ static int __Pyx_PrintOne(PyObject* stream, PyObject *o) {
 #endif
 
 /* FastTypeChecks */
-            #if CYTHON_COMPILING_IN_CPYTHON
+          #if CYTHON_COMPILING_IN_CPYTHON
 static int __Pyx_InBases(PyTypeObject *a, PyTypeObject *b) {
     while (a) {
         a = a->tp_base;
@@ -14714,7 +15036,7 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 #endif
 
 /* CheckBinaryVersion */
-            static int __Pyx_check_binary_version(void) {
+          static int __Pyx_check_binary_version(void) {
     char ctversion[4], rtversion[4];
     PyOS_snprintf(ctversion, 4, "%d.%d", PY_MAJOR_VERSION, PY_MINOR_VERSION);
     PyOS_snprintf(rtversion, 4, "%s", Py_GetVersion());
@@ -14730,7 +15052,7 @@ static CYTHON_INLINE int __Pyx_PyErr_GivenExceptionMatches2(PyObject *err, PyObj
 }
 
 /* ModuleImport */
-            #ifndef __PYX_HAVE_RT_ImportModule
+          #ifndef __PYX_HAVE_RT_ImportModule
 #define __PYX_HAVE_RT_ImportModule
 static PyObject *__Pyx_ImportModule(const char *name) {
     PyObject *py_name = 0;
@@ -14748,7 +15070,7 @@ bad:
 #endif
 
 /* TypeImport */
-            #ifndef __PYX_HAVE_RT_ImportType
+          #ifndef __PYX_HAVE_RT_ImportType
 #define __PYX_HAVE_RT_ImportType
 static PyTypeObject *__Pyx_ImportType(const char *module_name, const char *class_name,
     size_t size, int strict)
@@ -14813,7 +15135,7 @@ bad:
 #endif
 
 /* InitStrings */
-            static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
+          static int __Pyx_InitStrings(__Pyx_StringTabEntry *t) {
     while (t->p) {
         #if PY_MAJOR_VERSION < 3
         if (t->is_unicode) {
