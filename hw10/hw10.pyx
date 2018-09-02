@@ -1,9 +1,12 @@
 import numpy as np
+cimport numpy as np
+#define NPY_NO_DEPRECATED_API
+#define NPY_1_7_API_VERSION
 from queue import PriorityQueue as pqueue
 import csv
 from pathlib import Path
 
-cdef Path fpath = Path("sde-universe_2018-07-16.csv")
+fpath = Path("sde-universe_2018-07-16.csv")
 
 cdef class System:
     cdef str name
@@ -37,11 +40,11 @@ cdef class System:
 
 cdef class System_list:
     cdef dict name_to_id
-    cdef list systems
+    cdef np.ndarray systems
 
-    def __init__(System_list self):
+    def __init__(System_list self, int size):
         self.name_to_id = {}
-        self.systems = []
+        self.systems = np.ndarray(size, System)
 
     cdef add(System_list self, System to_add):
         pass
@@ -56,24 +59,21 @@ cdef class Vertex:
         self.pi = None
 
 cdef list q1_shortest_path(str start, str destination):
-    cdef System_list G = []
+    cdef System_list G
     with open(fpath) as f:
         r = csv.DictReader(f)
+        G = System_list(len(r))
         for row in r:
             sys = System(
                     row["system_id"],
-                    row['x'],
-                    row['y'],
-                    row['z'],
+                    row['x'], row['y'], row['z'],
                     row["solarsystem_name"],
                     row["security_status"]
                     )
+            G.add(sys)
 
-    w = np.array((len(G),len(G)), np.inf)
+    w = np.full((len(G),len(G)), np.inf)
 
 def main():
     print("hw10.pyx:main()")
     print("tests")
-    cdef System test = System()
-    print(test)
-    cdef Vertex tst = Vertex(test)

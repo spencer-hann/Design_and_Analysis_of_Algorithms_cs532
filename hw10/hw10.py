@@ -12,8 +12,16 @@ if len(sys.argv) == 1: # no command line args
 # This block compiles/sets up the hw10 module
 # from the  hw10.pyx cython file
 from distutils.core import setup
+from distutils.extension import Extension
 from Cython.Build import cythonize
-setup(ext_modules = cythonize("hw10.pyx"))
+setup(
+    ext_modules = cythonize(
+        Extension(
+            "hw10",
+            ["hw10.pyx"],
+            define_macros=[("NPY_NO_DEPRECATED_API",None)])
+        )
+    )
 print("*hw10.py Setup complete!")
 print("==================================================\n")
 
