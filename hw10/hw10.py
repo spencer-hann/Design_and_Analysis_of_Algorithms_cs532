@@ -19,9 +19,10 @@ setup(
         Extension(
             "hw10",
             ["hw10.pyx"],
-            define_macros=[("NPY_NO_DEPRECATED_API",None)])
+            define_macros=[("NPY_NO_DEPRECATED_API",None)]
         )
     )
+)
 print("*hw10.py Setup complete!")
 print("==================================================\n")
 
