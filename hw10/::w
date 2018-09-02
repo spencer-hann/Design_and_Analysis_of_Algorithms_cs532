@@ -1,0 +1,42 @@
+import numpy as np
+from queue import PriorityQueue as pqueue
+
+global fpath = Path("sde-universe_2018-07-16.csv")
+
+cdef class System:
+    cdef str name
+    cdef int x
+    cdef int y
+    cdef int z
+
+    def __init__(self, name="null",x=0,y=0,z=0):
+        self.name = name
+        self.x = x
+        self.y = y
+        self.z = z
+
+    def __str__(self):
+        return "System: " + self.name + \
+            "\nLocation: (" + str(self.x) + \
+            ", " + str(self.y) + ", " + \
+            str(self.z) + ")"
+
+cdef class Vertex:
+    cdef System system
+    cdef float d
+    cdef System pi
+    def __init__(self, system):
+        self.system = system
+        self.d = float("inf")
+        self.pi = None
+
+cdef q1_shortest_path(start: str, destination: str) -> List[str]:
+    with open("sde-universe_2018-07-16.csv")
+    w = np.array(_, np.inf)
+
+def main():
+    print("hw10.pyx:main()")
+    print("tests")
+    cdef System test = System()
+    print(test)
+    cdef Vertex tst = Vertex(test)
