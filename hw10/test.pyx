@@ -1,6 +1,6 @@
 import numpy as np
 cimport numpy as np
-from queue import PriorityQueue
+from queue import PriorityQueue as pqueue
 import csv
 from pathlib import Path
 from ast import literal_eval
@@ -8,17 +8,9 @@ from libc.math cimport sqrt
 from heapq import heapify
 
 
-cdef class System:
-    cdef public str name
-    cdef public int id
-    cdef public float x
-    cdef public float y
-    cdef public float z
-    cdef public float security
-    cdef public list adj
-
+class tystem:
     def __init__(
-            System self,
+            self,
             str system_id,
             str adj,
             str x, str y, str z,
@@ -39,19 +31,16 @@ cdef class System:
             ", " + str(self.y) + ", " + \
             str(self.z) + ")"
 
-    def distance(System self, System other):
+    def distance(self, other):
         return sqrt( # libc.math.sqrt
-                (self.x - other.x)**2 +
-                (self.y - other.y)**2 +
-                (self.z - other.z)**2
+                (self.x**2 + other.x**2) +
+                (self.y**2 + other.y**2) +
+                (self.z**2 + other.z**2)
                 )
 
-cdef class Vertex(System):
-    cdef public float d
-    cdef public Vertex pi
-
+class Vertex(System):
     def __init__(
-            Vertex self,
+            self,
             str system_id,
             str adj,
             str x, str y, str z,
@@ -62,19 +51,15 @@ cdef class Vertex(System):
         self.d = float("inf")
         self.pi = None
 
-    def __lt__(self, Vertex other): return self.d < other.d
+    def __lt__(self, other): return self.d < other.d
     def __gt__(self, other): return self.d > other.d
     def __le__(self, other): return self.d <= other.d
     def __ge__(self, other): return self.d >= other.d
     def __eq__(self, other): return self.d == other.d
     def __ne__(self, other): return self.d != other.d
 
-cdef class Vertex_list:
-    cdef public dict names
-    cdef public dict ids
-    cdef public np.ndarray vertices
-
-    def __init__(Vertex_list self, list lst):
+class Vertex_list:
+    def __init__(self, list lst):
         cdef int i = 0, size = len(lst)
         self.vertices = np.ndarray(size, Vertex)
         # get all vertices into a single list
@@ -85,6 +70,11 @@ cdef class Vertex_list:
         self.ids = {s.id: i for s,i in zip(self.vertices,range(size))}
         self.names = {s.name: i for s,i in zip(self.vertices,range(size))}
         # path weights matrix
+        self.w = np.full((size,size), np.inf)
+        for u in self.vertices:
+            for i in u.adj:
+                v = self.vertices[self.ids[i]]
+                self[u,v] = u.distance(v)
 
     def __len__(self): return len(self.vertices)
 
@@ -105,7 +95,7 @@ cdef class Vertex_list:
         if type(key) is int: return key in self.ids
         return False
 
-cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
+def load_file(fpath = Path("sde-universe_2018-07-16.csv")):
     cdef list temp = []
     with open(fpath) as f:
         r = csv.DictReader(f)
@@ -123,86 +113,38 @@ cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
 
     return Vertex_list(temp)
 
-cdef void update_priority(Vertex v, Q): raise NotImplementedError
+cdef void update_priority(v, Q): raise NotImplementedError
 
-def w(Vertex u, Vertex v):
-    if v.id not in u.adj: return float('inf')
-    return u.distance(v)
-
-################
-#  Question 1  #
-################
-
-cdef void relax(Vertex u, Vertex v, Q):
-    if v.d > u.d + w(u,v):
-        v.d = u.d + w(u,v)
+cdef void relax(u, v, s, w):
+    if v.d > u.d + w[u,v]:
+        v.d = u.d + w[u,v]
         v.pi = u
-        heapify(Q.queue)
+        w[s,v] = v.d
 
-cdef void Dijkstras(Vertex_list G, Vertex s, dest):
+cdef void Dijkstras(G, s):
     s.d = 0
     cdef int sys_id
-    cdef Vertex u
-
-    Q = PriorityQueue(maxsize=len(G))
-    Q.queue = [u for u in G.vertices]
-    heapify(Q.queue)
-
-    while Q.queue:
-        if len(Q.queue) % 1000 == 0: print(len(Q.queue))
-        u = Q.get()
+    cdef set S = set()
+    Q = pqueue(maxsize=len(G))
+    #for u in G.vertices: Q.put((u.d,u))
+    while Q:
+        _,u = Q.get()
+        S.add(u)
         for sys_id in u.adj:
-            relax(u,G[sys_id],Q)
+            relax(u,G[sys_id],s,G)
+            heapify(Q)
 
-    print("Dodixie distance: " + str(G["Dodixie"].d))
-
-cdef validate_path(list path, Vertex_list G):
-    cdef float total =0
-    for i in range(1,len(path)):
-        if G[path[i]].id not in G[path[i-1]].adj:
-            print(G[path[i-1]] +
-                    " has no stargate to " +
-                    G[path[i]].name
-                )
-            return None
-        total += w(G[path[i]], G[path[i-1]])
-    return total
-
-cdef list get_path(Vertex start, Vertex dest):
-    cdef list lst = []
-    while dest is not start:
-        lst.insert(0,dest.name)
-        dest = dest.pi
-    lst.insert(0,start.name)
-    return lst
-
-def q1_shortest_path(str start, str destination, return_graph=False):
-    cdef Vertex_list G = load_file()
+def q1_shortest_path(str start, str destination):
+    G = load_file()
     if start not in G or destination not in G: return None
 
-    Dijkstras(G, G[start], G[destination])
-    path = get_path(G[start], G[destination])
-    valid = validate_path(path, G)
-    if valid == False:
-        print("Error: invalid path")
-    else:
-        print("total distance: " + str(valid))
-    print(validate_path(path, G))
-    if return_graph:
-        return path, G
-    return path
-
-
-################
-#  Question 2  #
-################
-
-def q2_best_path(str start, str destination):
-    cdef Vertex_list G = load_file()
-    if start not in G or destination not in G: return None
+    Dijkstras(G, G[start])
+    return []
 
 def main():
     print("hw10.pyx:main()")
     print("tests")
-    result = q1_shortest_path("6VDT-H","Dodixie")
-    print result
+    print(q1_shortest_path("test","test"))
+    print(q1_shortest_path("6VDT-H","Dodixie"))
+
+
