@@ -2,7 +2,7 @@
 # you can provide your own if you want to test out different
 # options and this block will be mainly ignored
 import sys
-print("==================================================")
+print("======================================================================")
 if len(sys.argv) == 1: # no command line args
     print("*hw10.py Running with setup with default args")
     print("\t adding \"build_ext\" and \"--inplace\" to sys.argv")
@@ -14,6 +14,8 @@ if len(sys.argv) == 1: # no command line args
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
+print("Cython will probably warn depricated numpy API.")
+print("This warning is safe to ignore.")
 setup(
     ext_modules = cythonize(
         Extension(
@@ -24,7 +26,7 @@ setup(
     )
 )
 print("*hw10.py Setup complete!")
-print("==================================================\n")
+print("======================================================================\n")
 
 
 # This is where I import the pre-compiled 

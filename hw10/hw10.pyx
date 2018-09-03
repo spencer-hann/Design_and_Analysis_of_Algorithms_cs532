@@ -23,7 +23,7 @@ cdef class System:
             str adj,
             str x, str y, str z,
             str name="null",
-            str sec='0'
+            str security='0'
             ):
         self.name = name
         self.id = int(system_id)
@@ -31,7 +31,7 @@ cdef class System:
         self.x = float(x)
         self.y = float(y)
         self.z = float(z)
-        self.security = max(0.,float(sec))
+        self.security = max(0.,float(security))
 
     def __str__(self):
         return "System: " + self.name + \
@@ -56,9 +56,9 @@ cdef class Vertex(System):
             str adj,
             str x, str y, str z,
             str name="null",
-            str sec='0'
+            str security='0'
             ):
-        super().__init__(system_id,adj,x,y,z,name,sec)
+        super().__init__(system_id,adj,x,y,z,name,security)
         self.d = float("inf")
         self.pi = None
 
@@ -89,8 +89,6 @@ cdef class Vertex_list:
     def __len__(self): return len(self.vertices)
 
     def __getitem__(self, key):
-        if type(key) is tuple:
-            return self.w[self.ids[key[0].id], self.ids[key[1].id]]
         if type(key) is str:
             return self.vertices[self.names[key]]
         # if not str, should be int
@@ -179,7 +177,6 @@ cdef list get_path(Vertex start, Vertex dest):
 def q1_shortest_path(str start, str destination, return_graph=False):
     cdef Vertex_list G = load_file()
     if start not in G or destination not in G: return None
-
     Dijkstras(G, G[start], G[destination])
     path = get_path(G[start], G[destination])
     valid = validate_path(path, G)
@@ -196,13 +193,47 @@ def q1_shortest_path(str start, str destination, return_graph=False):
 ################
 #  Question 2  #
 ################
+cdef void relax2(Vertex u, Vertex v, Q):
+    if v.d == u.d \
+        and v.pi is not None \
+        and v.distance(v.pi) < v.distance(u):
+            return
+    if v.d >= u.d:
+        v.d = max(u.d,v.security) #u.d if u.d > v.security else v.security
+        v.pi = u
+        heapify(Q.queue)
+
+cdef void Dijkstras2(Vertex_list G, Vertex s, dest):
+    s.d = 0
+    cdef int sys_id
+    cdef Vertex u
+
+    Q = PriorityQueue(maxsize=len(G))
+    Q.queue = [u for u in G.vertices]
+    heapify(Q.queue)
+
+    while Q.queue:
+        if len(Q.queue) % 1000 == 0: print(len(Q.queue))
+        u = Q.get()
+        for sys_id in u.adj:
+            relax2(u,G[sys_id],Q)
 
 def q2_best_path(str start, str destination):
     cdef Vertex_list G = load_file()
     if start not in G or destination not in G: return None
+    sample_path = ['6VDT-H', 'B17O-R', 'IGE-RI', 'OW-TPO', 'AL8-V4', 'JGOW-Y', 'APM-6K', 'RE-C26', '00GD-D', 'C-N4OD', 'KVN-36', '4HS-CR', 'WMH-SO', 'LBGI-2', 'Y-2ANO', 'ZXB-VC', '5-CQDA', 'KEE-N6', '4X0-8B', 'JP4-AA', 'D-W7F0', '4K-TRB', 'QX-LIJ', 'O-IOAI', 'NOL-M9', 'PR-8CA', 'FWST-8', 'YZ9-F6', '319-3D', 'D-3GIQ', 'K-6K16', 'W-KQPI', 'PUIG-F', '0-HDC8', 'SVM-3K', '8QT-H4', '49-U6U', '4-07MU', 'RR-D05', '25S-6P', 'FAT-6P', 'CNC-4V', 'CZK-ZQ', '4NBN-9', 'X4-WL0', 'Q-U96U', 'EX6-AO', 'HY-RWO', 'V-3YG7', 'B-3QPD', 'U-QVWD', '0SHT-A', 'D87E-A', 'K-B2D3', 'VOL-MI', 'ARG-3R', '9PX2-F', 'N3-JBX', 'SG-75T', 'XV-MWG', 'Q-K2T7', '1V-LI2', 'LQ-OAI', 'U2-28D', 'PUZ-IO', 'HB-1NJ', 'F7A-MR', '0-3VW8', '28-QWU', 'N-RAEL']
+
+    Dijkstras2(G, G[start], G[destination])
+    path = get_path(G[start], G[destination])
+
+    for a in path:
+        print(G[a].security, a)
+    print(len(path), len(sample_path))
+    return path
 
 def main():
     print("hw10.pyx:main()")
     print("tests")
-    result = q1_shortest_path("6VDT-H","Dodixie")
-    print result
+    #print q1_shortest_path("6VDT-H","Dodixie")
+    path = q2_best_path("6VDT-H","N-RAEL")
+    print path
