@@ -8,13 +8,15 @@ from libc.math cimport sqrt
 from heapq import heapify
 import math
 
+filename = "sde-universe_2018-07-16.csv"
+
 cdef class System:
     cdef public str name
     cdef public int id
-    cdef public float x
-    cdef public float y
-    cdef public float z
-    cdef public float security
+    cdef public double x
+    cdef public double y
+    cdef public double z
+    cdef public double security
     cdef public list adj
 
     def __init__(
@@ -39,7 +41,7 @@ cdef class System:
             ", " + str(self.y) + ", " + \
             str(self.z) + ")"
 
-    def distance(System self, System other):
+    cdef double distance(System self, System other):
         return math.sqrt( # libc.math.sqrt
                 (self.x - other.x)**2 +
                 (self.y - other.y)**2 +
@@ -47,7 +49,7 @@ cdef class System:
                 )
 
 cdef class Vertex(System):
-    cdef public float d
+    cdef public double d
     cdef public Vertex pi
 
     def __init__(
@@ -95,7 +97,7 @@ cdef class Vertex_list:
         return self.vertices[self.ids[key]]
         # if type(key) is not int either, allow KeyError
 
-    def __setitem__(self, tuple key, float val):
+    def __setitem__(self, tuple key, double val):
         self.w[self.ids[key[0].id], self.ids[key[1].id]] = val
 
     def __contains__(self, key):
@@ -103,7 +105,7 @@ cdef class Vertex_list:
         if type(key) is int: return key in self.ids
         return False
 
-cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
+cdef Vertex_list load_file(fpath = Path(filename)):
     cdef list temp = []
     with open(fpath) as f:
         r = csv.DictReader(f)
@@ -156,7 +158,7 @@ cdef void Dijkstras(Vertex_list G, Vertex s, dest):
     print("Dodixie distance: " + str(G["Dodixie"].d))
 
 cdef validate_path(list path, Vertex_list G):
-    cdef float total =0
+    cdef double total =0
     for i in range(1,len(path)):
         if G[path[i]].id not in G[path[i-1]].adj:
             print(G[path[i-1]] +
@@ -228,34 +230,89 @@ def q2_best_path(str start, str destination):
 ################
 #  Question 3  #
 ################
-cdef tuple[np.ndarray,Vertex_list] load_distance_matrix(void):
-    cdef Vertex_list vlist = load_file()
+cdef Vertex_list load_file_empty_adjacencies(fpath=Path(filename)):
+    cdef list temp = []
+    with open(fpath) as f:
+        r = csv.DictReader(f)
+        for row in r:
+            if int(row["system_id"]) < 31_000_000:
+                sys = Vertex(
+                        row["system_id"],
+                        "[]",
+                        row['x'], row['y'], row['z'],
+                        row["solarsystem_name"],
+                        row["security_status"]
+                        )
+                temp.append(sys)
+
+    # creating my Vertex list from a list costs some
+    # extra runtime, but it allows me to create a numpy
+    # numpy array of the exact right size
+    return Vertex_list(temp)
+
+cdef mst_prim(double limit): # no r, source node is arbitrary
+    cdef Vertex_list G
+    cdef np.ndarray w
     cdef Vertex u, v
-    cdef int d, j, i=0, size = len(G.vertices)
+    G, w = fill_adjacencies(limit)
+
+    Q = PriorityQueue(maxsize=len(G))
+    Q.queue = [u for u in G.vertices]
+    Q.queue[0].d = 0
+
+    while Q.queue:
+        u = Q.get()
+        for v in u.adj:
+            if v in Q.queue and w[u,v] < v.d:
+                v.pi = u
+                v.key = w[u,v]
+#this is Prims copied over quickly
+# it may be better to calculate the distances in-time, rather than using the matrix
+    return G, w # does w need to be returned?
+
+cdef tuple fill_adjacencies(double limit):
+    cdef Vertex_list G = load_file_empty_adjacencies()
+    cdef Vertex u, v
+    cdef int j, i=0, size = len(G.vertices)
+
+    while i < size:
+        u = G.vertices[i]
+        j = i + 1
+        while j < size:
+            v = G.vertices[j]
+            if u.distance(v) <= limit:
+                u.adj.append(v)
+                v.adj.append(u)
+            j+=1
+        i+=1
+    return np.ndarray, G
+
+
+
+def q3_fully_connected(limit): raise NotImplementedError
+
+
+################
+#  Question 4  #
+################
+cdef tuple load_distance_matrix(double limit):
+    cdef Vertex_list G = load_file_empty_adjacencies()
+    cdef int j, i=0, size = len(G.vertices)
+    cdef double d
     cdef np.ndarray dist_matrx = np.zeros((size,size))
+
     while i < size:
         j = i + 1
         while j < size:
             d = G.vertices[i].distance(G.vertices[j])
-            dist_matrx[i,j] = d
-            dist_matrx[j,i] = d
+            if d <= limit:
+                G.vertices[i].adj.append(G.vertices[j])
+                G.vertices[j].adj.append(G.vertices[i])
+                dist_matrx[i,j] = d
+                dist_matrx[j,i] = d
             j+=1
         i+=1
-
     return np.ndarray, G
-
-def q3_fully_connected(limit):
-    cdef Vertex_list G = load_file()
-    # using first system because starting point is arbitrary
-    cdef int count = count_connected(G.vertices[0], limit, G)
-    print(count, len(G.vertices))
-    if count == len(G.vertices):
-        print("All systems are fully connected " + \
-                "within the limit of " + str(limit))
-        return True
-    print("Not all systems are fully connected " + \
-            "within the limit of " + str(limit))
-    return False
 
 def main():
     print("hw10.pyx:main()")
@@ -263,4 +320,4 @@ def main():
     #print q1_shortest_path("6VDT-H","Dodixie")
     #path = q2_best_path("6VDT-H","N-RAEL")
     #print path
-    q3_fully_connected(1.0e22)
+    #q3_fully_connected(1.0e22)

@@ -6,7 +6,8 @@ print("======================================================================")
 if len(sys.argv) == 1: # no command line args
     print("*hw10.py Running with setup with default args")
     print("\t adding \"build_ext\" and \"--inplace\" to sys.argv")
-    sys.argv = ["hw10.py", "build_ext", "--inplace"]
+    #sys.argv = ["hw10.py", "build_ext", "--inplace"]
+    sys.argv.extend( ["build_ext", "--inplace"] )
 
 
 # This block compiles/sets up the hw10 module
@@ -14,7 +15,7 @@ if len(sys.argv) == 1: # no command line args
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
-print("*hw10.py Cython may give a depricated numpy API warning.")
+print("*hw10.py Cython may give a depricated NumPy API warning.")
 print("         This warning is safe to ignore.")
 setup(
     ext_modules = cythonize(
