@@ -6,7 +6,7 @@ from pathlib import Path
 from ast import literal_eval
 from libc.math cimport sqrt
 from heapq import heapify
-
+import math
 
 cdef class System:
     cdef public str name
@@ -40,7 +40,7 @@ cdef class System:
             str(self.z) + ")"
 
     def distance(System self, System other):
-        return sqrt( # libc.math.sqrt
+        return math.sqrt( # libc.math.sqrt
                 (self.x - other.x)**2 +
                 (self.y - other.y)**2 +
                 (self.z - other.z)**2
@@ -119,9 +119,10 @@ cdef Vertex_list load_file(fpath = Path("sde-universe_2018-07-16.csv")):
                         )
                 temp.append(sys)
 
+    # creating my Vertex list from a list costs some
+    # extra runtime, but it allows me to create a numpy
+    # numpy array of the exact right size
     return Vertex_list(temp)
-
-cdef void update_priority(Vertex v, Q): raise NotImplementedError
 
 def w(Vertex u, Vertex v):
     if v.id not in u.adj: return float('inf')
@@ -194,12 +195,9 @@ def q1_shortest_path(str start, str destination, return_graph=False):
 #  Question 2  #
 ################
 cdef void relax2(Vertex u, Vertex v, Q):
-    if v.d == u.d \
-        and v.pi is not None \
-        and v.distance(v.pi) < v.distance(u):
-            return
-    if v.d >= u.d:
-        v.d = max(u.d,v.security) #u.d if u.d > v.security else v.security
+    if v.d > u.d:
+        v.d = u.d if u.d > v.security else v.security
+        #v.d = max(u.d,v.security)
         v.pi = u
         heapify(Q.queue)
 
@@ -221,19 +219,48 @@ cdef void Dijkstras2(Vertex_list G, Vertex s, dest):
 def q2_best_path(str start, str destination):
     cdef Vertex_list G = load_file()
     if start not in G or destination not in G: return None
-    sample_path = ['6VDT-H', 'B17O-R', 'IGE-RI', 'OW-TPO', 'AL8-V4', 'JGOW-Y', 'APM-6K', 'RE-C26', '00GD-D', 'C-N4OD', 'KVN-36', '4HS-CR', 'WMH-SO', 'LBGI-2', 'Y-2ANO', 'ZXB-VC', '5-CQDA', 'KEE-N6', '4X0-8B', 'JP4-AA', 'D-W7F0', '4K-TRB', 'QX-LIJ', 'O-IOAI', 'NOL-M9', 'PR-8CA', 'FWST-8', 'YZ9-F6', '319-3D', 'D-3GIQ', 'K-6K16', 'W-KQPI', 'PUIG-F', '0-HDC8', 'SVM-3K', '8QT-H4', '49-U6U', '4-07MU', 'RR-D05', '25S-6P', 'FAT-6P', 'CNC-4V', 'CZK-ZQ', '4NBN-9', 'X4-WL0', 'Q-U96U', 'EX6-AO', 'HY-RWO', 'V-3YG7', 'B-3QPD', 'U-QVWD', '0SHT-A', 'D87E-A', 'K-B2D3', 'VOL-MI', 'ARG-3R', '9PX2-F', 'N3-JBX', 'SG-75T', 'XV-MWG', 'Q-K2T7', '1V-LI2', 'LQ-OAI', 'U2-28D', 'PUZ-IO', 'HB-1NJ', 'F7A-MR', '0-3VW8', '28-QWU', 'N-RAEL']
 
     Dijkstras2(G, G[start], G[destination])
     path = get_path(G[start], G[destination])
-
-    for a in path:
-        print(G[a].security, a)
-    print(len(path), len(sample_path))
     return path
+
+
+################
+#  Question 3  #
+################
+cdef tuple[np.ndarray,Vertex_list] load_distance_matrix(void):
+    cdef Vertex_list vlist = load_file()
+    cdef Vertex u, v
+    cdef int d, j, i=0, size = len(G.vertices)
+    cdef np.ndarray dist_matrx = np.zeros((size,size))
+    while i < size:
+        j = i + 1
+        while j < size:
+            d = G.vertices[i].distance(G.vertices[j])
+            dist_matrx[i,j] = d
+            dist_matrx[j,i] = d
+            j+=1
+        i+=1
+
+    return np.ndarray, G
+
+def q3_fully_connected(limit):
+    cdef Vertex_list G = load_file()
+    # using first system because starting point is arbitrary
+    cdef int count = count_connected(G.vertices[0], limit, G)
+    print(count, len(G.vertices))
+    if count == len(G.vertices):
+        print("All systems are fully connected " + \
+                "within the limit of " + str(limit))
+        return True
+    print("Not all systems are fully connected " + \
+            "within the limit of " + str(limit))
+    return False
 
 def main():
     print("hw10.pyx:main()")
     print("tests")
     #print q1_shortest_path("6VDT-H","Dodixie")
-    path = q2_best_path("6VDT-H","N-RAEL")
-    print path
+    #path = q2_best_path("6VDT-H","N-RAEL")
+    #print path
+    q3_fully_connected(1.0e22)

@@ -14,8 +14,8 @@ if len(sys.argv) == 1: # no command line args
 from distutils.core import setup
 from distutils.extension import Extension
 from Cython.Build import cythonize
-print("Cython will probably warn depricated numpy API.")
-print("This warning is safe to ignore.")
+print("*hw10.py Cython may give a depricated numpy API warning.")
+print("         This warning is safe to ignore.")
 setup(
     ext_modules = cythonize(
         Extension(
